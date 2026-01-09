@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, HostListener, inject, input, output } from '@angular/core';
-import { VBackdropDirective } from '@app/shared/ui-kit/backdrop.directive';
+import { VButton } from '@app/shared/ui-kit/components/v-button/v-button';
+import { VBackdropDirective } from '@app/shared/ui-kit/directives/backdrop.directive';
+import { LayerController, PARENT_LAYER_ID, ZLayerService } from '@app/shared/ui-kit/services/z-layer.service';
 import { CssUnitValue } from '@app/shared/ui-kit/types';
-import { VButton } from '@app/shared/ui-kit/v-button/v-button';
-import { LayerController, PARENT_LAYER_ID, ZLayerService } from '@app/shared/ui-kit/z-layer.service';
 
 export type ModalDeviceType = 'mobile' | 'desktop';
 

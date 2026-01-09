@@ -13,8 +13,8 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { getValidationErrorMessage } from '@app/shared/ui-kit/components/v-input/validators';
 import { CssUnitValue } from '@app/shared/ui-kit/types';
-import { getValidationErrorMessage } from '@app/shared/ui-kit/v-input/validators';
 
 type InputValue = string | number | null;
 
