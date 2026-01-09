@@ -20,7 +20,7 @@
 .clear-icon {
   padding-right: var(--unit-2);
   color: var(--color-text-muted);
-  transition: color 0.2s ease;
+  transition: color var(--animation-duration-medium) ease;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -60,7 +60,7 @@
 .dropdown-item {
   padding: var(--unit-2);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--animation-duration-medium) ease;
   color: var(--color-text-default);
 
   &:hover {

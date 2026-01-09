@@ -18,7 +18,7 @@
   padding: var(--unit-2) 0;
   border-radius: var(--v-input-border-radius, var(--unit-2));
   box-sizing: border-box;
-  transition: all 0.2s ease;
+  transition: all var(--animation-duration-medium) ease;
   isolation: isolate;
 
   box-shadow:

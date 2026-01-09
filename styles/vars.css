@@ -1,4 +1,9 @@
 :root {
+  /* Animation durations - synced with animation-durations.ts */
+  --animation-duration-fast: 125ms;
+  --animation-duration-medium: 250ms;
+  --animation-duration-slow: 400ms;
+
   --unit-0: 0;
   --unit-1: 4px;
   --unit-2: 8px;

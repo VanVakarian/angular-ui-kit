@@ -6,8 +6,9 @@
 
 button {
   display: flex;
-  gap: var(--unit-2);
+  gap: var(--v-button-gap, var(--unit-2));
   align-items: center;
+  height: 100%;
   width: 100%;
   box-sizing: border-box;
   border: none;
@@ -16,6 +17,7 @@ button {
   font-family: inherit;
   font-size: 1rem;
   font-weight: 500;
+  overflow: hidden;
 
   padding: var(--v-button-padding-y, var(--unit-2)) var(--v-button-padding-x, var(--unit-4));
   border-radius: var(--v-button-border-radius, var(--unit-1));
@@ -44,6 +46,8 @@ button > :not(.prefix):not(.postfix) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
+  transition: opacity var(--animation-duration-fast) ease-in-out;
 }
 
 :host([text-align='left']) .btn-text {

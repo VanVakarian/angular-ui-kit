@@ -1,4 +1,5 @@
-import { Component, computed, ElementRef, inject, input, output } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, input, output, signal } from '@angular/core';
+import { ANIMATION_DURATION_MS } from '@app/shared/animations';
 import { ButtonStyle, CssUnitValue } from '@app/shared/ui-kit/types';
 
 type ButtonType = 'button' | 'submit' | 'reset';
@@ -14,6 +15,7 @@ export interface VButtonConfig {
   margin?: CssUnitValue;
   marginY?: CssUnitValue;
   marginX?: CssUnitValue;
+  gap?: CssUnitValue;
   isDisabled?: boolean;
   isWithoutShadow?: boolean;
   bgOpacity?: '0' | '1' | `0.${number}`;
@@ -32,6 +34,7 @@ const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
   margin: undefined as unknown as CssUnitValue,
   marginY: 0,
   marginX: 0,
+  gap: 2,
   isDisabled: false,
   isWithoutShadow: false,
   bgOpacity: '1',
@@ -63,6 +66,7 @@ const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
     '[style.--v-button-padding-x]': 'paddingXString$$()',
     '[style.--v-button-margin-y]': 'marginYString$$()',
     '[style.--v-button-margin-x]': 'marginXString$$()',
+    '[style.--v-button-gap]': 'gapString$$()',
     '[attr.text-align]': 'settings$$().textAlign || null',
     '[attr.aria-disabled]': 'settings$$().isDisabled ? "true" : "false"',
   },
@@ -87,6 +91,7 @@ export class VButton {
   protected readonly paddingXString$$ = computed(() => `var(--unit-${this.paddingX$$()})`);
   protected readonly marginYString$$ = computed(() => `var(--unit-${this.marginY$$()})`);
   protected readonly marginXString$$ = computed(() => `var(--unit-${this.marginX$$()})`);
+  protected readonly gapString$$ = computed(() => `var(--unit-${this.settings$$().gap})`);
 
   public get isFlat(): boolean {
     return this.getActiveStyle() === ButtonStyle.Flat;
@@ -155,4 +160,36 @@ export class VButton {
     if (config.margin !== undefined) return config.margin;
     return this.settings$$().marginX;
   }
+
+  // ======================================= Label visibility with animation ===
+
+  protected readonly isLabelInDom$$ = signal(true);
+  protected readonly isLabelVisible$$ = signal(true);
+
+  private labelAnimationTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  private readonly labelVisibilityEffect = effect(() => {
+    if (this.labelAnimationTimeoutId) {
+      clearTimeout(this.labelAnimationTimeoutId);
+      this.labelAnimationTimeoutId = null;
+    }
+
+    if (this.settings$$().isLabelHidden) {
+      // Hide: first fade out, then remove from DOM
+      this.isLabelVisible$$.set(false);
+      this.labelAnimationTimeoutId = setTimeout(() => {
+        this.isLabelInDom$$.set(false);
+        this.labelAnimationTimeoutId = null;
+      }, ANIMATION_DURATION_MS.FAST);
+    } else {
+      // Show: first add to DOM with opacity 0, then fade in
+      this.isLabelInDom$$.set(true);
+      this.isLabelVisible$$.set(false);
+      // Small delay to ensure DOM is updated before transition starts
+      this.labelAnimationTimeoutId = setTimeout(() => {
+        this.isLabelVisible$$.set(true);
+        this.labelAnimationTimeoutId = null;
+      }, 10);
+    }
+  });
 }
