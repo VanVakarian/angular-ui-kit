@@ -35,6 +35,7 @@ export enum IconName {
   Settings = 'settings',
   Star = 'star',
   SwapHoriz = 'swap_horiz',
+  Undo = 'undo',
   ViewCozy = 'view_cozy',
   Warning = 'warning',
 }
