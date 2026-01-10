@@ -1,5 +1,4 @@
 import { Component, computed, effect, ElementRef, inject, input, output, signal } from '@angular/core';
-import { ANIMATION_DURATION_MS } from '@app/shared/animations';
 import { ButtonStyle, CssUnitValue } from '@app/shared/ui-kit/types';
 
 type ButtonType = 'button' | 'submit' | 'reset';
@@ -20,6 +19,7 @@ export interface VButtonConfig {
   isWithoutShadow?: boolean;
   bgOpacity?: '0' | '1' | `0.${number}`;
   isLabelHidden?: boolean;
+  labelAnimationDuration?: number;
   textAlign?: 'left' | 'center' | 'right';
 }
 
@@ -39,6 +39,7 @@ const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
   isWithoutShadow: false,
   bgOpacity: '1',
   isLabelHidden: false,
+  labelAnimationDuration: 0,
   textAlign: undefined as unknown as 'left' | 'center' | 'right',
 };
 
@@ -161,35 +162,88 @@ export class VButton {
     return this.settings$$().marginX;
   }
 
-  // ======================================= Label visibility with animation ===
+  // ======================================= LABEL VISIBILITY WITH ANIMATION ===
 
-  protected readonly isLabelInDom$$ = signal(true);
-  protected readonly isLabelVisible$$ = signal(true);
+  /**
+   * Animation state signals - control DOM presence and opacity independently for smooth transitions.
+   */
+  private readonly isLabelInDomAnimated$$ = signal(false);
+  private readonly isLabelVisibleAnimated$$ = signal(false);
+
+  /**
+   * Controls whether label exists in DOM. True if visible or animating out.
+   */
+  protected readonly isLabelInDom$$ = computed(() => {
+    const isHidden = this.settings$$().isLabelHidden;
+    return !isHidden || this.isLabelInDomAnimated$$();
+  });
+
+  /**
+   * Controls label opacity. True only when fully visible.
+   */
+  protected readonly isLabelVisible$$ = computed(() => {
+    const isHidden = this.settings$$().isLabelHidden;
+    return !isHidden && this.isLabelVisibleAnimated$$();
+  });
 
   private labelAnimationTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private isInitialLoad = true;
 
+  /**
+   * Label show/hide animation logic.
+   *
+   * WHY THIS EXISTS:
+   * Label must be removed from DOM (not just hidden) to eliminate the gap flash
+   * between label and prefix/postfix that appears due to flex gap.
+   * Setting width:0 or opacity:0 alone is insufficient.
+   *
+   * BEHAVIOR:
+   * - labelAnimationDuration = 0: instant show/hide
+   * - labelAnimationDuration > 0: fade in/out with timed DOM add/remove
+   * - Initial render: always instant (prevents animation flash on page load)
+   *
+   * SEQUENCE (when animated):
+   * Hide: fade out → wait → remove from DOM
+   * Show: add to DOM → wait 10ms → fade in
+   */
   private readonly labelVisibilityEffect = effect(() => {
     if (this.labelAnimationTimeoutId) {
       clearTimeout(this.labelAnimationTimeoutId);
       this.labelAnimationTimeoutId = null;
     }
 
+    const animationDuration = this.settings$$().labelAnimationDuration || 0;
+    const shouldAnimate = animationDuration > 0 && !this.isInitialLoad;
+
     if (this.settings$$().isLabelHidden) {
-      // Hide: first fade out, then remove from DOM
-      this.isLabelVisible$$.set(false);
-      this.labelAnimationTimeoutId = setTimeout(() => {
-        this.isLabelInDom$$.set(false);
-        this.labelAnimationTimeoutId = null;
-      }, ANIMATION_DURATION_MS.FAST);
+      this.isInitialLoad = false;
+      if (!shouldAnimate) {
+        // No animation: instantly hide
+        this.isLabelVisibleAnimated$$.set(false);
+        this.isLabelInDomAnimated$$.set(false);
+      } else {
+        // With animation: fade out, then remove from DOM
+        this.isLabelVisibleAnimated$$.set(false);
+        this.labelAnimationTimeoutId = setTimeout(() => {
+          this.isLabelInDomAnimated$$.set(false);
+          this.labelAnimationTimeoutId = null;
+        }, animationDuration);
+      }
     } else {
-      // Show: first add to DOM with opacity 0, then fade in
-      this.isLabelInDom$$.set(true);
-      this.isLabelVisible$$.set(false);
-      // Small delay to ensure DOM is updated before transition starts
-      this.labelAnimationTimeoutId = setTimeout(() => {
-        this.isLabelVisible$$.set(true);
-        this.labelAnimationTimeoutId = null;
-      }, 10);
+      this.isInitialLoad = false;
+      if (!shouldAnimate) {
+        // No animation: instantly show
+        this.isLabelInDomAnimated$$.set(true);
+        this.isLabelVisibleAnimated$$.set(true);
+      } else {
+        // With animation: add to DOM, then fadset(true);
+        this.isLabelVisibleAnimated$$.set(false);
+        // Small delay to ensure DOM is updated before transition starts
+        this.labelAnimationTimeoutId = setTimeout(() => {
+          this.isLabelVisibleAnimated$$.set(true);
+          this.labelAnimationTimeoutId = null;
+        }, 10);
+      }
     }
   });
 }

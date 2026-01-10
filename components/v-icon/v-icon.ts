@@ -20,7 +20,7 @@ export enum IconName {
   LeftPanelOpen = 'left_panel_open',
   Login = 'login',
   Logout = 'logout',
-  MenyBook = 'menu_book',
+  Menu = 'menu',
   Mic = 'mic',
   Paid = 'paid',
   PersonAdd = 'person_add',
