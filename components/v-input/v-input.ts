@@ -183,8 +183,68 @@ export class VInput implements ControlValueAccessor {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Enter' && !this.settings$$().isTextarea) {
-      this.onEnterPressed.emit(event);
+    if (!this.settings$$().isTextarea) {
+      if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+        const didApply = this.applyArrowStep(event);
+        if (didApply) return;
+      }
+
+      if (event.key === 'Enter') {
+        this.onEnterPressed.emit(event);
+      }
+    }
+  }
+
+  private applyArrowStep(event: KeyboardEvent): boolean {
+    const settings = this.settings$$();
+    if (settings.isTextarea) return false;
+    if (settings.isDisabled || settings.isReadonly) return false;
+
+    const isNumericLike =
+      settings.type === 'number' || settings.inputmode === 'numeric' || settings.inputmode === 'decimal';
+    if (!isNumericLike) return false;
+
+    const target = event.target as HTMLInputElement | HTMLTextAreaElement;
+    const rawValue = target.value;
+    const parsed = this.parseNumericInput(rawValue);
+    if (!parsed) return false;
+
+    event.preventDefault();
+
+    const delta = event.key === 'ArrowUp' ? 1 : -1;
+    const nextNum = parsed.value + delta;
+    const nextRaw = parsed.usesComma ? String(nextNum).replace('.', ',') : String(nextNum);
+    this.applyKeyboardValue(nextRaw);
+    this.onInputChanged.emit(event);
+
+    return true;
+  }
+
+  private parseNumericInput(rawValue: string): { value: number; usesComma: boolean } | null {
+    const trimmed = rawValue.trim();
+    if (trimmed === '') return { value: 0, usesComma: false };
+
+    const usesComma = trimmed.includes(',') && !trimmed.includes('.');
+    const normalized = usesComma ? trimmed.replace(',', '.') : trimmed;
+
+    if (!/^[+-]?(?:\d+|\d*\.\d+)(?:\.)?$/.test(normalized) && !/^[+-]?\d+(?:\.)?$/.test(normalized)) {
+      return null;
+    }
+
+    const num = Number(normalized.endsWith('.') ? normalized.slice(0, -1) : normalized);
+    if (!Number.isFinite(num)) return null;
+
+    return { value: num, usesComma };
+  }
+
+  private applyKeyboardValue(newValue: string): void {
+    this.hasInteracted = true;
+
+    if (this.ngControl) {
+      this.ngControlValue$$.set(newValue);
+      this.onChange(newValue);
+    } else {
+      this.value.set(newValue);
     }
   }
 
