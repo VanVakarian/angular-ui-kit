@@ -74,6 +74,7 @@ const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
 })
 export class VButton {
   public readonly config = input<VButtonConfig>({});
+  public readonly tabindex = input<number | string | undefined>(undefined);
 
   protected readonly settings$$ = computed(() => ({
     ...DEFAULT_V_BUTTON_CONFIG,

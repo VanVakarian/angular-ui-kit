@@ -1,5 +1,6 @@
 <button [type]="settings$$().type"
         [disabled]="settings$$().isDisabled"
+        [attr.tabindex]="tabindex() !== undefined ? tabindex() : null"
         (click)="onButtonClick($event)">
 
   <ng-content select="[v-prefix]"
