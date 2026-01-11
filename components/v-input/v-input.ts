@@ -88,7 +88,7 @@ export class VInput implements ControlValueAccessor {
   public readonly onInputChanged = output<Event>();
   public readonly onFocused = output<Event>();
   public readonly onBlurred = output<Event>();
-  public readonly onEnterPressed = output<Event>();
+  public readonly onEnterPressed = output<KeyboardEvent>();
 
   protected readonly settings$$ = computed(() => ({
     ...DEFAULT_V_INPUT_CONFIG,
@@ -101,6 +101,8 @@ export class VInput implements ControlValueAccessor {
   protected isFocused = false;
   protected hasInteracted = false;
   protected readonly inputId = `v-input-${++uniqueId}`;
+
+  private isImeComposing = false;
 
   protected readonly displayValue$$ = computed(() => {
     return this.ngControl ? this.ngControlValue$$() : this.value();
@@ -190,9 +192,18 @@ export class VInput implements ControlValueAccessor {
       }
 
       if (event.key === 'Enter') {
+        if (event.isComposing || this.isImeComposing) return;
         this.onEnterPressed.emit(event);
       }
     }
+  }
+
+  protected onCompositionStart(): void {
+    this.isImeComposing = true;
+  }
+
+  protected onCompositionEnd(): void {
+    this.isImeComposing = false;
   }
 
   private applyArrowStep(event: KeyboardEvent): boolean {

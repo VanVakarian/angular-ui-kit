@@ -27,6 +27,8 @@
               class="input-field textarea-field"
               (input)="onInputChange($event)"
               (change)="onInputChange($event)"
+              (compositionstart)="onCompositionStart()"
+              (compositionend)="onCompositionEnd()"
               (focus)="onFocus()"
               (blur)="onBlur()"
               (keydown)="onKeydown($event)"></textarea>
@@ -47,6 +49,8 @@
            class="input-field"
            (input)="onInputChange($event)"
            (change)="onInputChange($event)"
+           (compositionstart)="onCompositionStart()"
+           (compositionend)="onCompositionEnd()"
            (focus)="onFocus()"
            (blur)="onBlur()"
            (keydown)="onKeydown($event)" />
