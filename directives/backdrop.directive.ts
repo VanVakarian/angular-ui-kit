@@ -1,5 +1,5 @@
 import { Directive, ElementRef, Inject, OnDestroy, Optional, effect, input, output } from '@angular/core';
-import { PARENT_LAYER_ID, ZLayerService } from '@app/shared/ui-kit/services/z-layer.service';
+import { PARENT_LAYER_ID, ZLayerService } from '@ui-kit/services/z-layer.service';
 
 @Directive({
   selector: '[vBackdrop]',

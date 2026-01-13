@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { CssUnitValue } from '@app/shared/ui-kit/types';
+import { CssUnitValue } from '@ui-kit/types';
 
 export enum IconName {
   Add = 'add',
@@ -59,7 +59,7 @@ export class VIcon {
   public readonly color = input<string>();
 
   public readonly iconBackgroundString$$ = computed(() => {
-    return `url(assets/icons/${this.name()}.svg)`;
+    return `url(ui-kit-assets/icons/${this.name()}.svg)`;
   });
   public readonly iconUnitSizeString$$ = computed(() => {
     return `var(--unit-${this.size()})`;

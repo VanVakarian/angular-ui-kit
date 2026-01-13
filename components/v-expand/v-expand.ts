@@ -1,5 +1,5 @@
 import { Component, computed, effect, input, output, signal } from '@angular/core';
-import { CssUnitValue } from '@app/shared/ui-kit/types';
+import { CssUnitValue } from '@ui-kit/types';
 
 export interface VExpandConfig {
   padding?: CssUnitValue;

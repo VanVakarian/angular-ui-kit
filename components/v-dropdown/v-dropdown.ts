@@ -13,9 +13,9 @@ import {
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
-import { VInput, VInputConfig } from '@app/shared/ui-kit/components/v-input/v-input';
-import { VBackdropDirective } from '@app/shared/ui-kit/directives/backdrop.directive';
-import { LayerController, PARENT_LAYER_ID, ZLayerService } from '@app/shared/ui-kit/services/z-layer.service';
+import { VInput, VInputConfig } from '@ui-kit/components/v-input/v-input';
+import { VBackdropDirective } from '@ui-kit/directives/backdrop.directive';
+import { LayerController, PARENT_LAYER_ID, ZLayerService } from '@ui-kit/services/z-layer.service';
 
 export enum ddExpandDirection {
   Left = 'left',

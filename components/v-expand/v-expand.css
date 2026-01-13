@@ -1,4 +1,4 @@
-@import '@app/shared/ui-kit/styles/vars.css';
+@import '@ui-kit/styles/vars.css';
 
 :host {
   display: block;

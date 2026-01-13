@@ -1,5 +1,5 @@
 import { Component, computed, effect, ElementRef, inject, input, output, signal } from '@angular/core';
-import { ButtonStyle, CssUnitValue } from '@app/shared/ui-kit/types';
+import { ButtonStyle, CssUnitValue } from '@ui-kit/types';
 
 type ButtonType = 'button' | 'submit' | 'reset';
 
