@@ -52,13 +52,15 @@
 
   --color-success: #22c55e;
 
+  --color-warning: #f97316;
+
   --color-danger: #ef4444;
   --color-danger-gradient-lighter: #f87171;
   --color-danger-gradient-darker: #ef4444;
   /* --color-danger-gradient-darker: #dc2626; */
 
   --color-nutrient-low: var(--color-primary-gradient-darker);
-  --color-nutrient-target: var(--color-success);
+  --color-nutrient-warning: var(--color-warning);
   --color-nutrient-high: var(--color-danger-gradient-darker);
 
   --color-text-default: #374151;
