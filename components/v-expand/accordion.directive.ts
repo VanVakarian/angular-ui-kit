@@ -5,24 +5,21 @@ import { VExpand } from './v-expand';
 @Directive({
   selector: '[accordion]',
   host: {
-    '[class.open]': 'isOpen',
+    '[class.open]': 'isOpen()',
   },
 })
 export class AccordionDirective implements OnInit, OnDestroy {
-  public readonly accordion = input<string | boolean>(true);
+  public readonly accordion = input.required<string>();
+  public readonly accordionId = input.required<string>();
 
-  // private isOpen = false;
-  private id = crypto.randomUUID();
-  private groupId = 'default';
+  private groupId = '';
 
   private readonly syncEffectRef$$: EffectRef = effect(() => {
-    const accordionValue = this.accordion();
-    const groupId = typeof accordionValue === 'string' ? accordionValue : 'default';
+    const groupId = this.accordion();
     this.groupId = groupId;
 
     const opened = this.accordionService.openedIds$$();
-    const isOpen = opened.get(groupId) === this.id;
-    // this.isOpen = isOpen;
+    const isOpen = opened.get(groupId) === this.accordionId();
     this.vExpand.setExpanded(isOpen);
   });
 
@@ -34,27 +31,25 @@ export class AccordionDirective implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    const accordionValue = this.accordion();
-    this.groupId = typeof accordionValue === 'string' ? accordionValue : 'default';
+    this.groupId = this.accordion();
   }
 
   public ngOnDestroy() {
     this.syncEffectRef$$.destroy();
   }
 
+  protected isOpen(): boolean {
+    const opened = this.accordionService.openedIds$$();
+    return opened.get(this.groupId) === this.accordionId();
+  }
+
   @HostListener('click', ['$event'])
-  private toggle(event: Event) {
+  protected toggle(event: Event) {
     const target = event.target as HTMLElement;
     const headerElement = this.el.nativeElement.querySelector('.header');
 
     if (headerElement && headerElement.contains(target)) {
-      const accordionValue = this.accordion();
-      const groupId = typeof accordionValue === 'string' ? accordionValue : 'default';
-      this.accordionService.toggle(groupId, this.id);
+      this.accordionService.toggle(this.groupId, this.accordionId());
     }
-  }
-
-  private setVExpandState(expanded: boolean) {
-    this.vExpand.setExpanded(expanded);
   }
 }

@@ -1,6 +1,20 @@
 import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { CssUnitValue } from '@app/shared/ui-kit/types';
 
+export interface VExpandConfig {
+  padding?: CssUnitValue;
+  borderRadius?: CssUnitValue;
+  animationTimingFunction?: 'ease-in-out' | 'linear' | 'ease' | 'ease-in' | 'ease-out';
+  isWithoutAnimation?: boolean;
+}
+
+const DEFAULT_V_EXPAND_CONFIG: Required<VExpandConfig> = {
+  padding: 2,
+  borderRadius: 2,
+  animationTimingFunction: 'ease-in-out',
+  isWithoutAnimation: false,
+};
+
 @Component({
   selector: 'v-expand',
   templateUrl: './v-expand.html',
@@ -8,23 +22,33 @@ import { CssUnitValue } from '@app/shared/ui-kit/types';
   host: {
     '[style.--v-expand-padding]': 'paddingString$$()',
     '[style.--v-expand-border-radius]': 'borderRadiusString$$()',
-    '[class.no-transition]': 'isWithoutAnimation()',
+    '[style.--v-expand-animation-timing-function]': 'animationTimingFunction$$()',
+    '[class.no-transition]': 'config$$().isWithoutAnimation',
   },
 })
 export class VExpand {
-  public readonly padding = input<CssUnitValue>(2);
-  public readonly borderRadius = input<CssUnitValue>(2);
+  public readonly config = input<VExpandConfig>({});
   public readonly isExpanded = input<boolean>(false);
-  public readonly isWithoutAnimation = input<boolean>(false);
 
   public readonly onOpened = output<CustomEvent<boolean>>();
 
+  protected readonly config$$ = computed(() => ({
+    ...DEFAULT_V_EXPAND_CONFIG,
+    ...this.config(),
+  }));
+
   public readonly paddingString$$ = computed(() => {
-    return `var(--unit-${this.padding()})`;
+    const padding = this.config$$().padding;
+    return `var(--unit-${padding})`;
   });
 
   public readonly borderRadiusString$$ = computed(() => {
-    return `var(--unit-${this.borderRadius()})`;
+    const borderRadius = this.config$$().borderRadius;
+    return `var(--unit-${borderRadius})`;
+  });
+
+  public readonly animationTimingFunction$$ = computed(() => {
+    return this.config$$().animationTimingFunction;
   });
 
   private readonly _isExpanded$$ = signal(false);

@@ -10,7 +10,7 @@
   border-radius: var(--v-expand-border-radius);
   cursor: pointer;
   user-select: none;
-  transition: background-color var(--animation-duration-fast) ease-in-out;
+  transition: background-color var(--animation-duration-fast) var(--v-expand-animation-timing-function);
 }
 
 .header:hover {
@@ -21,7 +21,7 @@
 
 .body {
   height: 0;
-  transition: height var(--animation-duration-fast) ease-in-out;
+  transition: height var(--animation-duration-fast) var(--v-expand-animation-timing-function);
 }
 
 .body.expanded {
