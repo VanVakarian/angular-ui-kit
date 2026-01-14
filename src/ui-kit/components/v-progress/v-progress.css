@@ -11,8 +11,7 @@
   background: var(--color-bg-default);
   overflow: hidden;
 
-  box-shadow:
-    inset 3px 3px 3px var(--shadow-dark-light),
+  box-shadow: inset 3px 3px 3px var(--shadow-dark-light),
     inset -3px -3px 3px var(--shadow-light-strong);
 }
 
@@ -24,7 +23,9 @@
   width: calc(var(--v-progress-percentage, 0%) - var(--v-progress-bar-gap, 1px) * 2);
   background: var(--v-progress-bar-color, var(--color-primary));
   transition: width var(--animation-duration-medium) ease;
-  border-radius: calc(var(--v-progress-border-radius, var(--unit-2)) - var(--v-progress-bar-gap, 1px));
+  border-radius: calc(
+    var(--v-progress-border-radius, var(--unit-2)) - var(--v-progress-bar-gap, 1px)
+  );
 }
 
 :host([bar-style='flat']) .progress-bar {
@@ -32,15 +33,11 @@
 }
 
 :host([bar-style='inset']) .progress-bar {
-  box-shadow:
-    inset 1px 1px 2px rgba(24, 24, 24, 0.3),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.3);
+  box-shadow: inset 1px 1px 2px rgba(24, 24, 24, 0.3), inset -1px -1px 2px rgba(255, 255, 255, 0.3);
 }
 
 :host([bar-style='raised']) .progress-bar {
-  box-shadow:
-    inset 1px 1px 3px rgba(255, 255, 255, 0.3),
-    inset -1px -1px 2px rgba(24, 24, 24, 0.3);
+  box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.3), inset -1px -1px 2px rgba(24, 24, 24, 0.3);
 }
 
 .progress-wrapper {

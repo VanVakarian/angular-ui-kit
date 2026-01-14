@@ -21,8 +21,7 @@
   transition: all var(--animation-duration-medium) ease;
   isolation: isolate;
 
-  box-shadow:
-    inset 3px 3px 3px var(--shadow-dark-light),
+  box-shadow: inset 3px 3px 3px var(--shadow-dark-light),
     inset -3px -3px 3px var(--shadow-light-strong);
 
   background: var(--color-bg-default);
@@ -33,8 +32,7 @@
   }
 
   &.focused {
-    box-shadow:
-      inset 4px 4px 4px var(--shadow-dark-medium),
+    box-shadow: inset 4px 4px 4px var(--shadow-dark-medium),
       inset -4px -4px 4px var(--shadow-light-full);
   }
 
