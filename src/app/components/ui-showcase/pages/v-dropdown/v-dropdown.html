@@ -1,0 +1,84 @@
+<div class="p-8">
+  <h1 class="text-3xl font-bold mb-6">v-dropdown</h1>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-6">Basic Dropdown</h2>
+    <v-dropdown label="Select Food Item"
+                placeholder="Search food items"
+                class="w-full max-w-md"
+                [items]="foodItems"
+                (onSelectionChanged)="onFoodItemChange($event)" />
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-6">Dropdown with Custom Width</h2>
+    <v-dropdown label="Select Food Item"
+                placeholder="Search food items"
+                class="w-full max-w-md"
+                [minDropdownWidth]="'300px'"
+                [items]="foodItems"
+                (onSelectionChanged)="onFoodItemChange($event)" />
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-6">Dropdown with Expand Direction</h2>
+    <div class="flex gap-4 flex-wrap">
+      <v-dropdown label="Expand Left"
+                  placeholder="Search"
+                  class="w-64"
+                  [items]="foodItems"
+                  [minDropdownWidth]="'300px'"
+                  [expandDirection]="ddExpandDirection.Left"
+                  (onSelectionChanged)="onFoodItemChange($event)" />
+
+      <v-dropdown label="Expand Right"
+                  placeholder="Search"
+                  class="w-64"
+                  [items]="foodItems"
+                  [expandDirection]="ddExpandDirection.Right"
+                  (onSelectionChanged)="onFoodItemChange($event)" />
+    </div>
+  </section>
+
+  @if (selectedFoodItem) {
+    <section class="mb-12">
+      <h2 class="text-2xl font-semibold mb-6">Selected Item</h2>
+      <v-card>
+        <p><strong>Selected:</strong> {{ selectedFoodItem }}</p>
+      </v-card>
+    </section>
+  }
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-6">Dropdown in Modal</h2>
+    <v-button raised
+              (click)="openModal()">
+      Open Modal with Dropdown
+    </v-button>
+
+    @if (isModalOpen) {
+      <v-modal [config]="{ isOpen: isModalOpen, width: '500px', borderRadius: 3 }"
+               (onClose)="closeModal()">
+        <div v-header>
+          <h3 class="m-0">Select from Dropdown</h3>
+        </div>
+
+        <v-dropdown label="Select Food Item"
+                    placeholder="Search food items"
+                    class="w-full"
+                    [items]="foodItems"
+                    [minDropdownWidth]="'300px'"
+                    [expandDirection]="ddExpandDirection.Left"
+                    (onSelectionChanged)="onFoodItemChange($event)" />
+
+        <div v-footer
+             class="flex justify-end">
+          <v-button danger
+                    (onClick)="closeModal()">
+            Close
+          </v-button>
+        </div>
+      </v-modal>
+    }
+  </section>
+</div>

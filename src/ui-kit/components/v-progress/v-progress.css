@@ -11,8 +11,7 @@
   background: var(--color-bg-default);
   overflow: hidden;
 
-  box-shadow: inset 3px 3px 3px var(--shadow-dark-light),
-    inset -3px -3px 3px var(--shadow-light-strong);
+  box-shadow: inset 3px 3px 3px var(--shadow-dark-light), inset -3px -3px 3px var(--shadow-light-strong);
 }
 
 .progress-bar {
@@ -23,9 +22,7 @@
   width: calc(var(--v-progress-percentage, 0%) - var(--v-progress-bar-gap, 1px) * 2);
   background: var(--v-progress-bar-color, var(--color-primary));
   transition: width var(--animation-duration-medium) ease;
-  border-radius: calc(
-    var(--v-progress-border-radius, var(--unit-2)) - var(--v-progress-bar-gap, 1px)
-  );
+  border-radius: calc(var(--v-progress-border-radius, var(--unit-2)) - var(--v-progress-bar-gap, 1px));
 }
 
 :host([bar-style='flat']) .progress-bar {

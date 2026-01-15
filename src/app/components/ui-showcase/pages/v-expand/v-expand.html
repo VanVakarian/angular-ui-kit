@@ -1,0 +1,129 @@
+<div class="p-8">
+  <h1 class="mb-6 text-3xl font-bold">v-expand</h1>
+
+  <section class="mb-12">
+    <h2 class="mb-6 text-2xl font-semibold">Basic Expand</h2>
+    <v-expand outer-shadow-rounded>
+      <div v-header
+           class="p-2 cursor-pointer">
+        Click to Expand/Collapse
+      </div>
+      <div v-body
+           class="p-2">
+        <p>This is expandable content that can be toggled.</p>
+      </div>
+    </v-expand>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="mb-6 text-2xl font-semibold">Controlled Expand</h2>
+
+    <v-button primary
+              class="mb-4"
+              (click)="toggleHiddenPanel()">
+      @if (isHiddenPanelExpanded) {
+        Hide Panel
+      } @else {
+        Show Panel
+      }
+    </v-button>
+
+    <v-expand outer-shadow-rounded
+              [isExpanded]="isHiddenPanelExpanded">
+      <div v-body
+           class="p-2">
+        <p>This panel is controlled by external button state.</p>
+      </div>
+    </v-expand>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="mb-6 text-2xl font-semibold">Accordion Group</h2>
+    <p class="mb-4 text-gray-600">Only one item in accordion group can be expanded at a time</p>
+
+    <v-expand accordion="menu-items"
+              accordionId="item-1"
+              outer-shadow-rounded
+              class="mb-2">
+      <h3 v-header
+          class="p-2 cursor-pointer">🍕 Pizza Menu</h3>
+      <div v-body
+           class="p-2">
+        <p>Margherita - Classic tomato and mozzarella - $12</p>
+        <p>Pepperoni - Spicy pepperoni with cheese - $14</p>
+        <p>Veggie Supreme - Bell peppers, mushrooms, olives - $13</p>
+      </div>
+    </v-expand>
+
+    <v-expand accordion="menu-items"
+              accordionId="item-2"
+              inner-shadow-rounded
+              class="mb-2">
+      <h3 v-header
+          class="p-2 cursor-pointer">🥗 Daily Specials</h3>
+      <div v-body
+           class="p-2">
+        <h4>Today's Features:</h4>
+        <ul>
+          <li>Caesar Salad with grilled chicken - $11</li>
+          <li>Beef Stroganoff with rice - $16</li>
+          <li>Vegetarian Buddha Bowl - $13</li>
+        </ul>
+      </div>
+    </v-expand>
+
+    <v-expand accordion="menu-items"
+              accordionId="item-3"
+              outer-shadow-rounded>
+      <h3 v-header
+          class="p-2 cursor-pointer">🍰 Desserts</h3>
+      <div v-body
+           class="p-2">
+        <p>Tiramisu - $8</p>
+        <p>Cheesecake - $7</p>
+        <p>Ice Cream - $5</p>
+      </div>
+    </v-expand>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="mb-6 text-2xl font-semibold">Dynamic Accordion Items</h2>
+    <div outer-shadow-rounded
+         [shadowBorderRadius]="4">
+      @for (i of [0, 1, 2, 3]; track i) {
+        <v-expand accordion="dynamic-group"
+                  [accordionId]="'dynamic-item-' + i"
+                  class="last:border-b-0 border-b">
+          <div v-header
+               class="p-3 cursor-pointer">
+            Item {{ i + 1 }}
+          </div>
+          <div v-body
+               class="p-3">
+            <p>Description for item {{ i + 1 }}.</p>
+            <p>This demonstrates how to create dynamic accordion items using Angular control flow.</p>
+          </div>
+        </v-expand>
+      }
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="mb-6 text-2xl font-semibold">Shadow Variants</h2>
+    <div class="flex flex-col gap-4">
+      <v-expand outer-shadow-rounded>
+        <div v-header
+             class="p-2 cursor-pointer">Outer Shadow Rounded</div>
+        <div v-body
+             class="p-2">Content with outer shadow</div>
+      </v-expand>
+
+      <v-expand inner-shadow-rounded>
+        <div v-header
+             class="p-2 cursor-pointer">Inner Shadow Rounded</div>
+        <div v-body
+             class="p-2">Content with inner shadow</div>
+      </v-expand>
+    </div>
+  </section>
+</div>

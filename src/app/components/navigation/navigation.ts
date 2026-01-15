@@ -1,10 +1,8 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { NgClass } from '@angular/common';
 import { Component, computed, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DeviceInfoService } from '@app/services/device-info.service';
 import { MenuButton, NavigationService, UiShowcaseButton } from '@app/services/navigation.service';
-import { ANIMATION_DURATION_MS, ANIMATION_DURATION_MS_STRING } from '@app/shared/animations';
 import { VButton } from '@ui-kit/components/v-button/v-button';
 import { IconName, VIcon } from '@ui-kit/components/v-icon/v-icon';
 import { ButtonStyle } from '@ui-kit/types';
@@ -14,29 +12,6 @@ import { ButtonStyle } from '@ui-kit/types';
   templateUrl: './navigation.html',
   styleUrl: './navigation.scss',
   imports: [VButton, VIcon, NgClass],
-  animations: [
-    trigger('menuSlide', [
-      state('closed', style({ transform: 'translateX(100%)' })),
-      state('open', style({ transform: 'translateX(0)' })),
-      transition('closed <=> open', [
-        animate(`${ANIMATION_DURATION_MS_STRING.MEDIUM} cubic-bezier(0.68, -0.6, 0.32, 1.6)`),
-      ]),
-    ]),
-    trigger('fadeInOut', [
-      state('fadeOut', style({ opacity: 0 })),
-      state('fadeIn', style({ opacity: 0.75 })),
-      transition('fadeOut <=> fadeIn', [
-        animate(`${ANIMATION_DURATION_MS_STRING.MEDIUM} ease-in-out`),
-      ]),
-    ]),
-    trigger('fabSlideDiagonal', [
-      state('visible', style({ transform: 'translate(0, 0)' })),
-      state('hidden', style({ transform: 'translate(200%, 200%)' })),
-      transition('visible <=> hidden', [
-        animate(`${ANIMATION_DURATION_MS_STRING.MEDIUM} ease-in-out`),
-      ]),
-    ]),
-  ],
 })
 export class Navigation implements OnInit {
   protected readonly fader = viewChild.required<ElementRef>('fader');
@@ -62,8 +37,7 @@ export class Navigation implements OnInit {
   });
 
   protected readonly uiShowcaseButtons$$ = this.navigationService.visibleUiShowcaseButtons$$;
-  protected readonly forceShowOnUiShowcasePage$$ =
-    this.navigationService.shouldShowUiShowcaseButtons$$;
+  protected readonly forceShowOnUiShowcasePage$$ = this.navigationService.shouldShowUiShowcaseButtons$$;
 
   public ngOnInit(): void {}
 
@@ -71,26 +45,18 @@ export class Navigation implements OnInit {
     return button.selected ? ButtonStyle.Raised : ButtonStyle.Flat;
   }
 
-  protected toggleMenuCollapse(): void {
-    this.navigationService.toggleCollapse();
-  }
-
   protected toggleMobileMenu(): void {
     this.isMobileMenuOpen$$.update((value) => !value);
     if (this.isMobileMenuOpen$$()) {
       this.fader().nativeElement.classList.remove('hidden');
     } else {
-      setTimeout(() => {
-        this.fader().nativeElement.classList.add('hidden');
-      }, ANIMATION_DURATION_MS.MEDIUM);
+      this.fader().nativeElement.classList.add('hidden');
     }
   }
 
   protected closeMobileMenu(): void {
     this.isMobileMenuOpen$$.set(false);
-    setTimeout(() => {
-      this.fader().nativeElement.classList.add('hidden');
-    }, ANIMATION_DURATION_MS.MEDIUM);
+    this.fader().nativeElement.classList.add('hidden');
   }
 
   protected navigateToLink(link: string | string[]): void {
@@ -99,11 +65,5 @@ export class Navigation implements OnInit {
     } else if (link) {
       this.router.navigate([link]);
     }
-  }
-
-  protected getCollapseIconName(): IconName {
-    return this.navigationService.isCollapsed$$()
-      ? IconName.LeftPanelOpen
-      : IconName.LeftPanelClose;
   }
 }

@@ -62,27 +62,51 @@ export class NavigationService {
 
   private readonly uiShowcaseButtons: UiShowcaseButton[] = [
     {
-      label: 'Dishes',
-      link: '/ui-showcase/dishes',
-      iconName: IconName.Restaurant,
+      label: 'v-button',
+      link: '/ui-showcase/v-button',
+      iconName: IconName.Check,
       selected: false,
     },
     {
-      label: 'Finance',
-      link: '/ui-showcase/finance',
-      iconName: IconName.Paid,
+      label: 'v-input',
+      link: '/ui-showcase/v-input',
+      iconName: IconName.Edit,
       selected: false,
     },
     {
-      label: 'Icons',
-      link: '/ui-showcase/icons',
+      label: 'v-card',
+      link: '/ui-showcase/v-card',
+      iconName: IconName.Article,
+      selected: false,
+    },
+    {
+      label: 'v-dropdown',
+      link: '/ui-showcase/v-dropdown',
+      iconName: IconName.KeyboardArrowDown,
+      selected: false,
+    },
+    {
+      label: 'v-expand',
+      link: '/ui-showcase/v-expand',
+      iconName: IconName.SwapHoriz,
+      selected: false,
+    },
+    {
+      label: 'v-icon',
+      link: '/ui-showcase/v-icon',
+      iconName: IconName.Star,
+      selected: false,
+    },
+    {
+      label: 'v-modal',
+      link: '/ui-showcase/v-modal',
       iconName: IconName.ViewCozy,
       selected: false,
     },
     {
-      label: 'Other',
-      link: '/ui-showcase/other',
-      iconName: IconName.Article,
+      label: 'v-progress',
+      link: '/ui-showcase/v-progress',
+      iconName: IconName.Analytics,
       selected: false,
     },
   ];

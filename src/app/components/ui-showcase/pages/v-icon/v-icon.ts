@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
-import { VCard } from '@ui-kit/components/v-card/v-card';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { IconName, VIcon } from '@ui-kit/components/v-icon/v-icon';
 
 @Component({
-  selector: 'icons',
-  templateUrl: './icons.html',
-  imports: [VCard, VIcon],
+  selector: 'v-icon-page',
+  templateUrl: './v-icon.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [VIcon],
 })
-export class Icons {
+export class VIconPage {
+  protected readonly Icon = IconName;
   protected readonly iconNames = Object.values(IconName);
 
   protected getIconKey(iconName: IconName): string {

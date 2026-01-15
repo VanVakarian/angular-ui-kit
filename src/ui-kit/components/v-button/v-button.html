@@ -6,9 +6,8 @@
   <ng-content select="[v-prefix]"
               class="prefix" />
 
-  @if (isLabelInDom$$()) {
-    <div class="btn-text"
-         [style.opacity]="isLabelVisible$$() ? '1' : '0'">
+  @if (!settings$$().isLabelHidden) {
+    <div class="btn-text">
       <ng-content />
     </div>
   }

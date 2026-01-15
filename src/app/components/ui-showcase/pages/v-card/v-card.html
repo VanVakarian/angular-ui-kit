@@ -1,0 +1,62 @@
+<div class="p-8">
+  <h1 class="text-3xl font-bold mb-6">v-card</h1>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-6">Default Card</h2>
+    <v-card class="flex flex-col gap-3">
+      <div>Default card with borderRadius=2, padding=2</div>
+      <p>This is the standard card appearance with default settings.</p>
+    </v-card>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-6">Compact Card</h2>
+    <v-card [config]="{ borderRadius: 1, padding: 1 }">
+      Compact card with smaller border radius and padding
+    </v-card>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-6">Card Without Border Radius</h2>
+    <v-card [config]="{ borderRadius: 0 }"
+            class="flex flex-col gap-2">
+      <div>Card with no border radius (sharp corners)</div>
+      <p>Useful for stacking cards or creating grid layouts.</p>
+    </v-card>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-6">Card with Content</h2>
+    <v-card class="flex flex-col gap-3">
+      <h3 class="text-xl font-semibold">Card Title</h3>
+      <p>Cards can contain any content including text, buttons, forms, and other components.</p>
+      <div class="flex gap-2">
+        <v-button primary>Primary Action</v-button>
+        <v-button flat>Secondary</v-button>
+      </div>
+    </v-card>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-6">Custom Padding</h2>
+    <div class="flex flex-col gap-4">
+      <v-card [config]="{ padding: 0 }">
+        <div class="p-4">Card with padding: 0 (manual padding applied)</div>
+      </v-card>
+      <v-card [config]="{ padding: 4 }">
+        <div>Card with padding: 4 (extra padding)</div>
+      </v-card>
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-6">Card with Various Border Radius</h2>
+    <div class="flex flex-col gap-4">
+      <v-card [config]="{ borderRadius: 0 }">borderRadius: 0</v-card>
+      <v-card [config]="{ borderRadius: 1 }">borderRadius: 1</v-card>
+      <v-card [config]="{ borderRadius: 2 }">borderRadius: 2 (default)</v-card>
+      <v-card [config]="{ borderRadius: 3 }">borderRadius: 3</v-card>
+      <v-card [config]="{ borderRadius: 5 }">borderRadius: 5</v-card>
+    </div>
+  </section>
+</div>

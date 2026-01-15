@@ -1,7 +1,6 @@
 @if (forceShowOnUiShowcasePage$$()) {
   @if (isDesktop$$()) {
-    <nav class="fixed top-0 left-0 z-40 flex flex-col h-screen gap-2 pt-2 pb-2 pl-2 pr-2 transition-[width] duration-(--animation-duration-medium) ease-in-out"
-         [style.width.px]="navigationService.navbarWidth$$()">
+    <nav class="flex flex-col h-screen gap-2 pt-2 pb-2 pl-2 pr-2">
 
       <!-- main menu buttons -->
       <div class="flex flex-col gap-2">
@@ -12,39 +11,19 @@
                       buttonStyle: getButtonStyle(button),
                       width: '100%',
                       padding: 2,
-                      isLabelHidden: navigationService.isCollapsed$$(),
-                      labelAnimationDuration: 125,
                       textAlign: 'left',
                     }"
                     class="menu-item"
                     (click)="navigateToLink(button.link)">
-            <v-icon v-prefix
-                    [name]="button.iconName"
-                    [size]="7" />
             {{ button.label }}
           </v-button>
         }
-      </div>
-
-      <!-- collapse sidebar button -->
-      <div class="flex flex-col gap-2 mt-auto">
-        <v-button [config]="{
-                    buttonStyle: ButtonStyle.Flat,
-                    padding: 2,
-                    isLabelHidden: true,
-                  }"
-                  class="menu-item"
-                  (click)="toggleMenuCollapse()">
-          <v-icon v-prefix
-                  [name]="getCollapseIconName()"
-                  [size]="7" />
-        </v-button>
       </div>
     </nav>
   }
 
   @if (!isDesktop$$()) {
-    <div [@menuSlide]="isMobileMenuOpen$$() ? 'open' : 'closed'"
+    <div [class.hidden]="!isMobileMenuOpen$$()"
          class="h-dvh fixed top-0 right-0 z-40 pointer-events-none">
       <div class="flex flex-col justify-end h-full gap-4 mx-4 pointer-events-none">
         @for (button of visibleButtons$$(); track button.label) {
@@ -73,12 +52,12 @@
     </div>
 
     <div #fader
-         [@fadeInOut]="isMobileMenuOpen$$() ? 'fadeIn' : 'fadeOut'"
+         [style.opacity]="isMobileMenuOpen$$() ? '0.75' : '0'"
          class="h-dvh w-dvw fixed top-0 left-0 z-30 hidden bg-black"
          (click)="closeMobileMenu()">
     </div>
 
-    <div [@fabSlideDiagonal]="shouldHideFabButtons$$() ? 'hidden' : 'visible'"
+    <div [class.hidden]="shouldHideFabButtons$$()"
          class="fixed bottom-0 right-0 z-50 mb-4 mr-4">
       <v-button [config]="{
                   buttonStyle: isMobileMenuOpen$$() ? ButtonStyle.Danger : ButtonStyle.Primary,

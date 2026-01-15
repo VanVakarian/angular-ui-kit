@@ -8,8 +8,7 @@
   border-radius: var(--v-expand-border-radius);
   cursor: pointer;
   user-select: none;
-  transition: background-color var(--animation-duration-fast)
-    var(--v-expand-animation-timing-function);
+  transition: background-color var(--animation-duration-fast) var(--v-expand-animation-timing-function);
 }
 
 .header:hover {

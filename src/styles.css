@@ -3,6 +3,9 @@
 :root {
   --gradient-color: var(--color-primary-gradient-lighter);
   --gradient-bg: var(--color-bg-default);
+
+  /* most important property that allows animating height */
+  interpolate-size: allow-keywords;
 }
 
 * {
