@@ -35,6 +35,9 @@
             ],
             "styles": [
               "src/ui-kit/styles/vars.css",
+              "src/ui-kit/styles/themes/neumorphic-blue.css",
+              "src/ui-kit/styles/styles/neumorphic-style.css",
+              "src/ui-kit/styles/styles/flat.css",
               "src/styles.css"
             ],
             "stylePreprocessorOptions": {

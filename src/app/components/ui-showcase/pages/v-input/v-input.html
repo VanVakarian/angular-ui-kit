@@ -1,71 +1,78 @@
-<div class="p-8">
+<div v-theme="neumorphic-blue"
+     v-style="neumorphic-style"
+     class="p-8">
   <h1 class="text-3xl font-bold mb-6">v-input</h1>
 
-  <section class="mb-12">
-    <h2 class="text-2xl font-semibold mb-6">Basic Inputs</h2>
-    <div class="flex flex-col gap-4">
-      <v-input placeholder="Enter text..." />
-      <v-input [config]="{ isDisabled: true }"
-               placeholder="Disabled input" />
-      <v-input [config]="{ isReadonly: true }"
-               placeholder="Readonly input" />
+  <div class="flex flex-col gap-8 lg:flex-row">
+    <div class="flex-1">
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6">Basic Inputs</h2>
+        <div class="flex flex-col gap-4">
+          <v-input placeholder="Enter text..." />
+          <v-input [config]="{ isDisabled: true }"
+                   placeholder="Disabled input" />
+          <v-input [config]="{ isReadonly: true }"
+                   placeholder="Readonly input" />
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6">Input Types</h2>
+        <form [formGroup]="form"
+              class="flex flex-col gap-4">
+          <v-input formControlName="username"
+                   [config]="{ label: 'Username', placeholder: 'Enter your username' }" />
+
+          <v-input formControlName="email"
+                   [config]="{ label: 'Email', placeholder: 'example@email.com', type: 'email' }" />
+
+          <v-input formControlName="password"
+                   [config]="{ label: 'Password', placeholder: 'Enter password', type: 'password' }" />
+
+          <v-input formControlName="disabled"
+                   [config]="{ label: 'Disabled Field', placeholder: 'This field is disabled' }" />
+
+          <v-input formControlName="error"
+                   [config]="{ label: 'Field with Error', placeholder: 'Enter something' }" />
+        </form>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6">Inputs with Prefix/Postfix</h2>
+        <div class="flex flex-col gap-4"
+             [formGroup]="form">
+          <v-input formControlName="testInput">
+            <span v-prefix
+                  class="px-2">$</span>
+            <button v-postfix
+                    type="button"
+                    class="w-7 h-7">🔍</button>
+          </v-input>
+
+          <v-input formControlName="testInput">
+            <v-button flat
+                      v-prefix
+                      class="mr-2"
+                      [config]="{ isWithoutShadow: true, bgOpacity: '0.5', padding: 0 }"
+                      (click)="consoleLogFormValue()">
+              <v-icon [name]="Icon.Close"
+                      [size]="8" />
+            </v-button>
+            <button v-postfix
+                    type="button"
+                    class="w-7 h-7">🔍</button>
+          </v-input>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6">Input Sizes</h2>
+        <div class="flex flex-col gap-4">
+          <v-input placeholder="Default size" />
+          <v-input placeholder="Another input" />
+        </div>
+      </section>
     </div>
-  </section>
-
-  <section class="mb-12">
-    <h2 class="text-2xl font-semibold mb-6">Input Types</h2>
-    <form [formGroup]="form"
-          class="flex flex-col gap-4">
-      <v-input formControlName="username"
-               [config]="{ label: 'Username', placeholder: 'Enter your username' }" />
-
-      <v-input formControlName="email"
-               [config]="{ label: 'Email', placeholder: 'example@email.com', type: 'email' }" />
-
-      <v-input formControlName="password"
-               [config]="{ label: 'Password', placeholder: 'Enter password', type: 'password' }" />
-
-      <v-input formControlName="disabled"
-               [config]="{ label: 'Disabled Field', placeholder: 'This field is disabled' }" />
-
-      <v-input formControlName="error"
-               [config]="{ label: 'Field with Error', placeholder: 'Enter something' }" />
-    </form>
-  </section>
-
-  <section class="mb-12">
-    <h2 class="text-2xl font-semibold mb-6">Inputs with Prefix/Postfix</h2>
-    <div class="flex flex-col gap-4"
-         [formGroup]="form">
-      <v-input formControlName="testInput">
-        <span v-prefix
-              class="px-2">$</span>
-        <button v-postfix
-                type="button"
-                class="w-7 h-7">🔍</button>
-      </v-input>
-
-      <v-input formControlName="testInput">
-        <v-button flat
-                  v-prefix
-                  class="mr-2"
-                  [config]="{ isWithoutShadow: true, bgOpacity: '0.5', padding: 0 }"
-                  (click)="consoleLogFormValue()">
-          <v-icon [name]="Icon.Close"
-                  [size]="8" />
-        </v-button>
-        <button v-postfix
-                type="button"
-                class="w-7 h-7">🔍</button>
-      </v-input>
-    </div>
-  </section>
-
-  <section class="mb-12">
-    <h2 class="text-2xl font-semibold mb-6">Input Sizes</h2>
-    <div class="flex flex-col gap-4">
-      <v-input placeholder="Default size" />
-      <v-input placeholder="Another input" />
-    </div>
-  </section>
+    <div class="flex-1"></div>
+  </div>
 </div>

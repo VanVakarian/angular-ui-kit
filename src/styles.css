@@ -1,11 +1,8 @@
 @import 'tailwindcss';
 
 :root {
-  --gradient-color: var(--color-primary-gradient-lighter);
-  --gradient-bg: var(--color-bg-default);
-
-  /* most important property that allows animating height */
-  interpolate-size: allow-keywords;
+  --gradient-color: var(--v-color-accent-gradient-light);
+  --gradient-bg: var(--v-color-bg);
 }
 
 * {
@@ -17,5 +14,5 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: var(--color-bg-default);
+  background-color: var(--v-color-bg);
 }

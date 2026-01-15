@@ -10,12 +10,7 @@ export class OuterShadowDirective implements OnInit {
   public ngOnInit() {
     const element = this.el.nativeElement;
 
-    this.renderer.setStyle(
-      element,
-      'box-shadow',
-      ` 3px 3px 6px var(--shadow-dark-light),
-        -3px -3px 6px var(--shadow-light-strong) `,
-    );
+    this.renderer.setStyle(element, 'box-shadow', ` var(--v-shadow-outer-1) `);
   }
 }
 
@@ -31,12 +26,7 @@ export class OuterShadowRoundedDirective implements OnInit {
   public ngOnInit() {
     const element = this.el.nativeElement;
 
-    this.renderer.setStyle(
-      element,
-      'box-shadow',
-      ` 3px 3px 6px var(--shadow-dark-light),
-        -3px -3px 6px var(--shadow-light-strong) `,
-    );
+    this.renderer.setStyle(element, 'box-shadow', ` var(--v-shadow-outer-1) `);
     this.renderer.setStyle(element, 'border-radius', `var(--unit-${this.shadowBorderRadius()})`);
   }
 }
@@ -51,12 +41,7 @@ export class InnerShadowDirective implements OnInit {
   public ngOnInit() {
     const element = this.el.nativeElement;
 
-    this.renderer.setStyle(
-      element,
-      'box-shadow',
-      ` inset 3px 3px 3px var(--shadow-dark-light),
-        inset -3px -3px 3px var(--shadow-light-strong) `,
-    );
+    this.renderer.setStyle(element, 'box-shadow', ` var(--v-shadow-inset-2) `);
   }
 }
 
@@ -72,12 +57,7 @@ export class InnerShadowRoundedDirective implements OnInit {
   public ngOnInit() {
     const element = this.el.nativeElement;
 
-    this.renderer.setStyle(
-      element,
-      'box-shadow',
-      ` inset 3px 3px 3px var(--shadow-dark-light),
-        inset -3px -3px 3px var(--shadow-light-strong) `,
-    );
+    this.renderer.setStyle(element, 'box-shadow', ` var(--v-shadow-inset-2) `);
     this.renderer.setStyle(element, 'border-radius', `var(--unit-${this.shadowBorderRadius()})`);
   }
 }

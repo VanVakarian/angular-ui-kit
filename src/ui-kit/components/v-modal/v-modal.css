@@ -28,7 +28,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--color-bg-default);
+  background: var(--v-color-surface);
   border-radius: var(--v-modal-border-radius);
   z-index: 0;
 }
@@ -55,16 +55,16 @@
 }
 
 ::ng-deep [v-header] {
-  border-bottom: 0.5px solid var(--shadow-dark-light);
+  border-bottom: 0.5px solid var(--v-color-border-subtle);
   font-weight: 600;
-  color: var(--color-text-default);
+  color: var(--v-color-text);
   flex-shrink: 0;
   position: relative;
   z-index: 1;
 }
 
 ::ng-deep [v-footer] {
-  border-top: 1px solid var(--shadow-dark-light);
+  border-top: 1px solid var(--v-color-border-subtle);
   flex-shrink: 0;
   position: relative;
   z-index: 1;

@@ -1,4 +1,7 @@
 :root {
+  /* most important property that allows animating height */
+  interpolate-size: allow-keywords;
+
   /* Animation durations - synced with animation-durations.ts */
   --animation-duration-fast: 125ms;
   --animation-duration-medium: 250ms;
@@ -45,47 +48,4 @@
   --unit--8: -32px;
   --unit--12: -48px;
   --unit--16: -64px;
-
-  --color-primary: #3f51b5;
-  --color-primary-gradient-lighter: #717dc1;
-  --color-primary-gradient-darker: #3f51b5;
-
-  --color-success: #22c55e;
-
-  --color-warning: #f97316;
-
-  --color-danger: #ef4444;
-  --color-danger-gradient-lighter: #f87171;
-  --color-danger-gradient-darker: #ef4444;
-  /* --color-danger-gradient-darker: #dc2626; */
-
-  --color-nutrient-low: var(--color-primary-gradient-darker);
-  --color-nutrient-warning: var(--color-warning);
-  --color-nutrient-high: var(--color-danger-gradient-darker);
-
-  --color-text-default: #374151;
-  --color-text-muted: #6b7280;
-  --color-text-error: #ef4444;
-  --color-text-on-dark: #ffffff;
-
-  --color-bg-default: #ebf3fa;
-  --color-bg-accent: #c7d2fe;
-
-  --shadow-dark-light: rgba(174, 174, 192, 0.3);
-  --shadow-dark-medium: rgba(174, 174, 192, 0.5);
-  --shadow-light-strong: rgba(255, 255, 255, 0.9);
-  --shadow-light-full: rgba(255, 255, 255, 1);
-
-  /* --color-text-disabled */
-  /* --color-text-accent */
-  /* --color-bg-subtle */
-  /* --color-bg-accent */
-  /* --color-bg-error */
-  /* --color-border-default */
-  /* --color-border-muted */
-  /* --color-border-error */
-  /* --color-primary */
-  /* --color-success */
-  /* --color-warning */
-  /* --color-error */
 }

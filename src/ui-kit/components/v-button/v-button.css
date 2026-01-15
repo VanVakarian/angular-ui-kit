@@ -20,8 +20,8 @@ button {
   padding: var(--v-button-padding-y, var(--unit-2)) var(--v-button-padding-x, var(--unit-4));
   border-radius: var(--v-button-border-radius, var(--unit-1));
 
-  background: color-mix(in oklab, var(--color-bg-default) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
-  color: var(--color-text-default);
+  background: color-mix(in oklab, var(--v-color-surface) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
+  color: var(--v-color-text);
 
   transition: background 0.2s ease, box-shadow 0.2s ease;
 
@@ -73,92 +73,92 @@ button > :not(.prefix):not(.postfix) {
   box-shadow: none;
 
   &:hover {
-    box-shadow: 2px 2px 4px var(--shadow-dark-light), -2px -2px 4px var(--shadow-light-strong);
+    box-shadow: var(--v-shadow-outer-0);
   }
 
   &:active {
-    box-shadow: inset 1px 1px 2px var(--shadow-dark-light), inset -1px -1px 2px var(--shadow-light-strong);
+    box-shadow: var(--v-shadow-inset-0);
   }
 }
 
 /* Raised directive */
 :host([raised]) button {
-  box-shadow: 3px 3px 6px var(--shadow-dark-light), -3px -3px 6px var(--shadow-light-strong);
+  box-shadow: var(--v-shadow-outer-1);
 
   &:hover {
-    box-shadow: 4px 4px 8px var(--shadow-dark-light), -4px -4px 8px var(--shadow-light-strong);
+    box-shadow: var(--v-shadow-outer-2);
   }
 
   &:active {
-    box-shadow: inset 2px 2px 4px var(--shadow-dark-light), inset -2px -2px 4px var(--shadow-light-strong);
+    box-shadow: var(--v-shadow-inset-1);
   }
 }
 
 /* Primary directive */
 :host([primary]) button {
-  color: var(--color-text-on-dark, white);
-  box-shadow: 3px 3px 6px var(--shadow-dark-light), -3px -3px 6px var(--shadow-light-strong);
+  color: var(--v-color-text-on-accent, white);
+  box-shadow: var(--v-shadow-outer-1);
 
   --angle: 155deg;
   --start-pos: -50%;
   --end-pos: 150%;
   background: linear-gradient(
     var(--angle),
-    color-mix(in oklab, var(--color-primary-gradient-lighter) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
+    color-mix(in oklab, var(--v-color-accent-gradient-light) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
       var(--start-pos),
-    color-mix(in oklab, var(--color-primary-gradient-darker) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
+    color-mix(in oklab, var(--v-color-accent-gradient-dark) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
       var(--end-pos)
   );
 
   &:active {
     background: linear-gradient(
       var(--angle),
-      color-mix(in oklab, var(--color-primary-gradient-darker) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
+      color-mix(in oklab, var(--v-color-accent-gradient-dark) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
         var(--start-pos),
-      color-mix(in oklab, var(--color-primary-gradient-lighter) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
+      color-mix(in oklab, var(--v-color-accent-gradient-light) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
         var(--end-pos)
     );
   }
 
   &:hover {
-    box-shadow: 4px 4px 8px var(--shadow-dark-light), -4px -4px 8px var(--shadow-light-strong);
+    box-shadow: var(--v-shadow-outer-2);
   }
 }
 
 /* Danger directive */
 :host([danger]) button {
-  color: var(--color-text-on-dark, white);
-  box-shadow: 3px 3px 6px var(--shadow-dark-light), -3px -3px 6px var(--shadow-light-strong);
+  color: var(--v-color-text-on-accent, white);
+  box-shadow: var(--v-shadow-outer-1);
 
   --angle: 155deg;
   --start-pos: -50%;
   --end-pos: 150%;
   background: linear-gradient(
     var(--angle),
-    color-mix(in oklab, var(--color-danger-gradient-lighter) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
+    color-mix(in oklab, var(--v-color-danger-gradient-light) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
       var(--start-pos),
-    color-mix(in oklab, var(--color-danger-gradient-darker) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
+    color-mix(in oklab, var(--v-color-danger-gradient-dark) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
       var(--end-pos)
   );
 
   &:active {
     background: linear-gradient(
       var(--angle),
-      color-mix(in oklab, var(--color-danger-gradient-darker) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
+      color-mix(in oklab, var(--v-color-danger-gradient-dark) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
         var(--start-pos),
-      color-mix(in oklab, var(--color-danger-gradient-lighter) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
+      color-mix(in oklab, var(--v-color-danger-gradient-light) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
         var(--end-pos)
     );
   }
 
   &:hover {
-    box-shadow: 4px 4px 8px var(--shadow-dark-light), -4px -4px 8px var(--shadow-light-strong);
+    box-shadow: var(--v-shadow-outer-2);
   }
 }
 
 :host([transparent]) button {
   background: transparent;
-  color: var(--color-text-default);
+  color: var(--v-color-text);
   box-shadow: none;
 }
 
