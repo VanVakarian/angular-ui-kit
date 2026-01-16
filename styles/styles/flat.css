@@ -6,4 +6,11 @@
   --v-shadow-inset-1: none;
   --v-shadow-inset-2: none;
   --v-shadow-inset-3: none;
+
+  --v-bar-shadow-inset: none;
+  --v-bar-shadow-raised: none;
+
+  --v-slider-thumb-shadow: none;
+  --v-slider-thumb-shadow-hover: none;
+  --v-slider-thumb-shadow-active: none;
 }

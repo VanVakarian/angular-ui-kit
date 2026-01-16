@@ -1,0 +1,37 @@
+<div class="slider"
+     #root
+     (pointermove)="onPointerMove($event)"
+     (pointerup)="onPointerUp($event)"
+     (pointercancel)="onPointerUp($event)">
+
+  <div class="track"
+       #track
+       (pointerdown)="onTrackPointerDown($event)">
+
+    <div class="fill"></div>
+
+    <div class="thumb"
+         [style.left]="thumbStartPosition$$()"
+         (pointerdown)="onThumbPointerDown($event, 'start')">
+      <div class="thumb-grip">
+        <span class="thumb-grip-line"></span>
+        <span class="thumb-grip-line"></span>
+        <span class="thumb-grip-line"></span>
+      </div>
+    </div>
+
+    @if (isRange$$()) {
+      <div class="thumb"
+           [style.left]="thumbEndPosition$$()"
+           (pointerdown)="onThumbPointerDown($event, 'end')">
+        <div class="thumb-grip">
+          <span class="thumb-grip-line"></span>
+          <span class="thumb-grip-line"></span>
+          <span class="thumb-grip-line"></span>
+        </div>
+      </div>
+    }
+
+  </div>
+
+</div>

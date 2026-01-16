@@ -30,11 +30,11 @@
 }
 
 :host([bar-style='inset']) .progress-bar {
-  box-shadow: inset 1px 1px 2px rgba(24, 24, 24, 0.3), inset -1px -1px 2px rgba(255, 255, 255, 0.3);
+  box-shadow: var(--v-bar-shadow-inset);
 }
 
 :host([bar-style='raised']) .progress-bar {
-  box-shadow: inset 1px 1px 3px rgba(255, 255, 255, 0.3), inset -1px -1px 2px rgba(24, 24, 24, 0.3);
+  box-shadow: var(--v-bar-shadow-raised);
 }
 
 .progress-wrapper {

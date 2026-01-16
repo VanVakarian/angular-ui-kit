@@ -1,13 +1,8 @@
 import { Component, computed, input } from '@angular/core';
+import { ProgressBarStyle } from '@ui-kit/components/types';
 import { CssUnitValue } from '@ui-kit/types';
 
-export enum ProgressBarStyle {
-  Flat,
-  Raised,
-  Inset,
-}
-
-export interface VProgressConfig {
+interface VProgressConfig {
   value?: number;
   min?: number;
   max?: number;
@@ -31,7 +26,7 @@ const DEFAULT_V_PROGRESS_CONFIG: Required<VProgressConfig> = {
   barGap: 1,
   isShowValues: false,
   valueSuffix: '',
-};
+} as const;
 
 @Component({
   selector: 'v-progress',

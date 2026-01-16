@@ -18,9 +18,7 @@
   --v-color-text-on-accent: #ffffff;
 
   --v-color-bg: #ebf3fa;
-  /* --v-color-bg: white; */
   --v-color-surface: #ebf3fa;
-  /* --v-color-surface: white; */
   --v-color-surface-accent: #c7d2fe;
   --v-color-border-subtle: rgba(174, 174, 192, 0.6);
 
@@ -28,4 +26,7 @@
   --v-shadow-color-dark-strong: rgba(174, 174, 192, 0.5);
   --v-shadow-color-light: rgba(255, 255, 255, 0.9);
   --v-shadow-color-light-strong: rgba(255, 255, 255, 1);
+
+  --v-slider-thumb-shadow-color: rgba(46, 56, 86, 0.15);
+  --v-slider-thumb-shadow-color-strong: rgba(46, 56, 86, 0.35);
 }
