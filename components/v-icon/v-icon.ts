@@ -59,7 +59,7 @@ export class VIcon {
   public readonly color = input<string>();
 
   public readonly iconBackgroundString$$ = computed(() => {
-    return `url(ui-kit-assets/icons/${this.name()}.svg)`;
+    return `url(/ui-kit-assets/icons/${this.name()}.svg)`;
   });
   public readonly iconUnitSizeString$$ = computed(() => {
     return `var(--unit-${this.size()})`;

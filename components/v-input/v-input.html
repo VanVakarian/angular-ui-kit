@@ -4,7 +4,7 @@
 }
 
 <div class="input-wrapper"
-     [class.focused]="isFocused"
+     [class.focused]="isFocused$$()"
      [class.disabled]="settings$$().isDisabled">
 
   <div class="prefix">
@@ -62,8 +62,8 @@
 
 </div>
 
-@if (getErrorMessage()) {
+@if (errorMessage$$()) {
   <div class="error-message">
-    {{ getErrorMessage() }}
+    {{ errorMessage$$() }}
   </div>
 }

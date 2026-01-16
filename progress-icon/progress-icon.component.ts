@@ -1,92 +1,60 @@
-import { Component, ElementRef, Input, OnChanges } from '@angular/core';
+import { Component, computed, ElementRef, input } from '@angular/core';
 
 @Component({
   selector: 'ui-progress-icon',
   templateUrl: './progress-icon.component.html',
   styleUrl: './progress-icon.component.scss',
 })
-export class UiProgressIcon implements OnChanges {
-  @Input()
-  public progressNum: number = 0;
+export class UiProgressIcon {
+  public readonly progressNum = input(0);
+  public readonly diameter = input(40);
+  public readonly strokeWidthCircle = input(4);
+  public readonly strokeWidthPie = input(0);
+  public readonly color = input('#000000de');
+  public readonly backgroundColor = input('#e0e0e0');
 
-  @Input()
-  public diameter: number = 40;
-
-  @Input()
-  public strokeWidthCircle: number = 4;
-
-  @Input()
-  public strokeWidthPie: number = 0;
-
-  @Input()
-  // public color: string = '#3f51b5'; // TODO[092] Color system refactor
-  public color: string = '#000000de';
-
-  @Input()
-  public backgroundColor: string = '#e0e0e0';
-
-  radius: number = 0;
-  circumference: number = 0;
-  dashoffset: number = 0;
-  piePathData: string = '';
-
-  constructor(private elementRef: ElementRef) {}
-
-  public get isCircle(): boolean {
+  protected readonly isCircle$$ = computed(() => {
     const element = this.elementRef.nativeElement;
     return !element.hasAttribute('pieStyle');
-  }
+  });
 
-  public get isPie(): boolean {
+  protected readonly isPie$$ = computed(() => {
     const element = this.elementRef.nativeElement;
     return element.hasAttribute('pieStyle');
-  }
+  });
 
-  ngOnChanges() {
-    this.radius = (this.diameter - this.strokeWidthCircle) / 2;
-    this.circumference = 2 * Math.PI * this.radius;
-    this.updateProgress();
-  }
+  protected readonly radius$$ = computed(() => (this.diameter() - this.strokeWidthCircle()) / 2);
+  protected readonly circumference$$ = computed(() => 2 * Math.PI * this.radius$$());
+  protected readonly clampedProgress$$ = computed(() => Math.max(0, Math.min(100, this.progressNum())));
+  protected readonly progressRatio$$ = computed(() => this.clampedProgress$$() / 100);
+  protected readonly dashoffset$$ = computed(() => this.circumference$$() * (1 - this.progressRatio$$()));
+  protected readonly piePathData$$ = computed(() => this.buildPiePath(this.progressRatio$$()));
 
-  updateProgress() {
-    const clampedProgress = Math.max(0, Math.min(100, this.progressNum));
-    const progress = clampedProgress / 100;
+  constructor(private readonly elementRef: ElementRef) {}
 
-    // Updating the circular progress
-    this.dashoffset = this.circumference * (1 - progress);
-
-    // Updating the pie progress
-    this.updatePiePath(progress);
-  }
-
-  // Calculating the SVG path for the pie chart
-  updatePiePath(progress: number) {
+  private buildPiePath(progress: number): string {
     if (progress <= 0) {
-      this.piePathData = '';
-      return;
+      return '';
     }
 
-    // Clamping progress to ensure it is between 0% and 100%
+    const diameter = this.diameter();
+    const radius = this.radius$$();
+
     if (progress >= 1) {
-      this.piePathData = `M ${this.diameter / 2} ${this.diameter / 2}
-        m 0 -${this.radius}
-        a ${this.radius} ${this.radius} 0 1 1 0 ${2 * this.radius}
-        a ${this.radius} ${this.radius} 0 1 1 0 -${2 * this.radius}`;
-      return;
+      return `M ${diameter / 2} ${diameter / 2}
+        m 0 -${radius}
+        a ${radius} ${radius} 0 1 1 0 ${2 * radius}
+        a ${radius} ${radius} 0 1 1 0 -${2 * radius}`;
     }
 
-    // Calculating end point based on progress
     const angle = progress * 2 * Math.PI;
-    const x = this.diameter / 2 + this.radius * Math.sin(angle);
-    const y = this.diameter / 2 - this.radius * Math.cos(angle);
-
-    // Arc flag is 0 for angles less than 180 degrees, 1 for angles greater than 180 degrees
+    const x = diameter / 2 + radius * Math.sin(angle);
+    const y = diameter / 2 - radius * Math.cos(angle);
     const largeArcFlag = progress > 0.5 ? 1 : 0;
 
-    // Building the SVG path
-    this.piePathData = `M ${this.diameter / 2} ${this.diameter / 2}
-      L ${this.diameter / 2} ${this.diameter / 2 - this.radius}
-      A ${this.radius} ${this.radius} 0 ${largeArcFlag} 1 ${x} ${y}
+    return `M ${diameter / 2} ${diameter / 2}
+      L ${diameter / 2} ${diameter / 2 - radius}
+      A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x} ${y}
       Z`;
   }
 }

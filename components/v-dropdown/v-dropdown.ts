@@ -10,6 +10,7 @@ import {
   OnInit,
   Optional,
   output,
+  signal,
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
@@ -32,8 +33,8 @@ export interface DropdownItem {
   templateUrl: './v-dropdown.html',
   styleUrl: './v-dropdown.css',
   host: {
-    '[style.--v-dropdown-z-index]': 'zIndex',
-    '[style.--v-dropdown-backdrop-z-index]': 'backdropZIndex',
+    '[style.--v-dropdown-z-index]': 'zIndex$$()',
+    '[style.--v-dropdown-backdrop-z-index]': 'backdropZIndex$$()',
   },
   providers: [
     {
@@ -62,16 +63,16 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
     label: this.label(),
     placeholder: this.placeholder(),
     isDisabled: this.isDisabled(),
-    errorMessage: this.computedErrorMessage,
+    errorMessage: this.computedErrorMessage$$(),
   }));
 
-  protected value: string = '';
-  protected isOpen = false;
-  protected filteredItems: DropdownItem[] = [];
-  protected validationError: string = '';
-  protected dropdownWidth = 0;
-  protected zIndex = 100;
-  protected backdropZIndex = 90;
+  protected readonly value$$ = signal('');
+  protected readonly isOpen$$ = signal(false);
+  protected readonly filteredItems$$ = signal<DropdownItem[]>([]);
+  protected readonly validationError$$ = signal('');
+  protected readonly dropdownWidth$$ = signal(0);
+  protected readonly zIndex$$ = signal(100);
+  protected readonly backdropZIndex$$ = signal(90);
   protected readonly internalForm = new FormGroup({
     search: new FormControl(''),
   });
@@ -88,10 +89,10 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
     private readonly parentLayerId?: string,
   ) {
     this.internalForm.get('search')?.valueChanges.subscribe((value) => {
-      this.value = value || '';
-      this.onChange(this.value);
+      this.value$$.set(value || '');
+      this.onChange(this.value$$());
       this.updateFilteredItems();
-      this.isOpen = true;
+      this.isOpen$$.set(true);
     });
   }
 
@@ -103,28 +104,29 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
     this.layerController?.destroy();
   }
 
-  protected get computedErrorMessage(): string {
-    if (this.isOpen) {
+  protected readonly computedErrorMessage$$ = computed(() => {
+    if (this.isOpen$$()) {
       return this.errorMessage();
     }
-    return this.validationError || this.errorMessage();
-  }
+    return this.validationError$$() || this.errorMessage();
+  });
 
-  protected get dropdownListStyles(): { [key: string]: string } {
+  protected readonly dropdownListStyles$$ = computed(() => {
     const styles: { [key: string]: string } = {};
+    const dropdownWidth = this.dropdownWidth$$();
 
-    if (this.dropdownWidth > 0) {
-      styles['width'] = `${this.dropdownWidth}px`;
+    if (dropdownWidth > 0) {
+      styles['width'] = `${dropdownWidth}px`;
     } else if (this.minDropdownWidth()) {
       styles['min-width'] = this.minDropdownWidth();
     }
 
     return styles;
-  }
+  });
 
   public writeValue(value: string | null): void {
-    this.value = value || '';
-    this.internalForm.get('search')?.setValue(this.value, { emitEvent: false });
+    this.value$$.set(value || '');
+    this.internalForm.get('search')?.setValue(this.value$$(), { emitEvent: false });
     this.updateFilteredItems();
     this.validateInput();
   }
@@ -140,7 +142,7 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   public setDisabledState(isDisabled: boolean): void {}
 
   protected onFocus(): void {
-    this.isOpen = true;
+    this.isOpen$$.set(true);
     this.updateFilteredItems();
     this.setDropdownWidth();
   }
@@ -152,12 +154,12 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   }
 
   protected selectItem(item: DropdownItem): void {
-    this.value = item.label;
-    this.validationError = '';
-    this.internalForm.get('search')?.setValue(this.value, { emitEvent: false });
+    this.value$$.set(item.label);
+    this.validationError$$.set('');
+    this.internalForm.get('search')?.setValue(this.value$$(), { emitEvent: false });
     this.onChange(item.value);
     this.onSelectionChanged.emit(item);
-    this.isOpen = false;
+    this.isOpen$$.set(false);
     const inputComp = this.inputComponent();
     if (inputComp) {
       const element = inputComp.inputElement();
@@ -168,8 +170,8 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   }
 
   protected clearInput(): void {
-    this.value = '';
-    this.validationError = '';
+    this.value$$.set('');
+    this.validationError$$.set('');
     this.internalForm.get('search')?.setValue('', { emitEvent: false });
     this.onChange('');
     this.onSelectionChanged.emit(null);
@@ -177,31 +179,33 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   }
 
   protected closeDropdown(): void {
-    this.isOpen = false;
+    this.isOpen$$.set(false);
     this.validateInput();
     this.onTouched();
   }
 
   private updateFilteredItems(): void {
-    if (!this.value.trim()) {
-      this.filteredItems = this.items();
+    if (!this.value$$().trim()) {
+      this.filteredItems$$.set(this.items());
     } else {
-      this.filteredItems = this.items().filter((item) => item.label.toLowerCase().includes(this.value.toLowerCase()));
+      this.filteredItems$$.set(
+        this.items().filter((item) => item.label.toLowerCase().includes(this.value$$().toLowerCase())),
+      );
     }
   }
 
   private validateInput(): void {
-    if (!this.isRequired() || !this.value.trim()) {
-      this.validationError = '';
+    if (!this.isRequired() || !this.value$$().trim()) {
+      this.validationError$$.set('');
       return;
     }
 
-    const exactMatch = this.items().find((item) => item.label.toLowerCase() === this.value.toLowerCase());
+    const exactMatch = this.items().find((item) => item.label.toLowerCase() === this.value$$().toLowerCase());
 
     if (!exactMatch) {
-      this.validationError = 'Please select a valid option from the list';
+      this.validationError$$.set('Please select a valid option from the list');
     } else {
-      this.validationError = '';
+      this.validationError$$.set('');
     }
   }
 
@@ -214,13 +218,13 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
       const hostElement = this.elementRef.nativeElement;
       const hostRect = hostElement.getBoundingClientRect();
       const minWidthValue = this.minDropdownWidth() ? parseInt(this.minDropdownWidth().replace(/[^\d]/g, '')) || 0 : 0;
-      this.dropdownWidth = Math.max(hostRect.width, minWidthValue);
+      this.dropdownWidth$$.set(Math.max(hostRect.width, minWidthValue));
     }, 0);
   }
 
   private registerLayer(): void {
     this.layerController = this.zLayerService.registerLayer('dropdown', this.parentLayerId);
-    this.zIndex = this.layerController.zIndex;
-    this.backdropZIndex = this.layerController.getBackdropZIndex();
+    this.zIndex$$.set(this.layerController.zIndex);
+    this.backdropZIndex$$.set(this.layerController.getBackdropZIndex());
   }
 }

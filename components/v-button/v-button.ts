@@ -48,10 +48,10 @@ const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
   styleUrl: './v-button.css',
   host: {
     '[style.width]': 'settings$$().width || null',
-    '[attr.primary]': 'isPrimary ? "" : null',
-    '[attr.raised]': 'isRaised ? "" : null',
-    '[attr.flat]': 'isFlat ? "" : null',
-    '[attr.danger]': 'isDanger ? "" : null',
+    '[attr.primary]': 'isPrimary$$() ? "" : null',
+    '[attr.raised]': 'isRaised$$() ? "" : null',
+    '[attr.flat]': 'isFlat$$() ? "" : null',
+    '[attr.danger]': 'isDanger$$() ? "" : null',
     '[attr.no-shadow]': 'settings$$().isWithoutShadow ? "" : null',
     '[style.--v-button-border-radius]': 'borderRadiusString$$()',
     '[style.--v-button-bg-opacity]': 'settings$$().bgOpacity',
@@ -81,21 +81,10 @@ export class VButton {
   protected readonly paddingXString$$ = computed(() => `var(--unit-${this.paddingX$$()})`);
   protected readonly gapString$$ = computed(() => `var(--unit-${this.settings$$().gap})`);
 
-  public get isFlat(): boolean {
-    return this.getActiveStyle() === ButtonStyle.Flat;
-  }
-
-  public get isRaised(): boolean {
-    return this.getActiveStyle() === ButtonStyle.Raised;
-  }
-
-  public get isPrimary(): boolean {
-    return this.getActiveStyle() === ButtonStyle.Primary;
-  }
-
-  public get isDanger(): boolean {
-    return this.getActiveStyle() === ButtonStyle.Danger;
-  }
+  protected readonly isFlat$$ = computed(() => this.getActiveStyle() === ButtonStyle.Flat);
+  protected readonly isRaised$$ = computed(() => this.getActiveStyle() === ButtonStyle.Raised);
+  protected readonly isPrimary$$ = computed(() => this.getActiveStyle() === ButtonStyle.Primary);
+  protected readonly isDanger$$ = computed(() => this.getActiveStyle() === ButtonStyle.Danger);
 
   private readonly elementRef = inject(ElementRef);
 

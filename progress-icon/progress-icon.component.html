@@ -1,43 +1,43 @@
-<svg [attr.width]="diameter"
-     [attr.height]="diameter"
-     [attr.viewBox]="'0 0 ' + diameter + ' ' + diameter"
-     [class.is-circle-style]="isCircle"
+<svg [attr.width]="diameter()"
+     [attr.height]="diameter()"
+     [attr.viewBox]="'0 0 ' + diameter() + ' ' + diameter()"
+     [class.is-circle-style]="isCircle$$()"
      class="progress-circle">
 
-  @if (isCircle) {
+  @if (isCircle$$()) {
     <!-- Background circle -->
-    <circle [attr.cx]="diameter/2"
-            [attr.cy]="diameter/2"
-            [attr.r]="radius"
-            [attr.stroke-width]="strokeWidthCircle"
-            [attr.stroke]="backgroundColor"
+    <circle [attr.cx]="diameter() / 2"
+            [attr.cy]="diameter() / 2"
+            [attr.r]="radius$$()"
+            [attr.stroke-width]="strokeWidthCircle()"
+            [attr.stroke]="backgroundColor()"
             fill="none" />
 
     <!-- Progress circle -->
-    <circle [attr.cx]="diameter/2"
-            [attr.cy]="diameter/2"
-            [attr.r]="radius"
-            [attr.stroke-width]="strokeWidthCircle"
-            [attr.stroke]="color"
-            [style.stroke-dasharray]="circumference"
-            [style.stroke-dashoffset]="dashoffset"
+    <circle [attr.cx]="diameter() / 2"
+            [attr.cy]="diameter() / 2"
+            [attr.r]="radius$$()"
+            [attr.stroke-width]="strokeWidthCircle()"
+            [attr.stroke]="color()"
+            [style.stroke-dasharray]="circumference$$()"
+            [style.stroke-dashoffset]="dashoffset$$()"
             fill="none"
             stroke-linecap="round" />
   }
 
-  @if (isPie) {
+  @if (isPie$$()) {
     <!-- Background circle -->
-    <circle [attr.cx]="diameter/2"
-            [attr.cy]="diameter/2"
-            [attr.r]="radius"
+    <circle [attr.cx]="diameter() / 2"
+            [attr.cy]="diameter() / 2"
+            [attr.r]="radius$$()"
             fill="none"
-            [attr.stroke-width]="strokeWidthPie"
-            [attr.stroke]="color" />
+            [attr.stroke-width]="strokeWidthPie()"
+            [attr.stroke]="color()" />
 
     <!-- Pie slice representing progress -->
-    @if (piePathData) {
-      <path [attr.d]="piePathData"
-            [attr.fill]="color" />
+    @if (piePathData$$()) {
+      <path [attr.d]="piePathData$$()"
+            [attr.fill]="color()" />
     }
   }
 

@@ -1,7 +1,7 @@
 <div class="dropdown-wrapper"
-     [class.open]="isOpen"
+     [class.open]="isOpen$$()"
      [formGroup]="internalForm"
-     [vBackdrop]="isOpen"
+     [vBackdrop]="isOpen$$()"
      (backdropClick)="closeDropdown()">
 
   <v-input #inputComponent
@@ -9,7 +9,7 @@
            formControlName="search"
            (onFocused)="onFocus()"
            (onBlurred)="onBlur()">
-    @if (value) {
+    @if (value$$()) {
       <div v-postfix
            class="clear-icon"
            (mousedown)="$event.preventDefault()"
@@ -28,11 +28,11 @@
     }
   </v-input>
 
-  @if (isOpen && filteredItems.length > 0) {
+  @if (isOpen$$() && filteredItems$$().length > 0) {
     <div class="dropdown-list"
          [class.align-left]="expandDirection() === 'left'"
-         [ngStyle]="dropdownListStyles">
-      @for (item of filteredItems; track item.value) {
+         [ngStyle]="dropdownListStyles$$()">
+      @for (item of filteredItems$$(); track item.value) {
         <div class="dropdown-item"
              (click)="selectItem(item)">
           {{ item.label }}
@@ -41,10 +41,10 @@
     </div>
   }
 
-  @if (isOpen && filteredItems.length === 0 && value) {
+  @if (isOpen$$() && filteredItems$$().length === 0 && value$$()) {
     <div class="dropdown-list"
          [class.align-left]="expandDirection() === 'left'"
-         [ngStyle]="dropdownListStyles">
+         [ngStyle]="dropdownListStyles$$()">
       <div class="dropdown-item empty">
         No items found
       </div>
