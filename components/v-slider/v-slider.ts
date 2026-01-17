@@ -6,7 +6,17 @@ export type VSliderRangeValue = [number, number];
 
 type ActiveThumb = 'start' | 'end';
 
+type DragMode = 'single' | 'range-start' | 'range-end' | 'range-shift';
+
+type DragState = {
+  mode: DragMode;
+  startX: number;
+  startValue: number;
+  startRange: VSliderRangeValue;
+};
+
 export interface VSliderConfig {
+  valueList?: number[];
   min?: number;
   max?: number;
   height?: CssUnitValue;
@@ -17,9 +27,12 @@ export interface VSliderConfig {
   barStyle?: ProgressBarStyle;
   thumbSize?: CssUnitValue;
   isRange?: boolean;
+  isTouchMode?: boolean;
+  touchAreaSize?: CssUnitValue;
 }
 
 const DEFAULT_V_SLIDER_CONFIG: Required<VSliderConfig> = {
+  valueList: [],
   min: 0,
   max: 100,
   height: 3,
@@ -30,6 +43,8 @@ const DEFAULT_V_SLIDER_CONFIG: Required<VSliderConfig> = {
   barStyle: ProgressBarStyle.Flat,
   thumbSize: 6,
   isRange: false,
+  isTouchMode: false,
+  touchAreaSize: 12,
 };
 
 @Component({
@@ -37,12 +52,14 @@ const DEFAULT_V_SLIDER_CONFIG: Required<VSliderConfig> = {
   templateUrl: './v-slider.html',
   styleUrl: './v-slider.css',
   host: {
+    '[class.touch-mode]': 'isTouchMode$$()',
     '[style.--v-slider-height]': 'heightString$$()',
     '[style.--v-slider-border-radius]': 'borderRadiusString$$()',
     '[style.--v-slider-track-color]': 'trackColor$$()',
     '[style.--v-slider-fill-color]': 'fillColor$$()',
     '[style.--v-slider-thumb-size]': 'thumbSizeString$$()',
     '[style.--v-slider-thumb-border-radius]': 'thumbBorderRadiusString$$()',
+    '[style.--v-slider-touch-size]': 'touchAreaSizeString$$()',
     '[style.--v-slider-fill-radius]': 'fillRadiusString$$()',
     '[style.--v-slider-fill-start]': 'fillStart$$()',
     '[style.--v-slider-fill-end]': 'fillEnd$$()',
@@ -63,8 +80,29 @@ export class VSlider {
     ...this.config(),
   }));
 
-  protected readonly min$$ = computed(() => Math.min(this.settings$$().min, this.settings$$().max));
-  protected readonly max$$ = computed(() => Math.max(this.settings$$().min, this.settings$$().max));
+  protected readonly isTouchMode$$ = computed(() => this.settings$$().isTouchMode);
+  protected readonly touchAreaSizeString$$ = computed(() => `var(--unit-${this.settings$$().touchAreaSize})`);
+
+  protected readonly valueList$$ = computed(() => {
+    const list = this.settings$$().valueList;
+    if (!Array.isArray(list)) return [];
+    const filtered = list.filter((value) => Number.isFinite(value));
+    if (filtered.length <= 1) return [];
+    return [...filtered].sort((a, b) => a - b);
+  });
+
+  protected readonly min$$ = computed(() => {
+    const list = this.valueList$$();
+    if (list.length > 0) return list[0];
+    return Math.min(this.settings$$().min, this.settings$$().max);
+  });
+
+  protected readonly max$$ = computed(() => {
+    const list = this.valueList$$();
+    if (list.length > 0) return list[list.length - 1];
+    return Math.max(this.settings$$().min, this.settings$$().max);
+  });
+
   protected readonly isRange$$ = computed(() => this.settings$$().isRange);
 
   protected readonly heightString$$ = computed(() => `var(--unit-${this.settings$$().height})`);
@@ -98,14 +136,12 @@ export class VSlider {
     }
   });
 
-  protected readonly displayValue$$ = computed(() => this.clampToBounds(this.value(), this.min$$(), this.max$$()));
+  protected readonly displayValue$$ = computed(() => this.normalizeValue(this.value()));
 
   protected readonly displayRange$$ = computed(() => {
     const [start, end] = this.range();
-    const min = this.min$$();
-    const max = this.max$$();
-    const clampedStart = this.clampToBounds(start, min, max);
-    const clampedEnd = this.clampToBounds(end, min, max);
+    const clampedStart = this.normalizeValue(start);
+    const clampedEnd = this.normalizeValue(end);
     const lower = Math.min(clampedStart, clampedEnd);
     const upper = Math.max(clampedStart, clampedEnd);
 
@@ -113,41 +149,40 @@ export class VSlider {
   });
 
   protected readonly thumbStartPosition$$ = computed(() => {
-    const value = this.isRange$$() ? this.displayRange$$()[0] : this.displayValue$$();
-
-    return this.isRange$$() ? this.valueToPercentForRangeStart(value) : this.valueToPercentSingle(value);
+    const isRange = this.isRange$$();
+    const value = isRange ? this.displayRange$$()[0] : this.displayValue$$();
+    return isRange ? this.valueToPercentForRangeStart(value) : this.valueToPercentSingle(value);
   });
 
   protected readonly thumbEndPosition$$ = computed(() => {
-    const value = this.isRange$$() ? this.displayRange$$()[1] : this.displayValue$$();
-
-    return this.isRange$$() ? this.valueToPercentForRangeEnd(value) : this.valueToPercentSingle(value);
+    const isRange = this.isRange$$();
+    const value = isRange ? this.displayRange$$()[1] : this.displayValue$$();
+    return isRange ? this.valueToPercentForRangeEnd(value) : this.valueToPercentSingle(value);
   });
 
   protected readonly fillStart$$ = computed(() => {
     if (!this.isRange$$()) return '0%';
-
     return this.valueToPercentForRangeEdge(this.displayRange$$()[0]);
   });
 
   protected readonly fillEnd$$ = computed(() => {
     if (this.isRange$$()) return this.valueToPercentForRangeEdge(this.displayRange$$()[1]);
-
     return this.valueToPercentSingle(this.displayValue$$());
   });
 
-  private readonly activeThumb$$ = signal<ActiveThumb>('end');
   private readonly isDragging$$ = signal(false);
   private readonly pointerId$$ = signal<number | null>(null);
+  private readonly dragState$$ = signal<DragState | null>(null);
+  protected readonly touchActive$$ = signal(false);
+  protected readonly activeTouchThumb$$ = signal<ActiveThumb | null>(null);
 
   private readonly normalizeEffect = effect(() => {
-    const min = this.min$$();
-    const max = this.max$$();
+    const { min, max } = this.getRangeMetrics();
 
     if (this.isRange$$()) {
       const current = this.range();
-      const clampedStart = this.clampToBounds(current[0], min, max);
-      const clampedEnd = this.clampToBounds(current[1], min, max);
+      const clampedStart = this.normalizeValue(current[0]);
+      const clampedEnd = this.normalizeValue(current[1]);
       const nextStart = Math.min(clampedStart, clampedEnd);
       const nextEnd = Math.max(clampedStart, clampedEnd);
 
@@ -159,7 +194,7 @@ export class VSlider {
     }
 
     const currentValue = this.value();
-    const clampedValue = this.clampToBounds(currentValue, min, max);
+    const clampedValue = this.normalizeValue(currentValue);
 
     if (currentValue !== clampedValue) {
       this.value.set(clampedValue);
@@ -173,12 +208,25 @@ export class VSlider {
     if (this.isRange$$()) {
       const value = this.positionToValueForRangeEdge(event);
       const thumb = this.getClosestThumb(value);
-      this.startDrag(event, thumb, this.positionToValue(event, thumb));
+      this.startDrag(event, thumb === 'start' ? 'range-start' : 'range-end');
       return;
     }
 
-    const value = this.positionToValue(event, 'end');
-    this.startDrag(event, 'end', value);
+    this.startDrag(event, 'single');
+  }
+
+  protected onFillPointerDown(event: PointerEvent): void {
+    if (event.button !== 0) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (this.isRange$$()) {
+      this.startDrag(event, 'range-shift');
+      return;
+    }
+
+    this.startDrag(event, 'single');
   }
 
   protected onThumbPointerDown(event: PointerEvent, thumb: ActiveThumb): void {
@@ -186,7 +234,15 @@ export class VSlider {
 
     event.preventDefault();
     event.stopPropagation();
-    this.startDrag(event, thumb);
+    if (this.isTouchMode$$() && event.pointerType === 'touch') {
+      this.touchActive$$.set(true);
+      this.activeTouchThumb$$.set(thumb);
+    }
+    if (this.isRange$$()) {
+      this.startDrag(event, thumb === 'start' ? 'range-start' : 'range-end');
+      return;
+    }
+    this.startDrag(event, 'single');
   }
 
   protected onPointerMove(event: PointerEvent): void {
@@ -194,8 +250,52 @@ export class VSlider {
 
     if (this.pointerId$$() !== event.pointerId) return;
 
-    const value = this.positionToValue(event, this.activeThumb$$());
-    this.applyValue(value, this.activeThumb$$());
+    const dragState = this.dragState$$();
+    if (!dragState) return;
+
+    const deltaX = event.clientX - dragState.startX;
+    const deltaValue = this.deltaToValue(deltaX, dragState.mode);
+    const { min, max } = this.getRangeMetrics();
+
+    if (dragState.mode === 'single') {
+      const nextValue = this.normalizeValue(dragState.startValue + deltaValue);
+      this.value.set(nextValue);
+      return;
+    }
+
+    const [start, end] = dragState.startRange;
+
+    if (dragState.mode === 'range-start') {
+      const nextStart = Math.min(this.normalizeValue(start + deltaValue), end);
+      this.range.set([nextStart, end]);
+      return;
+    }
+
+    if (dragState.mode === 'range-end') {
+      const nextEnd = Math.max(this.normalizeValue(end + deltaValue), start);
+      this.range.set([start, nextEnd]);
+      return;
+    }
+
+    const length = end - start;
+    let nextStart = start + deltaValue;
+    let nextEnd = end + deltaValue;
+
+    if (nextStart < min) {
+      nextStart = min;
+      nextEnd = min + length;
+    }
+
+    if (nextEnd > max) {
+      nextEnd = max;
+      nextStart = max - length;
+    }
+
+    const snappedStart = this.normalizeValue(nextStart);
+    const snappedEnd = this.normalizeValue(nextEnd);
+    const lower = Math.min(snappedStart, snappedEnd);
+    const upper = Math.max(snappedStart, snappedEnd);
+    this.range.set([lower, upper]);
   }
 
   protected onPointerUp(event: PointerEvent): void {
@@ -205,6 +305,9 @@ export class VSlider {
 
     this.isDragging$$.set(false);
     this.pointerId$$.set(null);
+    this.dragState$$.set(null);
+    this.touchActive$$.set(false);
+    this.activeTouchThumb$$.set(null);
     const root = this.rootElement().nativeElement;
 
     if (root.hasPointerCapture(event.pointerId)) {
@@ -212,35 +315,18 @@ export class VSlider {
     }
   }
 
-  private startDrag(event: PointerEvent, thumb: ActiveThumb, initialValue?: number): void {
-    this.activeThumb$$.set(thumb);
+  private startDrag(event: PointerEvent, mode: DragMode): void {
     this.isDragging$$.set(true);
     this.pointerId$$.set(event.pointerId);
     this.rootElement().nativeElement.setPointerCapture(event.pointerId);
-    const value = initialValue ?? this.positionToValue(event, thumb);
-    this.applyValue(value, thumb);
-  }
-
-  private applyValue(value: number, activeThumb: ActiveThumb): void {
-    const min = this.min$$();
-    const max = this.max$$();
-    const clamped = this.clampToBounds(value, min, max);
-
-    if (!this.isRange$$()) {
-      this.value.set(clamped);
-      return;
-    }
-
-    this.applyRangeValue(clamped, activeThumb);
-  }
-
-  private applyRangeValue(value: number, activeThumb: ActiveThumb): void {
-    const [start, end] = this.range();
-    if (activeThumb === 'start') {
-      this.range.set([Math.min(value, end), end]);
-      return;
-    }
-    this.range.set([start, Math.max(value, start)]);
+    const startValue = this.displayValue$$();
+    const startRange = this.displayRange$$();
+    this.dragState$$.set({
+      mode,
+      startX: event.clientX,
+      startValue,
+      startRange,
+    });
   }
 
   private getClosestThumb(value: number): ActiveThumb {
@@ -251,71 +337,36 @@ export class VSlider {
     return distStart <= distEnd ? 'start' : 'end';
   }
 
-  private positionToValue(event: PointerEvent, activeThumb: ActiveThumb): number {
-    const rect = this.trackElement().nativeElement.getBoundingClientRect();
-
-    if (rect.width <= 0) return this.min$$();
-
-    const trackWidth = rect.width;
-    const thumbSize = this.unitToPx(this.settings$$().thumbSize);
-    const halfThumb = thumbSize / 2;
-    const min = this.min$$();
-    const max = this.max$$();
-    const range = max - min;
-
-    const centerMin = halfThumb;
-    const centerMax = trackWidth - halfThumb;
-    const centerX = Math.min(centerMax, Math.max(centerMin, event.clientX - rect.left));
-
-    if (!this.isRange$$()) {
-      const effectiveWidth = Math.max(0, trackWidth - thumbSize);
-      const ratio = effectiveWidth === 0 ? 0 : (centerX - halfThumb) / effectiveWidth;
-      return min + ratio * range;
-    }
-
-    const edgeMin = thumbSize;
-    const edgeMax = trackWidth - thumbSize;
-    const edgeWidth = Math.max(0, edgeMax - edgeMin);
-    const edgePos = activeThumb === 'start' ? centerX + halfThumb : centerX - halfThumb;
-    const clampedEdge = Math.min(edgeMax, Math.max(edgeMin, edgePos));
-    const ratio = edgeWidth === 0 ? 0 : (clampedEdge - edgeMin) / edgeWidth;
-    return min + ratio * range;
-  }
-
   private positionToValueForRangeEdge(event: PointerEvent): number {
-    const rect = this.trackElement().nativeElement.getBoundingClientRect();
+    const rect = this.getTrackRect();
     if (rect.width <= 0) return this.min$$();
 
     const trackWidth = rect.width;
-    const thumbSize = this.unitToPx(this.settings$$().thumbSize);
+    const thumbSize = this.getThumbSizePx();
     const edgeMin = thumbSize;
     const edgeMax = trackWidth - thumbSize;
     const edgeWidth = Math.max(0, edgeMax - edgeMin);
     const edgePos = Math.min(edgeMax, Math.max(edgeMin, event.clientX - rect.left));
 
-    const min = this.min$$();
-    const max = this.max$$();
-    const range = max - min;
+    const { min, range } = this.getRangeMetrics();
     const ratio = edgeWidth === 0 ? 0 : (edgePos - edgeMin) / edgeWidth;
     return min + ratio * range;
   }
 
   private valueToPercentSingle(value: number): string {
-    const min = this.min$$();
-    const max = this.max$$();
-    const range = max - min;
+    const { min, range } = this.getRangeMetrics();
     if (range === 0) return '0%';
 
-    const rect = this.trackElement().nativeElement.getBoundingClientRect();
-    const width = rect.width;
+    const width = this.getTrackRect().width;
     if (width <= 0) return '0%';
 
-    const thumbSize = this.unitToPx(this.settings$$().thumbSize);
+    const thumbSize = this.getThumbSizePx();
     const halfThumb = thumbSize / 2;
     const effectiveWidth = Math.max(0, width - thumbSize);
     const ratio = (value - min) / range;
     const position = halfThumb + ratio * effectiveWidth;
     const percent = (position / width) * 100;
+
     return `${percent}%`;
   }
 
@@ -332,16 +383,13 @@ export class VSlider {
   }
 
   private valueToPercentWithEdge(value: number, edgeDirection: -1 | 0 | 1): string {
-    const min = this.min$$();
-    const max = this.max$$();
-    const range = max - min;
+    const { min, range } = this.getRangeMetrics();
     if (range === 0) return '0%';
 
-    const rect = this.trackElement().nativeElement.getBoundingClientRect();
-    const width = rect.width;
+    const width = this.getTrackRect().width;
     if (width <= 0) return '0%';
 
-    const thumbSize = this.unitToPx(this.settings$$().thumbSize);
+    const thumbSize = this.getThumbSizePx();
     const halfThumb = thumbSize / 2;
     const edgeMin = thumbSize;
     const edgeMax = width - thumbSize;
@@ -351,6 +399,65 @@ export class VSlider {
     const position = edgePos + edgeDirection * halfThumb;
     const percent = (position / width) * 100;
     return `${percent}%`;
+  }
+
+  private getRangeMetrics(): { min: number; max: number; range: number } {
+    const min = this.min$$();
+    const max = this.max$$();
+    return { min, max, range: max - min };
+  }
+
+  private normalizeValue(value: number): number {
+    const clamped = this.clampToBounds(value, this.min$$(), this.max$$());
+    return this.snapToList(clamped);
+  }
+
+  private snapToList(value: number): number {
+    const list = this.valueList$$();
+    if (list.length === 0) return value;
+    if (value <= list[0]) return list[0];
+    if (value >= list[list.length - 1]) return list[list.length - 1];
+
+    let low = 0;
+    let high = list.length - 1;
+    while (high - low > 1) {
+      const mid = Math.floor((low + high) / 2);
+      const midValue = list[mid];
+      if (value === midValue) return midValue;
+      if (value < midValue) {
+        high = mid;
+      } else {
+        low = mid;
+      }
+    }
+
+    const lowValue = list[low];
+    const highValue = list[high];
+    return Math.abs(value - lowValue) <= Math.abs(highValue - value) ? lowValue : highValue;
+  }
+
+  private deltaToValue(deltaX: number, mode: DragMode): number {
+    const rect = this.getTrackRect();
+    if (rect.width <= 0) return 0;
+
+    const { range } = this.getRangeMetrics();
+    if (range === 0) return 0;
+
+    const thumbSize = this.getThumbSizePx();
+    const availableWidth =
+      mode === 'single' ? Math.max(0, rect.width - thumbSize) : Math.max(0, rect.width - thumbSize * 2);
+
+    if (availableWidth === 0) return 0;
+
+    return (deltaX / availableWidth) * range;
+  }
+
+  private getTrackRect(): DOMRect {
+    return this.trackElement().nativeElement.getBoundingClientRect();
+  }
+
+  private getThumbSizePx(): number {
+    return this.unitToPx(this.settings$$().thumbSize);
   }
 
   private unitToPx(value: CssUnitValue): number {

@@ -27,6 +27,19 @@
   box-shadow: none;
 }
 
+.thumb-hit-area {
+  position: absolute;
+  top: 50%;
+  width: var(--v-slider-touch-size, var(--unit-10));
+  height: var(--v-slider-touch-size, var(--unit-10));
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  display: none;
+  opacity: 0;
+  background: color-mix(in srgb, var(--v-color-accent) 14%, transparent);
+  transition: opacity 200ms ease;
+}
+
 :host([bar-style='flat']) .fill {
   box-shadow: none;
 }
@@ -37,6 +50,14 @@
 
 :host([bar-style='raised']) .fill {
   box-shadow: var(--v-bar-shadow-raised);
+}
+
+:host(.touch-mode) .thumb-hit-area {
+  display: block;
+}
+
+:host(.touch-mode) .thumb-hit-area.touch-active {
+  opacity: 1;
 }
 
 .thumb {

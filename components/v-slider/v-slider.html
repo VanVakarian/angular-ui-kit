@@ -8,8 +8,13 @@
        #track
        (pointerdown)="onTrackPointerDown($event)">
 
-    <div class="fill"></div>
+    <div class="fill"
+         (pointerdown)="onFillPointerDown($event)"></div>
 
+    <div class="thumb-hit-area"
+         [class.touch-active]="touchActive$$() && activeTouchThumb$$() === 'start'"
+         [style.left]="thumbStartPosition$$()"
+         (pointerdown)="onThumbPointerDown($event, 'start')"></div>
     <div class="thumb"
          [style.left]="thumbStartPosition$$()"
          (pointerdown)="onThumbPointerDown($event, 'start')">
@@ -21,6 +26,10 @@
     </div>
 
     @if (isRange$$()) {
+      <div class="thumb-hit-area"
+           [class.touch-active]="touchActive$$() && activeTouchThumb$$() === 'end'"
+           [style.left]="thumbEndPosition$$()"
+           (pointerdown)="onThumbPointerDown($event, 'end')"></div>
       <div class="thumb"
            [style.left]="thumbEndPosition$$()"
            (pointerdown)="onThumbPointerDown($event, 'end')">
