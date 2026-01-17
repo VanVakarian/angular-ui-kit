@@ -1,0 +1,31 @@
+<label class="checkbox">
+
+  <input class="checkbox-input"
+         type="checkbox"
+         [checked]="value()"
+         [disabled]="settings$$().isDisabled"
+         (change)="onInputChange($event)" />
+
+  <span class="control">
+    @if (isSwitch$$()) {
+      <span class="thumb">
+        <span class="thumb-icon">
+          <v-icon [name]="value() ? Icon.Check : Icon.Close"
+                  [size]="checkIconSize$$()" />
+        </span>
+      </span>
+    }
+    @else {
+      <span class="check-icon">
+        <v-icon [name]="Icon.Check"
+                [size]="checkIconSize$$()" />
+      </span>
+    }
+  </span>
+
+  @if (settings$$().label) {
+    <span class="label-text">{{ settings$$().label }}</span>
+  }
+
+  <ng-content />
+</label>
