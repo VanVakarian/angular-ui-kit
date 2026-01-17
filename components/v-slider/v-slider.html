@@ -15,14 +15,17 @@
          [class.touch-active]="touchActive$$() && activeTouchThumb$$() === 'start'"
          [style.left]="thumbStartPosition$$()"
          (pointerdown)="onThumbPointerDown($event, 'start')"></div>
+
     <div class="thumb"
          [style.left]="thumbStartPosition$$()"
          (pointerdown)="onThumbPointerDown($event, 'start')">
+
       <div class="thumb-grip">
         <span class="thumb-grip-line"></span>
         <span class="thumb-grip-line"></span>
         <span class="thumb-grip-line"></span>
       </div>
+
     </div>
 
     @if (isRange$$()) {
@@ -30,14 +33,17 @@
            [class.touch-active]="touchActive$$() && activeTouchThumb$$() === 'end'"
            [style.left]="thumbEndPosition$$()"
            (pointerdown)="onThumbPointerDown($event, 'end')"></div>
+
       <div class="thumb"
            [style.left]="thumbEndPosition$$()"
            (pointerdown)="onThumbPointerDown($event, 'end')">
+
         <div class="thumb-grip">
           <span class="thumb-grip-line"></span>
           <span class="thumb-grip-line"></span>
           <span class="thumb-grip-line"></span>
         </div>
+
       </div>
     }
 

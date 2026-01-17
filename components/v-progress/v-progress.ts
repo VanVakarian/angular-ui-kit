@@ -2,7 +2,7 @@ import { Component, computed, input } from '@angular/core';
 import { ProgressBarStyle } from '@ui-kit/components/types';
 import { CssUnitValue } from '@ui-kit/types';
 
-interface VProgressConfig {
+export interface VProgressConfig {
   value?: number;
   min?: number;
   max?: number;

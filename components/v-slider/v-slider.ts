@@ -53,6 +53,7 @@ const DEFAULT_V_SLIDER_CONFIG: Required<VSliderConfig> = {
   styleUrl: './v-slider.css',
   host: {
     '[class.touch-mode]': 'isTouchMode$$()',
+    '[class.dragging]': 'isDragging$$()',
     '[style.--v-slider-height]': 'heightString$$()',
     '[style.--v-slider-border-radius]': 'borderRadiusString$$()',
     '[style.--v-slider-track-color]': 'trackColor$$()',
@@ -60,6 +61,7 @@ const DEFAULT_V_SLIDER_CONFIG: Required<VSliderConfig> = {
     '[style.--v-slider-thumb-size]': 'thumbSizeString$$()',
     '[style.--v-slider-thumb-border-radius]': 'thumbBorderRadiusString$$()',
     '[style.--v-slider-touch-size]': 'touchAreaSizeString$$()',
+    '[style.--v-slider-track-margin]': 'trackMarginString$$()',
     '[style.--v-slider-fill-radius]': 'fillRadiusString$$()',
     '[style.--v-slider-fill-start]': 'fillStart$$()',
     '[style.--v-slider-fill-end]': 'fillEnd$$()',
@@ -122,6 +124,15 @@ export class VSlider {
   protected readonly trackColor$$ = computed(() => this.settings$$().trackColor);
   protected readonly fillColor$$ = computed(() => this.settings$$().fillColor);
   protected readonly thumbSizeString$$ = computed(() => `var(--unit-${this.settings$$().thumbSize})`);
+
+  protected readonly trackMarginString$$ = computed(() => {
+    const trackHeightPx = this.unitToPx(this.settings$$().height);
+    const thumbSizePx = this.unitToPx(this.settings$$().thumbSize);
+    const thumbOuterPx = thumbSizePx + 4;
+    const marginPx = Math.max(0, (thumbOuterPx - trackHeightPx) / 2);
+    return `${marginPx}px`;
+  });
+
   protected readonly barStyle$$ = computed(() => {
     const style = this.settings$$().barStyle;
     switch (style) {
@@ -170,15 +181,13 @@ export class VSlider {
     return this.valueToPercentSingle(this.displayValue$$());
   });
 
-  private readonly isDragging$$ = signal(false);
+  protected readonly isDragging$$ = signal(false);
   private readonly pointerId$$ = signal<number | null>(null);
   private readonly dragState$$ = signal<DragState | null>(null);
   protected readonly touchActive$$ = signal(false);
   protected readonly activeTouchThumb$$ = signal<ActiveThumb | null>(null);
 
   private readonly normalizeEffect = effect(() => {
-    const { min, max } = this.getRangeMetrics();
-
     if (this.isRange$$()) {
       const current = this.range();
       const clampedStart = this.normalizeValue(current[0]);
