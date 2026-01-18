@@ -23,9 +23,7 @@
     }
   </span>
 
-  @if (settings$$().label) {
-    <span class="label-text">{{ settings$$().label }}</span>
-  }
-
-  <ng-content />
+  <span class="content">
+    <ng-content />
+  </span>
 </label>

@@ -117,10 +117,23 @@
   box-shadow: var(--v-shadow-inset-1);
 }
 
-.label-text {
+.content {
   display: inline-flex;
   align-items: center;
-  font-size: 1rem;
+  /* font-size: 1rem; */
+  order: 1;
+}
+
+.content:empty {
+  display: none;
+}
+
+:host([label-position='left']) .content {
+  order: 0;
+}
+
+:host([label-position='left']) .control {
+  order: 1;
 }
 
 :host(.disabled) {

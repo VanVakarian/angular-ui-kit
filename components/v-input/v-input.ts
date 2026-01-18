@@ -109,6 +109,11 @@ export class VInput implements ControlValueAccessor {
   });
 
   protected readonly errorMessage$$ = computed(() => {
+    if (this.ngControl) {
+      this.ngControlValue$$();
+    } else {
+      this.value();
+    }
     if (!this.hasInteracted$$()) return '';
     return this.settings$$().errorMessage || this.getValidationErrorMessage();
   });

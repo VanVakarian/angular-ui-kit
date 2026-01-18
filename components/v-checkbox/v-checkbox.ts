@@ -4,8 +4,10 @@ import { CssUnitValue } from '@ui-kit/types';
 
 export type VCheckboxMode = 'checkbox' | 'switch';
 
+export type VCheckboxLabelPosition = 'left' | 'right';
+
 export interface VCheckboxConfig {
-  label?: string;
+  labelPosition?: VCheckboxLabelPosition;
   isDisabled?: boolean;
   mode?: VCheckboxMode;
   size?: CssUnitValue;
@@ -19,13 +21,13 @@ export interface VCheckboxConfig {
 }
 
 const DEFAULT_V_CHECKBOX_CONFIG: Required<VCheckboxConfig> = {
-  label: '',
+  labelPosition: 'right',
   isDisabled: false,
   mode: 'checkbox',
   size: 6,
+  checkIconSize: 6,
   borderRadius: 2,
   gap: 2,
-  checkIconSize: 4,
   switchWidth: 14,
   switchHeight: 7,
   switchPadding: 1,
@@ -41,6 +43,7 @@ const DEFAULT_V_CHECKBOX_CONFIG: Required<VCheckboxConfig> = {
     '[class.checked]': 'value()',
     '[class.disabled]': 'settings$$().isDisabled',
     '[attr.mode]': 'mode$$()',
+    '[attr.label-position]': 'labelPosition$$()',
     '[style.--v-checkbox-size]': 'sizeString$$()',
     '[style.--v-checkbox-border-radius]': 'borderRadiusString$$()',
     '[style.--v-checkbox-gap]': 'gapString$$()',
@@ -65,6 +68,7 @@ export class VCheckbox {
 
   protected readonly mode$$ = computed(() => this.settings$$().mode);
   protected readonly isSwitch$$ = computed(() => this.mode$$() === 'switch');
+  protected readonly labelPosition$$ = computed(() => this.settings$$().labelPosition);
 
   protected readonly sizeString$$ = computed(() => `var(--unit-${this.settings$$().size})`);
   protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.settings$$().borderRadius})`);
