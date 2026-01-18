@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   computed,
+  effect,
   ElementRef,
   input,
   model,
+  OnDestroy,
   Optional,
   output,
   Self,
@@ -15,6 +17,7 @@ import {
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { getValidationErrorMessage } from '@ui-kit/components/v-input/validators';
 import { CssUnitValue } from '@ui-kit/types';
+import { VInputAutoSubmitManager, VInputAutoSubmitResult, VInputAutoSubmitState } from './v-input-auto-submit';
 
 type InputValue = string | number | null;
 
@@ -45,6 +48,9 @@ export interface VInputConfig {
   isTextarea?: boolean;
   rows?: number;
   cols?: number;
+  isAutoSubmitEnabled?: boolean;
+  autoSubmitDelay?: number;
+  autoSubmitResult?: VInputAutoSubmitResult | null;
 }
 
 const DEFAULT_V_INPUT_CONFIG: Required<VInputConfig> = {
@@ -64,6 +70,9 @@ const DEFAULT_V_INPUT_CONFIG: Required<VInputConfig> = {
   isTextarea: false,
   rows: 3,
   cols: 50,
+  isAutoSubmitEnabled: false,
+  autoSubmitDelay: 2000,
+  autoSubmitResult: null,
 };
 
 let uniqueId = 0;
@@ -71,14 +80,18 @@ let uniqueId = 0;
 @Component({
   selector: 'v-input',
   templateUrl: './v-input.html',
-  styleUrl: './v-input.css',
+  styleUrls: ['./v-input.css', './v-input-auto-submit.css'],
   host: {
     '[style.--v-input-border-radius]': 'borderRadiusString$$()',
     '[class]': '"v-input"',
+    '[class.countdown-state]': 'autoSubmitState$$() === vInputAutoSubmitState.Countdown',
+    '[class.submitting-state]': 'autoSubmitState$$() === vInputAutoSubmitState.Submitting',
+    '[class.success-state]': 'autoSubmitState$$() === vInputAutoSubmitState.Success',
+    '[class.error-state]': 'autoSubmitState$$() === vInputAutoSubmitState.Error',
   },
   imports: [CommonModule],
 })
-export class VInput implements ControlValueAccessor {
+export class VInput implements ControlValueAccessor, OnDestroy {
   public readonly inputElement = viewChild.required<ElementRef<HTMLInputElement | HTMLTextAreaElement>>('inputElement');
 
   public readonly config = input<VInputConfig>({});
@@ -89,6 +102,7 @@ export class VInput implements ControlValueAccessor {
   public readonly onFocused = output<Event>();
   public readonly onBlurred = output<Event>();
   public readonly onEnterPressed = output<KeyboardEvent>();
+  public readonly onAutoSubmit = output<InputValue>();
 
   protected readonly settings$$ = computed(() => ({
     ...DEFAULT_V_INPUT_CONFIG,
@@ -101,8 +115,19 @@ export class VInput implements ControlValueAccessor {
   protected readonly isFocused$$ = signal(false);
   protected readonly hasInteracted$$ = signal(false);
   protected readonly inputId = `v-input-${++uniqueId}`;
+  protected readonly autoSubmitState$$ = signal<VInputAutoSubmitState>(VInputAutoSubmitState.Idle);
 
   private isImeComposing = false;
+
+  private readonly autoSubmitManager = new VInputAutoSubmitManager({
+    isEnabled: () =>
+      this.settings$$().isAutoSubmitEnabled && !this.settings$$().isDisabled && !this.settings$$().isReadonly,
+    isValid: () => this.isControlValid(),
+    getValue: () => this.displayValue$$(),
+    getAutoSubmitDelay: () => this.settings$$().autoSubmitDelay,
+    emitSubmit: (value: string) => this.onAutoSubmit.emit(value),
+    onStateChange: (state: VInputAutoSubmitState) => this.autoSubmitState$$.set(state),
+  });
 
   protected readonly displayValue$$ = computed(() => {
     return this.ngControl ? this.ngControlValue$$() : this.value();
@@ -118,6 +143,8 @@ export class VInput implements ControlValueAccessor {
     return this.settings$$().errorMessage || this.getValidationErrorMessage();
   });
 
+  protected readonly vInputAutoSubmitState = VInputAutoSubmitState;
+
   constructor(
     @Optional()
     @Self()
@@ -126,6 +153,10 @@ export class VInput implements ControlValueAccessor {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.autoSubmitManager.destroy();
   }
 
   private getValidationErrorMessage(): string {
@@ -147,6 +178,7 @@ export class VInput implements ControlValueAccessor {
   public writeValue(value: InputValue): void {
     this.ngControlValue$$.set(value != null ? String(value) : '');
     this.hasInteracted$$.set(false);
+    this.autoSubmitManager.writeValue(value != null ? String(value) : '');
   }
 
   public registerOnChange(fn: (value: InputValue) => void): void {
@@ -172,6 +204,7 @@ export class VInput implements ControlValueAccessor {
     }
 
     this.onInputChanged.emit(event);
+    this.autoSubmitManager.handleChange();
   }
 
   protected onFocus(): void {
@@ -198,6 +231,9 @@ export class VInput implements ControlValueAccessor {
 
       if (event.key === 'Enter') {
         if (event.isComposing || this.isImeComposing) return;
+        if (this.settings$$().isAutoSubmitEnabled) {
+          this.autoSubmitManager.triggerSubmit();
+        }
         this.onEnterPressed.emit(event);
       }
     }
@@ -236,6 +272,20 @@ export class VInput implements ControlValueAccessor {
     return true;
   }
 
+  private isControlValid(): boolean {
+    if (!this.ngControl) return true;
+    const control = this.ngControl.control;
+    if (!control) return true;
+    if (control.disabled) return false;
+    return control.valid;
+  }
+
+  private readonly autoSubmitResultEffect = effect(() => {
+    const result = this.settings$$().autoSubmitResult;
+    if (result === null) return;
+    this.autoSubmitManager.handleResult(result);
+  });
+
   private parseNumericInput(rawValue: string): { value: number; usesComma: boolean } | null {
     const trimmed = rawValue.trim();
     if (trimmed === '') return { value: 0, usesComma: false };
@@ -272,3 +322,5 @@ export class VInput implements ControlValueAccessor {
     this.inputElement().nativeElement.blur();
   }
 }
+
+export { VInputAutoSubmitResult } from './v-input-auto-submit';

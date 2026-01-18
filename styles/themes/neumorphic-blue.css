@@ -29,4 +29,8 @@
 
   --v-slider-thumb-shadow-color: rgba(46, 56, 86, 0.15);
   --v-slider-thumb-shadow-color-strong: rgba(46, 56, 86, 0.35);
+
+  --v-input-auto-submit-progress-color: #3f51b5;
+  --v-input-auto-submit-success-color: #00ff00;
+  --v-input-auto-submit-error-color: #ff0000;
 }

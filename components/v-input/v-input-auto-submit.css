@@ -1,0 +1,84 @@
+:host(.countdown-state) .input-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--v-input-auto-submit-progress-color);
+  opacity: 0.1;
+  animation: fill-background 2s linear forwards;
+  border-radius: 5px;
+  pointer-events: none;
+}
+
+:host(.submitting-state) .input-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--v-input-auto-submit-progress-color);
+  opacity: 0.1;
+  border-radius: 5px;
+  pointer-events: none;
+}
+
+:host(.submitting-state) .input-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(135deg, var(--v-input-auto-submit-progress-color) 0 4px, transparent 0 8px)
+    right/200% 100%;
+  opacity: 0.2;
+  animation: slide-pattern 7s infinite linear;
+  border-radius: 5px;
+  animation-play-state: running;
+  pointer-events: none;
+}
+
+:host(.success-state) .input-wrapper::after,
+:host(.error-state) .input-wrapper::after {
+  animation-play-state: paused;
+}
+
+:host(.success-state) .input-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--v-input-auto-submit-success-color);
+  border-radius: 5px;
+  animation: fade-out 3s linear forwards;
+  pointer-events: none;
+}
+
+:host(.error-state) .input-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--v-input-auto-submit-error-color);
+  border-radius: 5px;
+  animation: fade-out 3s linear forwards;
+  pointer-events: none;
+}
+
+@keyframes fill-background {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes slide-pattern {
+  to {
+    background-position: left;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 0.2;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
