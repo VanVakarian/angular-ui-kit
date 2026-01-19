@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, computed, effect, HostListener, inject, input, output } from '@angular/core';
 import { VButton } from '@ui-kit/components/v-button/v-button';
 import { VBackdropDirective } from '@ui-kit/directives/backdrop.directive';
@@ -51,7 +51,7 @@ const DEFAULT_V_MODAL_CONFIG: Required<VModalConfig> = {
       deps: [VModal],
     },
   ],
-  imports: [CommonModule, VButton, VBackdropDirective],
+  imports: [VButton, VBackdropDirective],
 })
 export class VModal {
   public readonly config = input<VModalConfig>({});

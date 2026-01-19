@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   Component,
   computed,
@@ -89,7 +89,7 @@ let uniqueId = 0;
     '[class.success-state]': 'autoSubmitState$$() === vInputAutoSubmitState.Success',
     '[class.error-state]': 'autoSubmitState$$() === vInputAutoSubmitState.Error',
   },
-  imports: [CommonModule],
+  imports: [],
 })
 export class VInput implements ControlValueAccessor, OnDestroy {
   public readonly inputElement = viewChild.required<ElementRef<HTMLInputElement | HTMLTextAreaElement>>('inputElement');
