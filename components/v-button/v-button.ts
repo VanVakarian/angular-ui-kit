@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, inject, input, output } from '@angular/core';
+import { Component, computed, ElementRef, inject, input, output, Renderer2 } from '@angular/core';
 import { ButtonStyle, CssUnitValue } from '@ui-kit/types';
 
 type ButtonType = 'button' | 'submit' | 'reset';
@@ -87,6 +87,7 @@ export class VButton {
   protected readonly isDanger$$ = computed(() => this.getActiveStyle() === ButtonStyle.Danger);
 
   private readonly elementRef = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
 
   protected onButtonClick(event: MouseEvent): void {
     if (this.settings$$().isDisabled) {
@@ -95,6 +96,34 @@ export class VButton {
       return;
     }
     this.onClick.emit(event);
+  }
+
+  protected onPointerDown(event: PointerEvent): void {
+    if (this.settings$$().isDisabled || this.isFlat$$() || this.isRaised$$()) return;
+    const button = event.currentTarget as HTMLElement | null;
+    if (!button) return;
+
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 2;
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    this.createRipple(button, x, y, size);
+  }
+
+  protected onKeyDown(event: KeyboardEvent): void {
+    if (this.settings$$().isDisabled || this.isFlat$$() || this.isRaised$$()) return;
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+
+    const button = event.currentTarget as HTMLElement | null;
+    if (!button) return;
+
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 2;
+    const x = rect.width / 2;
+    const y = rect.height / 2;
+
+    this.createRipple(button, x, y, size);
   }
 
   private getActiveStyle(): ButtonStyle {
@@ -122,5 +151,25 @@ export class VButton {
     if (config.paddingX !== undefined) return config.paddingX;
     if (config.padding !== undefined) return config.padding;
     return this.settings$$().paddingX;
+  }
+
+  private createRipple(button: HTMLElement, x: number, y: number, size: number): void {
+    const ripple = this.renderer.createElement('span');
+    this.renderer.addClass(ripple, 'v-button-ripple');
+    this.renderer.setStyle(ripple, 'width', `${size}px`);
+    this.renderer.setStyle(ripple, 'height', `${size}px`);
+    this.renderer.setStyle(ripple, 'left', `${x - size / 2}px`);
+    this.renderer.setStyle(ripple, 'top', `${y - size / 2}px`);
+    this.renderer.setStyle(ripple, 'animation-duration', `${size / 1.2}ms`);
+
+    this.renderer.appendChild(button, ripple);
+
+    ripple.addEventListener(
+      'animationend',
+      () => {
+        this.renderer.removeChild(button, ripple);
+      },
+      { once: true },
+    );
   }
 }
