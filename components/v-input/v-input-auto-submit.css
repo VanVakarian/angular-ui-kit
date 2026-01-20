@@ -4,7 +4,7 @@
   inset: 0;
   background: var(--v-input-auto-submit-progress-color);
   opacity: 0.1;
-  animation: fill-background 2s linear forwards;
+  animation: fill-background var(--v-input-auto-submit-delay, 2000ms) linear forwards;
   border-radius: 5px;
   pointer-events: none;
 }
@@ -43,7 +43,7 @@
   inset: 0;
   background-color: var(--v-input-auto-submit-success-color);
   border-radius: 5px;
-  animation: fade-out 3s linear forwards;
+  animation: fade-out var(--v-input-auto-submit-result-fade-duration, 3000ms) linear forwards;
   pointer-events: none;
 }
 
@@ -53,7 +53,7 @@
   inset: 0;
   background-color: var(--v-input-auto-submit-error-color);
   border-radius: 5px;
-  animation: fade-out 3s linear forwards;
+  animation: fade-out var(--v-input-auto-submit-result-fade-duration, 3000ms) linear forwards;
   pointer-events: none;
 }
 

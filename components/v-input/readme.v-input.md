@@ -20,6 +20,8 @@ interface VInputConfig {
   isDisabled?: boolean;
   isReadonly?: boolean;
   type?: 'text' | 'password' | 'email' | 'number' | 'tel' | 'url';
+  inputmode?: 'none' | 'text' | 'numeric' | 'decimal' | 'tel' | 'email' | 'url' | 'search';
+  pattern?: string;
   label?: string;
   placeholder?: string;
   errorMessage?: string;
@@ -27,6 +29,13 @@ interface VInputConfig {
   fontSize?: string; // e.g. '1rem', '16px', '1.2em'
   fontWeight?: number; // 100-900
   textAlign?: 'left' | 'right' | 'center';
+  borderRadius?: CssUnitValue;
+  isTextarea?: boolean;
+  rows?: number;
+  cols?: number;
+  isAutoSubmitEnabled?: boolean;
+  autoSubmitDelay?: number;
+  autoSubmitResult?: VInputAutoSubmitResult | null;
 }
 ```
 
@@ -37,6 +46,15 @@ interface VInputConfig {
 | `onInputChanged` | `Event` | Value changed |
 | `onFocused` | `Event` | Input focused |
 | `onBlurred` | `Event` | Input blurred |
+| `onEnterPressed` | `KeyboardEvent` | Enter key pressed |
+| `onAutoSubmit` | `string \| number \| null` | Auto submit triggered |
+
+## Auto Submit Result
+
+Use `VInputAutoSubmitResult` to report submission outcomes:
+
+- `Success`
+- `Error`
 
 ## Examples
 
@@ -135,6 +153,19 @@ protected readonly inputConfig$$ = computed<VInputConfig>(() => ({
 </v-input>
 ```
 
+### Auto Submit
+```html
+<v-input
+  [config]="{
+    label: 'Auto submit input',
+    placeholder: 'Type at least 3 characters',
+    isAutoSubmitEnabled: true,
+    autoSubmitDelay: 1500,
+    autoSubmitResult: autoSubmitResult
+  }"
+  (onAutoSubmit)="handleAutoSubmit($event)" />
+```
+
 ## Styling
 
 The component uses neumorphic style with automatic states:
@@ -146,6 +177,10 @@ The component uses neumorphic style with automatic states:
   - `--color-text-muted` (#6b7280) - muted text
   - `--color-text-error` (#ef4444) - error text
 - **Background**: `--color-bg-default` (#ebf3fa)
+- **Auto submit colors**:
+  - `--v-input-auto-submit-progress-color`
+  - `--v-input-auto-submit-success-color`
+  - `--v-input-auto-submit-error-color`
 - **Shadows**:
   - `--shadow-dark-light`, `--shadow-dark-medium` - dark shadows
   - `--shadow-light-strong`, `--shadow-light-full` - light shadows
@@ -155,6 +190,7 @@ The component uses neumorphic style with automatic states:
 - **Focus state**: deeper inset effect
 - **Disabled state**: 0.6 opacity and disabled pointer events
 - **Error state**: red error text
+- **Auto submit states**: countdown, submitting, success, error (driven by theme vars)
 
 ## Angular Forms Integration
 

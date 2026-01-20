@@ -44,7 +44,7 @@ interface VCheckboxConfig {
 }
 ```
 
-Defaults: `labelPosition='right'`, `isDisabled=false`, `mode='checkbox'`, `size=6`, `borderRadius=2`, `gap=2`, `checkIconSize=4`, `switchWidth=14`, `switchHeight=7`, `switchPadding=1`, `thumbSize=5`.
+Defaults: `labelPosition='right'`, `isDisabled=false`, `mode='checkbox'`, `size=6`, `borderRadius=2`, `gap=2`, `checkIconSize=6`, `switchWidth=14`, `switchHeight=7`, `switchPadding=1`, `thumbSize=5`.
 
 ## Events
 

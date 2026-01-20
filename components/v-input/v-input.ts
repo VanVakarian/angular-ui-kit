@@ -1,4 +1,3 @@
-
 import {
   Component,
   computed,
@@ -51,6 +50,7 @@ export interface VInputConfig {
   isAutoSubmitEnabled?: boolean;
   autoSubmitDelay?: number;
   autoSubmitResult?: VInputAutoSubmitResult | null;
+  autoSubmitResultFadeDuration?: number;
 }
 
 const DEFAULT_V_INPUT_CONFIG: Required<VInputConfig> = {
@@ -73,6 +73,7 @@ const DEFAULT_V_INPUT_CONFIG: Required<VInputConfig> = {
   isAutoSubmitEnabled: false,
   autoSubmitDelay: 2000,
   autoSubmitResult: null,
+  autoSubmitResultFadeDuration: 3000,
 };
 
 let uniqueId = 0;
@@ -83,6 +84,8 @@ let uniqueId = 0;
   styleUrls: ['./v-input.css', './v-input-auto-submit.css'],
   host: {
     '[style.--v-input-border-radius]': 'borderRadiusString$$()',
+    '[style.--v-input-auto-submit-delay]': 'autoSubmitDelayString$$()',
+    '[style.--v-input-auto-submit-result-fade-duration]': 'autoSubmitResultFadeDurationString$$()',
     '[class]': '"v-input"',
     '[class.countdown-state]': 'autoSubmitState$$() === vInputAutoSubmitState.Countdown',
     '[class.submitting-state]': 'autoSubmitState$$() === vInputAutoSubmitState.Submitting',
@@ -110,6 +113,10 @@ export class VInput implements ControlValueAccessor, OnDestroy {
   }));
 
   protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.settings$$().borderRadius})`);
+  protected readonly autoSubmitDelayString$$ = computed(() => `${this.settings$$().autoSubmitDelay}ms`);
+  protected readonly autoSubmitResultFadeDurationString$$ = computed(
+    () => `${this.settings$$().autoSubmitResultFadeDuration}ms`,
+  );
 
   protected ngControlValue$$: WritableSignal<string> = signal('');
   protected readonly isFocused$$ = signal(false);
@@ -125,6 +132,7 @@ export class VInput implements ControlValueAccessor, OnDestroy {
     isValid: () => this.isControlValid(),
     getValue: () => this.displayValue$$(),
     getAutoSubmitDelay: () => this.settings$$().autoSubmitDelay,
+    getAutoSubmitResultFadeDuration: () => this.settings$$().autoSubmitResultFadeDuration,
     emitSubmit: (value: string) => this.onAutoSubmit.emit(value),
     onStateChange: (state: VInputAutoSubmitState) => this.autoSubmitState$$.set(state),
   });

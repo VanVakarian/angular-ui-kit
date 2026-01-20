@@ -11,13 +11,12 @@ export enum VInputAutoSubmitState {
   Error,
 }
 
-const DEFAULT_AUTO_SUBMIT_STATUS_FADE_OUT_DELAY = 3000;
-
 interface VInputAutoSubmitOptions {
   isEnabled: () => boolean;
   isValid: () => boolean;
   getValue: () => string;
   getAutoSubmitDelay: () => number;
+  getAutoSubmitResultFadeDuration: () => number;
   emitSubmit: (value: string) => void;
   onStateChange: (state: VInputAutoSubmitState) => void;
 }
@@ -27,6 +26,7 @@ export class VInputAutoSubmitManager {
   private readonly isValid: () => boolean;
   private readonly getValue: () => string;
   private readonly getAutoSubmitDelay: () => number;
+  private readonly getAutoSubmitResultFadeDuration: () => number;
   private readonly emitSubmit: (value: string) => void;
   private readonly onStateChange: (state: VInputAutoSubmitState) => void;
 
@@ -42,6 +42,7 @@ export class VInputAutoSubmitManager {
     this.isValid = options.isValid;
     this.getValue = options.getValue;
     this.getAutoSubmitDelay = options.getAutoSubmitDelay;
+    this.getAutoSubmitResultFadeDuration = options.getAutoSubmitResultFadeDuration;
     this.emitSubmit = options.emitSubmit;
     this.onStateChange = options.onStateChange;
   }
@@ -119,7 +120,7 @@ export class VInputAutoSubmitManager {
     if (state === VInputAutoSubmitState.Success || state === VInputAutoSubmitState.Error) {
       this.resetTimeoutId = setTimeout(() => {
         this.setState(VInputAutoSubmitState.Idle);
-      }, DEFAULT_AUTO_SUBMIT_STATUS_FADE_OUT_DELAY);
+      }, this.getAutoSubmitResultFadeDuration());
     }
   }
 
