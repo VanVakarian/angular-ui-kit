@@ -1,0 +1,20 @@
+<button [type]="settings$$().type"
+        [disabled]="settings$$().isDisabled"
+        [attr.tabindex]="tabindex() !== undefined ? tabindex() : null"
+        (click)="onButtonClick($event)"
+        (pointerdown)="onPointerDown($event)"
+        (keydown)="onKeyDown($event)">
+
+  <ng-content select="[v-prefix]"
+              class="prefix" />
+
+  @if (!settings$$().isLabelHidden) {
+    <div class="btn-text">
+      <ng-content />
+    </div>
+  }
+
+  <ng-content select="[v-postfix]"
+              class="postfix" />
+
+</button>

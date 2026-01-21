@@ -1,10 +1,11 @@
 import { Component, computed, ElementRef, inject, input, output, Renderer2 } from '@angular/core';
-import { CssUnitValue } from '@ui-kit/types';
+import { ButtonStyle, CssUnitValue } from '@ui-kit/types';
 
 type ButtonType = 'button' | 'submit' | 'reset';
 
 export interface VButtonConfig {
   type?: ButtonType;
+  buttonStyle?: ButtonStyle;
   width?: string;
   borderRadius?: CssUnitValue;
   padding?: CssUnitValue;
@@ -20,11 +21,12 @@ export interface VButtonConfig {
 
 const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
   type: 'button',
+  buttonStyle: undefined as unknown as ButtonStyle,
   width: undefined as unknown as string,
   borderRadius: 2,
   padding: undefined as unknown as CssUnitValue,
   paddingY: 2,
-  paddingX: 2,
+  paddingX: 4,
   gap: 2,
   isDisabled: false,
   isWithoutShadow: false,
@@ -34,12 +36,23 @@ const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
 } as const;
 
 @Component({
-  selector: 'v-button',
-  templateUrl: './v-button.html',
-  styleUrl: './v-button.css',
+  selector: `
+    v-button-old,
+    v-button-old[primary],
+    v-button-old[raised],
+    v-button-old[flat],
+    v-button-old[danger],
+    v-button-old[buttonStyle],
+  `,
+  templateUrl: './v-button-old.html',
+  styleUrl: './v-button-old.css',
   host: {
     '[style.width]': 'settings$$().width || null',
-    '[class.v-no-shadow]': 'settings$$().isWithoutShadow',
+    '[attr.primary]': 'isPrimary$$() ? "" : null',
+    '[attr.raised]': 'isRaised$$() ? "" : null',
+    '[attr.flat]': 'isFlat$$() ? "" : null',
+    '[attr.danger]': 'isDanger$$() ? "" : null',
+    '[attr.no-shadow]': 'settings$$().isWithoutShadow ? "" : null',
     '[style.--v-button-border-radius]': 'borderRadiusString$$()',
     '[style.--v-button-bg-opacity]': 'settings$$().bgOpacity',
     '[style.--v-button-padding-y]': 'paddingYString$$()',
@@ -49,7 +62,7 @@ const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
     '[attr.aria-disabled]': 'settings$$().isDisabled ? "true" : "false"',
   },
 })
-export class VButton {
+export class VButtonOld {
   public readonly config = input<VButtonConfig>({});
   public readonly tabindex = input<number | string | undefined>(undefined);
 
@@ -68,6 +81,11 @@ export class VButton {
   protected readonly paddingXString$$ = computed(() => `var(--unit-${this.paddingX$$()})`);
   protected readonly gapString$$ = computed(() => `var(--unit-${this.settings$$().gap})`);
 
+  protected readonly isFlat$$ = computed(() => this.getActiveStyle() === ButtonStyle.Flat);
+  protected readonly isRaised$$ = computed(() => this.getActiveStyle() === ButtonStyle.Raised);
+  protected readonly isPrimary$$ = computed(() => this.getActiveStyle() === ButtonStyle.Primary);
+  protected readonly isDanger$$ = computed(() => this.getActiveStyle() === ButtonStyle.Danger);
+
   private readonly elementRef = inject(ElementRef);
   private readonly renderer = inject(Renderer2);
 
@@ -81,13 +99,12 @@ export class VButton {
   }
 
   protected onPointerDown(event: PointerEvent): void {
-    if (this.settings$$().isDisabled || this.isLink()) return;
+    if (this.settings$$().isDisabled || this.isFlat$$() || this.isRaised$$()) return;
     const button = event.currentTarget as HTMLElement | null;
     if (!button) return;
 
     const rect = button.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height) * 2;
-    console.log('size', size);
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
@@ -95,7 +112,7 @@ export class VButton {
   }
 
   protected onKeyDown(event: KeyboardEvent): void {
-    if (this.settings$$().isDisabled || this.isLink()) return;
+    if (this.settings$$().isDisabled || this.isFlat$$() || this.isRaised$$()) return;
     if (event.key !== 'Enter' && event.key !== ' ') return;
 
     const button = event.currentTarget as HTMLElement | null;
@@ -109,9 +126,17 @@ export class VButton {
     this.createRipple(button, x, y, size);
   }
 
-  private isLink(): boolean {
-    const element = this.elementRef.nativeElement as HTMLElement;
-    return element.classList.contains('v-link');
+  private getActiveStyle(): ButtonStyle {
+    const styleInput = this.settings$$().buttonStyle;
+    if (styleInput) return styleInput;
+
+    const element = this.elementRef.nativeElement;
+    if (element.hasAttribute('primary')) return ButtonStyle.Primary;
+    if (element.hasAttribute('raised')) return ButtonStyle.Raised;
+    if (element.hasAttribute('flat')) return ButtonStyle.Flat;
+    if (element.hasAttribute('danger')) return ButtonStyle.Danger;
+
+    return ButtonStyle.Primary;
   }
 
   private getPaddingY(): CssUnitValue {
@@ -135,7 +160,7 @@ export class VButton {
     this.renderer.setStyle(ripple, 'height', `${size}px`);
     this.renderer.setStyle(ripple, 'left', `${x - size / 2}px`);
     this.renderer.setStyle(ripple, 'top', `${y - size / 2}px`);
-    this.renderer.setStyle(ripple, 'animation-duration', `${size * 1.5}ms`);
+    this.renderer.setStyle(ripple, 'animation-duration', `${size / 1.2}ms`);
 
     this.renderer.appendChild(button, ripple);
 

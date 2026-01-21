@@ -5,11 +5,11 @@
 
 button {
   display: flex;
-  gap: var(--v-button-gap, var(--unit-2));
+  /* gap: var(--v-button-gap, var(--unit-2)); */
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  border: none;
+  border: 1px solid transparent;
   outline: none;
   cursor: pointer;
   font-family: inherit;
@@ -26,7 +26,9 @@ button {
 
   transition:
     background 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 
   &:disabled {
     opacity: 0.4;
@@ -40,8 +42,14 @@ button {
   border-radius: 50%;
   transform: scale(0);
   pointer-events: none;
-  background: color-mix(in oklab, currentColor 20%, transparent);
+  background: color-mix(in oklab, currentColor 7%, transparent);
   animation: v-button-ripple 0.6s ease-out;
+}
+
+:host(.v-primary) .v-button-ripple,
+:host(.v-danger) .v-button-ripple,
+:host(.v-accent) .v-button-ripple {
+  background: color-mix(in oklab, currentColor 15%, transparent);
 }
 
 @keyframes v-button-ripple {
@@ -62,6 +70,7 @@ button > :not(.prefix):not(.postfix) {
   align-items: center;
   justify-content: center;
   white-space: nowrap;
+  margin-inline: var(--unit-2);
 }
 
 :host([text-align='left']) .btn-text {
@@ -87,101 +96,213 @@ button > :not(.prefix):not(.postfix) {
   width: auto;
 } */
 
-/* Flat directive - with subtle press animation */
-:host([flat]) button {
-  box-shadow: none;
-
-  &:hover {
-    box-shadow: var(--v-shadow-outer-0);
-  }
-
-  &:active {
-    box-shadow: var(--v-shadow-inset-0);
-  }
-}
-
-/* Raised directive */
-:host([raised]) button {
-  box-shadow: var(--v-shadow-outer-1);
-
-  &:hover {
-    box-shadow: var(--v-shadow-outer-2);
-  }
-
-  &:active {
-    box-shadow: var(--v-shadow-inset-1);
-  }
-}
-
-/* Primary directive */
-:host([primary]) button {
-  color: var(--v-color-text-on-accent, white);
-  box-shadow: var(--v-shadow-outer-1);
-
-  --angle: 155deg;
-  --start-pos: -50%;
-  --end-pos: 150%;
-  background: linear-gradient(
-    var(--angle),
-    color-mix(in oklab, var(--v-color-accent-gradient-light) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
-      var(--start-pos),
-    color-mix(in oklab, var(--v-color-accent-gradient-dark) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
-      var(--end-pos)
-  );
-
-  &:active {
-    background: linear-gradient(
-      var(--angle),
-      color-mix(in oklab, var(--v-color-accent-gradient-dark) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
-        var(--start-pos),
-      color-mix(in oklab, var(--v-color-accent-gradient-light) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
-        var(--end-pos)
-    );
-  }
-
-  &:hover {
-    box-shadow: var(--v-shadow-outer-2);
-  }
-}
-
-/* Danger directive */
-:host([danger]) button {
-  color: var(--v-color-text-on-accent, white);
-  box-shadow: var(--v-shadow-outer-1);
-
-  --angle: 155deg;
-  --start-pos: -50%;
-  --end-pos: 150%;
-  background: linear-gradient(
-    var(--angle),
-    color-mix(in oklab, var(--v-color-danger-gradient-light) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
-      var(--start-pos),
-    color-mix(in oklab, var(--v-color-danger-gradient-dark) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
-      var(--end-pos)
-  );
-
-  &:active {
-    background: linear-gradient(
-      var(--angle),
-      color-mix(in oklab, var(--v-color-danger-gradient-dark) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
-        var(--start-pos),
-      color-mix(in oklab, var(--v-color-danger-gradient-light) calc(var(--v-button-bg-opacity, 1) * 100%), transparent)
-        var(--end-pos)
-    );
-  }
-
-  &:hover {
-    box-shadow: var(--v-shadow-outer-2);
-  }
-}
-
-:host([transparent]) button {
+/* Link variant */
+:host(.v-link) button {
   background: transparent;
+  border-color: transparent;
+  box-shadow: none;
   color: var(--v-color-text);
+
+  &:hover {
+    color: var(--v-color-accent);
+  }
+
+  &:active {
+    color: color-mix(in oklab, var(--v-color-accent) 82%, black 18%);
+  }
+}
+
+:host(.v-link.v-primary) button:active {
+  color: color-mix(in oklab, var(--v-color-accent) 82%, black 18%);
+}
+
+:host(.v-link.v-danger) button:active {
+  color: color-mix(in oklab, var(--v-color-danger) 82%, black 18%);
+}
+
+:host(.v-link.v-accent) button:active {
+  color: color-mix(in oklab, var(--v-color-accent-alt) 82%, black 18%);
+}
+
+/* Flat variant */
+:host(.v-flat) button {
+  background: var(--v-color-surface);
+  border-color: var(--v-color-border-subtle);
+  box-shadow: none;
+
+  &:hover {
+    border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+  }
+}
+
+:host(.v-flat.v-primary) button,
+:host(.v-flat.v-danger) button,
+:host(.v-flat.v-accent) button {
+  border-color: transparent;
+}
+
+:host(.v-flat.v-primary) button:hover,
+:host(.v-flat.v-danger) button:hover,
+:host(.v-flat.v-accent) button:hover {
+  border-color: transparent;
+}
+
+/* Raised variant */
+:host(.v-raised) button {
+  background: var(--v-color-surface);
+  box-shadow: var(--v-shadow-outer-1);
+
+  &:hover {
+    box-shadow: var(--v-shadow-outer-2);
+  }
+
+  &:active {
+    box-shadow: var(--v-shadow-outer-1);
+  }
+}
+
+:host(.v-raised.v-primary) button,
+:host(.v-raised.v-danger) button,
+:host(.v-raised.v-accent) button {
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.16);
+}
+
+:host(.v-raised.v-primary) button:hover,
+:host(.v-raised.v-danger) button:hover,
+:host(.v-raised.v-accent) button:hover {
+  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.22);
+}
+
+:host(.v-raised.v-primary) button:active,
+:host(.v-raised.v-danger) button:active,
+:host(.v-raised.v-accent) button:active {
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.16);
+}
+
+:host(.v-primary) button {
+  color: var(--v-color-text-on-accent, white);
+  background: color-mix(in oklab, var(--v-color-accent) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
+  border-color: transparent;
+}
+
+:host(.v-danger) button {
+  color: var(--v-color-text-on-accent, white);
+  background: color-mix(in oklab, var(--v-color-danger) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
+  border-color: transparent;
+}
+
+:host(.v-accent) button {
+  color: var(--v-color-text-on-accent, white);
+  background: color-mix(in oklab, var(--v-color-accent-alt) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
+  border-color: transparent;
+}
+
+:host(.v-primary) button:hover {
+  background: color-mix(in oklab, var(--v-color-accent) 88%, black 12%);
+}
+
+:host(.v-primary) button:active {
+  background: color-mix(in oklab, var(--v-color-accent) 82%, black 18%);
+}
+
+:host(.v-danger) button:hover {
+  background: color-mix(in oklab, var(--v-color-danger) 88%, black 12%);
+}
+
+:host(.v-danger) button:active {
+  background: color-mix(in oklab, var(--v-color-danger) 82%, black 18%);
+}
+
+:host(.v-accent) button:hover {
+  background: color-mix(in oklab, var(--v-color-accent-alt) 88%, black 12%);
+}
+
+:host(.v-accent) button:active {
+  background: color-mix(in oklab, var(--v-color-accent-alt) 82%, black 18%);
+}
+
+:host(.v-link.v-primary) button,
+:host(.v-link.v-danger) button,
+:host(.v-link.v-accent) button {
+  background: transparent;
   box-shadow: none;
 }
 
-:host([no-shadow]) button {
+:host(.v-link.v-primary) button {
+  color: var(--v-color-accent);
+}
+
+:host(.v-link.v-danger) button {
+  color: var(--v-color-danger);
+}
+
+:host(.v-link.v-accent) button {
+  color: var(--v-color-accent-alt);
+}
+
+:host(.v-link.v-primary) button:hover {
+  color: color-mix(in oklab, var(--v-color-accent) 80%, black 20%);
+}
+
+:host(.v-link.v-danger) button:hover {
+  color: color-mix(in oklab, var(--v-color-danger) 80%, black 20%);
+}
+
+:host(.v-link.v-accent) button:hover {
+  color: color-mix(in oklab, var(--v-color-accent-alt) 80%, black 20%);
+}
+
+:host-context(.dark).v-link.v-primary button:hover {
+  color: color-mix(in oklab, var(--v-color-accent) 80%, white 20%);
+}
+
+:host-context(.dark).v-link.v-danger button:hover {
+  color: color-mix(in oklab, var(--v-color-danger) 80%, white 20%);
+}
+
+:host-context(.dark).v-link.v-accent button:hover {
+  color: color-mix(in oklab, var(--v-color-accent-alt) 80%, white 20%);
+}
+
+:host(.v-hover.v-primary):not(.v-link) button,
+:host(.v-hover.v-danger):not(.v-link) button,
+:host(.v-hover.v-accent):not(.v-link) button {
+  color: var(--v-color-text);
+  background: var(--v-color-surface);
+  border-color: var(--v-color-border-subtle);
+}
+
+:host(.v-hover.v-primary):not(.v-link) button:hover {
+  color: var(--v-color-text-on-accent, white);
+  background: var(--v-color-accent);
+  border-color: var(--v-color-accent);
+}
+
+:host(.v-hover.v-primary):not(.v-link) button:active {
+  background: color-mix(in oklab, var(--v-color-accent) 90%, black 10%);
+}
+
+:host(.v-hover.v-danger):not(.v-link) button:hover {
+  color: var(--v-color-text-on-accent, white);
+  background: var(--v-color-danger);
+  border-color: var(--v-color-danger);
+}
+
+:host(.v-hover.v-danger):not(.v-link) button:active {
+  background: color-mix(in oklab, var(--v-color-danger) 90%, black 10%);
+}
+
+:host(.v-hover.v-accent):not(.v-link) button:hover {
+  color: var(--v-color-text-on-accent, white);
+  background: var(--v-color-accent-alt);
+  border-color: var(--v-color-accent-alt);
+}
+
+:host(.v-hover.v-accent):not(.v-link) button:active {
+  background: color-mix(in oklab, var(--v-color-accent-alt) 90%, black 10%);
+}
+
+:host(.v-no-shadow) button {
   box-shadow: none !important;
 
   &:hover {

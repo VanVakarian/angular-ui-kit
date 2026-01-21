@@ -5,8 +5,7 @@
        (click)="$event.stopPropagation()">
     <div class="modal-content">
       @if (settings$$().isCloseButtonVisible) {
-        <v-button flat
-                  class="close-button"
+        <v-button class="v-flat close-button"
                   [config]="{
                     padding: 1,
                   }"
