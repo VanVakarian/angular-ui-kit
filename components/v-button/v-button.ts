@@ -87,7 +87,6 @@ export class VButton {
 
     const rect = button.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height) * 2;
-    console.log('size', size);
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
