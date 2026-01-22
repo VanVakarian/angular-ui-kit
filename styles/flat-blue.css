@@ -2,18 +2,14 @@
   background-color: var(--v-color-bg);
   color: var(--v-color-text);
 
-  --v-color-accent: #137fec;
-  --v-color-accent-gradient-light: #4aa3ff;
-  --v-color-accent-gradient-dark: #0f6fd6;
-  --v-color-accent-alt: #6366f1;
+  --v-color-primary: #3f51b5;
+  --v-color-accent: #1d851c;
 
   --v-color-success: #22c55e;
   --v-color-warning: #f97316;
   --v-color-danger: #ef4444;
-  --v-color-danger-gradient-light: #f87171;
-  --v-color-danger-gradient-dark: #ef4444;
 
-  --v-color-text: #111418;
+  --v-color-text: #333333;
   --v-color-text-muted: #64748b;
   --v-color-text-danger: #ef4444;
   --v-color-text-on-accent: #ffffff;
@@ -42,18 +38,14 @@
   background-color: var(--v-color-bg);
   color: var(--v-color-text);
 
-  --v-color-accent: #137fec;
-  --v-color-accent-gradient-light: #4aa3ff;
-  --v-color-accent-gradient-dark: #0b5bb7;
-  --v-color-accent-alt: #818cf8;
+  --v-color-primary: #0651ae;
+  --v-color-accent: #0b690b;
 
   --v-color-success: #22c55e;
   --v-color-warning: #f97316;
-  --v-color-danger: #ef4444;
-  --v-color-danger-gradient-light: #f87171;
-  --v-color-danger-gradient-dark: #dc2626;
+  --v-color-danger: #c02525;
 
-  --v-color-text: #ffffff;
+  --v-color-text: #cecece;
   --v-color-text-muted: #94a3b8;
   --v-color-text-danger: #f87171;
   --v-color-text-on-accent: #ffffff;

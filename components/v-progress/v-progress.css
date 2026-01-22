@@ -20,7 +20,7 @@
   left: var(--v-progress-bar-gap, 1px);
   height: calc(100% - var(--v-progress-bar-gap, 1px) * 2);
   width: calc(var(--v-progress-percentage, 0%) - var(--v-progress-bar-gap, 1px) * 2);
-  background: var(--v-progress-bar-color, var(--v-color-accent));
+  background: var(--v-progress-bar-color, var(--v-color-primary));
   transition: width var(--animation-duration-medium) ease;
   border-radius: calc(var(--v-progress-border-radius, var(--unit-2)) - var(--v-progress-bar-gap, 1px));
 }

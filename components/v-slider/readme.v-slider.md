@@ -40,7 +40,7 @@ interface VSliderConfig {
 }
 ```
 
-Defaults: `min=0`, `max=100`, `height=3`, `borderRadius=2`, `thumbBorderRadius='full'`, `trackColor='var(--v-color-surface)'`, `fillColor='var(--v-color-accent)'`, `barStyle=Flat`, `thumbSize=6`, `isRange=false`, `isTouchMode=false`, `touchAreaSize=12`, `valueList=[]`.
+Defaults: `min=0`, `max=100`, `height=3`, `borderRadius=2`, `thumbBorderRadius='full'`, `trackColor='var(--v-color-surface)'`, `fillColor='var(--v-color-primary)'`, `barStyle=Flat`, `thumbSize=6`, `isRange=false`, `isTouchMode=false`, `touchAreaSize=12`, `valueList=[]`.
 
 ## Events
 

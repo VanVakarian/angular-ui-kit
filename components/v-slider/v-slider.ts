@@ -39,7 +39,7 @@ const DEFAULT_V_SLIDER_CONFIG: Required<VSliderConfig> = {
   borderRadius: 2,
   thumbBorderRadius: 'full',
   trackColor: 'var(--v-color-surface)',
-  fillColor: 'var(--v-color-accent)',
+  fillColor: 'var(--v-color-primary)',
   barStyle: ProgressBarStyle.Flat,
   thumbSize: 6,
   isRange: false,

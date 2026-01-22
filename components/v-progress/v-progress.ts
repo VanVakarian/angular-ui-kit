@@ -21,7 +21,7 @@ const DEFAULT_V_PROGRESS_CONFIG: Required<VProgressConfig> = {
   max: 100,
   height: 3,
   borderRadius: 2,
-  barColor: 'var(--v-color-accent)',
+  barColor: 'var(--v-color-primary)',
   barStyle: ProgressBarStyle.Flat,
   barGap: 1,
   isShowValues: false,

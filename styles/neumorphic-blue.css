@@ -2,9 +2,9 @@
   background-color: var(--v-color-bg);
   color: var(--v-color-text);
 
-  --v-color-accent: #3f51b5;
-  --v-color-accent-gradient-light: #717dc1;
-  --v-color-accent-gradient-dark: #3f51b5;
+  --v-color-primary: #3f51b5;
+  --v-color-primary-gradient-light: #717dc1;
+  --v-color-primary-gradient-dark: #3f51b5;
 
   --v-color-success: #22c55e;
   --v-color-warning: #f97316;

@@ -24,7 +24,7 @@
   bottom: 0;
   left: calc(var(--v-slider-fill-start, 0%) - var(--v-slider-fill-radius, 0px));
   right: calc(100% - var(--v-slider-fill-end, 0%) - var(--v-slider-fill-radius, 0px));
-  background: var(--v-slider-fill-color, var(--v-color-accent));
+  background: var(--v-slider-fill-color, var(--v-color-primary));
   border-radius: inherit;
   box-shadow: none;
   cursor: pointer;
@@ -39,7 +39,7 @@
   border-radius: 50%;
   display: none;
   opacity: 0;
-  background: color-mix(in srgb, var(--v-color-accent) 14%, transparent);
+  background: color-mix(in srgb, var(--v-color-primary) 14%, transparent);
   transition: opacity 200ms ease;
   cursor: pointer;
 }
@@ -78,7 +78,7 @@
   background: var(--v-color-surface);
   box-shadow: var(--v-slider-thumb-shadow);
   cursor: pointer;
-  border: 2px solid var(--v-color-accent);
+  border: 2px solid var(--v-color-primary);
   display: flex;
   align-items: center;
   justify-content: center;

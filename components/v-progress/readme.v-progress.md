@@ -25,7 +25,7 @@ interface VProgressConfig {
 }
 ```
 
-Defaults: `value=0`, `min=0`, `max=100`, `height=3`, `borderRadius=2`, `barColor='var(--v-color-accent)'`, `barStyle=Flat`, `barGap=1`, `isShowValues=false`, `valueSuffix=''`.
+Defaults: `value=0`, `min=0`, `max=100`, `height=3`, `borderRadius=2`, `barColor='var(--v-color-primary)'`, `barStyle=Flat`, `barGap=1`, `isShowValues=false`, `valueSuffix=''`.
 
 ## Examples (minimal but diverse)
 
