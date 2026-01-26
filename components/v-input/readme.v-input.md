@@ -1,6 +1,6 @@
 # V-Input
 
-Neumorphic input component with unified configuration API, form integration and content projection.
+Flat design input component with unified configuration API, form integration and content projection. Supports dark theme.
 
 ## Basic Usage
 
@@ -168,29 +168,30 @@ protected readonly inputConfig$$ = computed<VInputConfig>(() => ({
 
 ## Styling
 
-The component uses neumorphic style with automatic states:
+The component uses flat design with subtle borders and smooth transitions:
 
 ### CSS Variables (from vars.css):
 - **Spacing units**: `--unit-1` to `--unit-96` (from 4px to 384px)
 - **Text colors**:
-  - `--color-text-default` (#374151) - main text
-  - `--color-text-muted` (#6b7280) - muted text
-  - `--color-text-error` (#ef4444) - error text
-- **Background**: `--color-bg-default` (#ebf3fa)
+  - `--v-color-text` - main text
+  - `--v-color-text-muted` - muted text
+  - `--v-color-text-danger` - error text
+- **Background**: `--v-color-surface`
+- **Border**: `--v-color-border-subtle`
+- **Transition**: `--v-input-transition-duration` (0.2s)
 - **Auto submit colors**:
   - `--v-input-auto-submit-progress-color`
   - `--v-input-auto-submit-success-color`
   - `--v-input-auto-submit-error-color`
-- **Shadows**:
-  - `--shadow-dark-light`, `--shadow-dark-medium` - dark shadows
-  - `--shadow-light-strong`, `--shadow-light-full` - light shadows
 
 ### States:
-- **Normal state**: inset effect with soft shadows
-- **Focus state**: deeper inset effect
-- **Disabled state**: 0.6 opacity and disabled pointer events
-- **Error state**: red error text
+- **Normal state**: subtle border with flat background
+- **Hover state**: darker border color
+- **Focus state**: emphasized border color
+- **Disabled state**: 0.4 opacity and disabled pointer events
+- **Error state**: red error text below input
 - **Auto submit states**: countdown, submitting, success, error (driven by theme vars)
+- **Dark mode**: automatically adapts colors via `:host-context(.dark)`
 
 ## Angular Forms Integration
 
@@ -249,7 +250,7 @@ Prefix and postfix can contain interactive elements:
 - They are vertically centered within the input wrapper via align-items: center
 - They replace input padding, ensuring minimum 8px spacing (var(--unit-2)) even when empty
 - Input field takes all remaining space (flex: 1)
-- Both are included within the neumorphic frame
+- Both are included within the bordered input frame
 
 ## Troubleshooting
 

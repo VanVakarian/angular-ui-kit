@@ -1,6 +1,6 @@
 # V-Checkbox
 
-Neumorphic checkbox with optional switch mode and simple check animation.
+Flat design checkbox with optional switch mode and smooth animations. Supports dark theme.
 
 ## Basic Usage
 

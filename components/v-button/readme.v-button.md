@@ -1,13 +1,14 @@
 # V-Button
 
-Neumorphic button with attribute-based style modes and a single typed config for all settings.
+Flat design button with attribute-based style modes and a single typed config for all settings. Supports dark theme.
 
 ## Overview
 
-- Two ways to select style: attribute (`flat`, `raised`, `primary`, `danger`) or `config.buttonStyle`.
+- Style modes via CSS classes: `v-primary`, `v-danger`, `v-flat`, `v-raised`, `v-link`, etc.
 - All other settings (size, width, behavior, states) are configured via a single `[config]` object.
 - Prefix/postfix content via `v-prefix` / `v-postfix` for icons and badges.
 - Built with modern Angular signals.
+- Supports dark theme and smooth transitions.
 
 ## Anatomy
 
@@ -23,21 +24,23 @@ Neumorphic button with attribute-based style modes and a single typed config for
 
 ## Styling modes
 
-- `flat` — clean flat look with subtle hover effects
-- `raised` — elevated with permanent shadows
-- `primary` — gradient primary button
-- `danger` — destructive/alert action
+- `v-primary` — primary action with accent color background
+- `v-danger` — destructive/alert action with danger color
+- `v-accent` — alternative accent styling
+- `v-flat` — clean flat look with borders and subtle hover effects
+- `v-raised` — elevated appearance with subtle shadows
+- `v-link` — link-style button (transparent, text only)
+- `v-hover` — special hover-only styling
 
-Choose a mode either by attribute or with `config.buttonStyle` (enum `ButtonStyle`). Use only one approach per button.
+Choose a mode by adding the corresponding class to the component.
 
 ## Quick start
 
 ```html
-<!-- Attribute-based style -->
-<v-button primary>Primary</v-button>
-
-<!-- Programmatic style via config -->
-<v-button [config]="{ buttonStyle: ButtonStyle.Raised }">Raised</v-button>
+<!-- Class-based style -->
+<v-button class="v-primary">Primary</v-button>
+<v-button class="v-danger">Danger</v-button>
+<v-button class="v-flat">Flat</v-button>
 ```
 
 ## Config API
@@ -45,13 +48,12 @@ Choose a mode either by attribute or with `config.buttonStyle` (enum `ButtonStyl
 ```ts
 interface VButtonConfig {
   type?: 'button' | 'submit' | 'reset';
-  buttonStyle?: ButtonStyle;           // Primary | Raised | Flat | Danger
   width?: string;                      // '100%', '240px', etc.
   isLabelHidden?: boolean;             // hides main label text
   paddingY?: CssUnitValue;             // vertical padding (unit system)
   paddingX?: CssUnitValue;             // horizontal padding
   isDisabled?: boolean;                // disabled state
-  isWithoutShadow?: boolean;           // removes all shadows
+  isWithoutShadow?: boolean;           // removes shadows (for v-raised)
   bgOpacity?: '0' | '1' | `0.${number}`; // background opacity
 }
 ```
@@ -61,25 +63,28 @@ Defaults: `type='button'`, `paddingY=2`, `paddingX=4`, `isDisabled=false`, `isWi
 ## Usage patterns (minimal but diverse)
 
 ```html
-<!-- 1) Icon-only: hide label, no shadows, compact paddings -->
-<v-button flat [config]="{ isLabelHidden: true, isWithoutShadow: true, paddingX: 2 }">
+<!-- 1) Icon-only: hide label, compact paddings -->
+<v-button class="v-flat" [config]="{ isLabelHidden: true, paddingX: 2 }">
   <span v-prefix>⚙️</span>
   Settings
 </v-button>
 
 <!-- 2) Destructive action with custom paddings -->
-<v-button danger [config]="{ paddingY: 1, paddingX: 6 }">Delete</v-button>
+<v-button class="v-danger" [config]="{ paddingY: 1, paddingX: 6 }">Delete</v-button>
 
-<!-- 3) Full width + programmatic style -->
-<v-button [config]="{ buttonStyle: ButtonStyle.Primary, width: '100%' }">Continue</v-button>
+<!-- 3) Full width primary button -->
+<v-button class="v-primary" [config]="{ width: '100%' }">Continue</v-button>
 
-<!-- 4) Transparent background (bgOpacity=0), e.g. prefix button near input -->
-<v-button flat [config]="{ bgOpacity: '0', paddingX: 0, paddingY: 0 }">
+<!-- 4) Transparent background (bgOpacity=0) -->
+<v-button class="v-flat" [config]="{ bgOpacity: '0', paddingX: 0, paddingY: 0 }">
   <span v-prefix>✕</span>
 </v-button>
 
 <!-- 5) Disabled state -->
-<v-button primary [config]="{ isDisabled: true }">Disabled</v-button>
+<v-button class="v-primary" [config]="{ isDisabled: true }">Disabled</v-button>
+
+<!-- 6) Link-style button -->
+<v-button class="v-link">Learn more</v-button>
 ```
 
 ## Content projection
@@ -91,7 +96,7 @@ Defaults: `type='button'`, `paddingY=2`, `paddingX=4`, `isDisabled=false`, `isWi
 Example:
 
 ```html
-<v-button raised>
+<v-button class="v-raised">
   <span v-prefix>🔍</span>
   Search
   <span v-postfix>→</span>
@@ -108,7 +113,10 @@ Example:
 
 - Paddings use unit system: `--unit-N` (see `vars.css`).
 - Background opacity is controlled via `--v-button-bg-opacity` by `config.bgOpacity`.
-- Colors are driven by theme variables (`--color-*`).
+- Colors are driven by theme variables (`--v-color-*`).
+- Supports dark mode via `:host-context(.dark)` context.
+- Smooth transitions for hover/active states (0.2s).
+- Color mixing for hover/active states using CSS `color-mix()`.
 
 ## Sizing & layout
 
@@ -117,9 +125,11 @@ Example:
 
 ## Behavior & states
 
-- Hover/active visuals depend on the selected style.
-- `isWithoutShadow` disables all shadows, including hover/active.
-- Disabled blocks pointer events and reduces opacity.
+- Hover/active visuals with smooth color mixing transitions.
+- `isWithoutShadow` disables shadows for v-raised style.
+- Disabled blocks pointer events and reduces opacity to 0.4.
+- Ripple effect on click for enhanced interactivity.
+- Dark mode automatically adjusts color mixing ratios.
 
 ## Events
 
@@ -127,7 +137,9 @@ Example:
 
 ## Best practices
 
-- Choose either attribute style or `config.buttonStyle`, not both.
+- Use class-based styling (e.g., `.v-primary`, `.v-flat`).
 - When hiding the label, set an accessible `aria-label` if needed.
 - Prefer unit values for paddings to keep consistent spacing.
 - Keep buttons concise; use postfix/prefix for icons and badges.
+- Use `.v-link` for inline text-style actions.
+- Combine `.v-link.v-link-static` to prevent color changes on hover.

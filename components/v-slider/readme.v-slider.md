@@ -1,6 +1,6 @@
 # V-Slider
 
-Neumorphic slider with unified config, single or range mode, touch areas, and optional discrete value lists.
+Flat design slider with unified config, single or range mode, touch areas, and optional discrete value lists. Supports dark theme and color classes.
 
 ## Basic Usage
 
@@ -32,7 +32,6 @@ interface VSliderConfig {
   thumbBorderRadius?: CssUnitValue | 'full';
   trackColor?: string;
   fillColor?: string;
-  barStyle?: ProgressBarStyle; // Flat | Raised | Inset
   thumbSize?: CssUnitValue;
   isRange?: boolean;
   isTouchMode?: boolean;
@@ -40,12 +39,20 @@ interface VSliderConfig {
 }
 ```
 
-Defaults: `min=0`, `max=100`, `height=3`, `borderRadius=2`, `thumbBorderRadius='full'`, `trackColor='var(--v-color-surface)'`, `fillColor='var(--v-color-primary)'`, `barStyle=Flat`, `thumbSize=6`, `isRange=false`, `isTouchMode=false`, `touchAreaSize=12`, `valueList=[]`.
+Defaults: `min=0`, `max=100`, `height=3`, `borderRadius=2`, `thumbBorderRadius='full'`, `trackColor='var(--v-color-surface)'`, `fillColor='var(--v-color-primary)'`, `thumbSize=6`, `isRange=false`, `isTouchMode=false`, `touchAreaSize=12`, `valueList=[]`.
 
 ## Events
 
 - `valueChange: number`
 - `rangeChange: [number, number]`
+
+## Color Classes
+
+Use `.v-primary`, `.v-danger`, or `.v-accent` to change fill and thumb color:
+
+```html
+<v-slider class="v-danger" [config]="{ min: 0, max: 100 }" [value]="value" (valueChange)="value = $event" />
+```
 
 ## Examples (minimal but diverse)
 
@@ -56,7 +63,6 @@ Defaults: `min=0`, `max=100`, `height=3`, `borderRadius=2`, `thumbBorderRadius='
     min: 0,
     max: 100,
     isRange: true,
-    barStyle: ProgressBarStyle.Inset,
     thumbBorderRadius: 2,
     thumbSize: 7,
     isTouchMode: true,
@@ -73,4 +79,11 @@ Defaults: `min=0`, `max=100`, `height=3`, `borderRadius=2`, `thumbBorderRadius='
   }"
   [range]="dateRange"
   (rangeChange)="dateRange = $event" />
+
+<!-- Custom color -->
+<v-slider
+  class="v-accent"
+  [config]="{ min: 0, max: 100 }"
+  [value]="value"
+  (valueChange)="value = $event" />
 ```

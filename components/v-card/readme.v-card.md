@@ -4,11 +4,11 @@
 
 The component has the following structure:
 ```
-:host (neumorphic card container)
+:host (flat card container)
 └── ng-content (projected content)
 ```
 
-**Key Feature**: The neumorphic styling is applied to the host element, creating a raised card appearance with soft shadows and rounded corners.
+**Key Feature**: The flat styling with subtle borders is applied to the host element, creating a clean card appearance with smooth transitions.
 
 ## Basic Usage
 
@@ -126,30 +126,31 @@ export class ExampleComponent {
 
 ## Styling
 
-The component uses neumorphic styling with the following characteristics:
+The component uses flat design with subtle borders and smooth transitions:
 
 ### CSS Variables (from vars.css):
 - **Spacing units**: `--unit-0` to `--unit-96` (from 0px to 384px)
-- **Background**: `--color-bg-default` (#ebf3fa)
-- **Shadows**:
-  - `--shadow-dark-light` - soft dark shadow for depth
-  - `--shadow-light-strong` - bright light shadow for highlight
+- **Background**: `--v-color-surface`
+- **Border**: `--v-color-border-subtle`
+- **Transition**: `--v-card-transition-duration` (0.2s)
 
-### Neumorphic Effects:
-- **Raised appearance**: Combination of dark and light shadows
+### Flat Design Effects:
+- **Clean appearance**: Subtle border with flat background
 - **Soft edges**: Customizable border radius
 - **Flexible spacing**: Configurable padding
-- **Background integration**: Matches the overall design system
+- **Smooth transitions**: Background and border color transitions
+- **Dark mode support**: Adapts to theme changes
 
 ### Host Element Styling:
 ```css
 :host {
   border-radius: var(--v-card-border-radius, var(--unit-2));
   padding: var(--v-card-padding, var(--unit-2));
-  box-shadow:
-    3px 3px 6px var(--shadow-dark-light),
-    -3px -3px 6px var(--shadow-light-strong);
-  background: var(--color-bg-default);
+  border: 1px solid var(--v-color-border-subtle);
+  background: var(--v-color-surface);
+  transition:
+    background var(--v-card-transition-duration) ease,
+    border-color var(--v-card-transition-duration) ease;
 }
 ```
 
