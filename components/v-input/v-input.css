@@ -1,6 +1,7 @@
 :host {
   display: flex;
   flex-direction: column;
+  --v-input-transition-duration: 0.2s;
 }
 
 .label {
@@ -8,30 +9,35 @@
   color: var(--v-color-text-muted);
   margin-left: calc(var(--unit-2));
   display: block;
+  margin-bottom: var(--unit-1);
 }
 
 .input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
-  width: 100%;
   padding: var(--unit-2) 0;
   border-radius: var(--v-input-border-radius, var(--unit-2));
   box-sizing: border-box;
-  transition: all var(--animation-duration-medium) ease;
+  transition:
+    background var(--v-input-transition-duration) ease,
+    border-color var(--v-input-transition-duration) ease;
   isolation: isolate;
-
-  box-shadow: var(--v-shadow-inset-2);
-
+  border: 1px solid var(--v-color-border-subtle);
   background: var(--v-color-surface);
 
   &.disabled {
-    opacity: 0.6;
+    opacity: 0.4;
     pointer-events: none;
+    cursor: not-allowed;
   }
 
   &.focused {
-    box-shadow: var(--v-shadow-inset-3);
+    border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+  }
+
+  &:not(.disabled):hover {
+    border-color: color-mix(in oklab, var(--v-color-text) 25%, transparent);
   }
 
   .prefix,
@@ -56,7 +62,9 @@
   z-index: 1;
 
   &::placeholder {
+    color: var(--v-color-text-muted);
     font-style: italic;
+    opacity: 0.7;
   }
 
   &:disabled {
@@ -67,12 +75,13 @@
     cursor: default;
   }
 
-  /* A hack to remove background in chrome autofilled input that overlaps with neumorphic styling */
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus,
   &:-webkit-autofill:active {
-    -webkit-background-clip: text;
+    -webkit-text-fill-color: var(--v-color-text) !important;
+    -webkit-box-shadow: 0 0 0 1000px var(--v-color-surface) inset !important;
+    caret-color: var(--v-color-text);
   }
 }
 
@@ -88,5 +97,6 @@
   color: var(--v-color-text-danger);
   font-size: 0.75rem;
   margin-left: calc(var(--unit-2));
+  margin-top: var(--unit-1);
   font-weight: 500;
 }
