@@ -1,5 +1,6 @@
 import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { CssUnitValue } from '@ui-kit/types';
+import { AccordionItemPosition } from './v-accordion';
 
 export interface VExpandConfig {
   padding?: CssUnitValue;
@@ -24,6 +25,11 @@ const DEFAULT_V_EXPAND_CONFIG: Required<VExpandConfig> = {
     '[style.--v-expand-border-radius]': 'borderRadiusString$$()',
     '[style.--v-expand-animation-timing-function]': 'animationTimingFunction$$()',
     '[class.no-transition]': 'config$$().isWithoutAnimation',
+    '[class.accordion-item]': 'isInAccordion$$()',
+    '[class.accordion-first]': 'accordionPosition$$()?.isFirst',
+    '[class.accordion-last]': 'accordionPosition$$()?.isLast',
+    '[class.accordion-middle]': 'isAccordionMiddle$$()',
+    '[class.collapsed]': '!isPanelExpanded$$()',
   },
 })
 export class VExpand {
@@ -36,6 +42,23 @@ export class VExpand {
     ...DEFAULT_V_EXPAND_CONFIG,
     ...this.config(),
   }));
+
+  protected readonly accordionPosition$$ = signal<AccordionItemPosition | null>(null);
+
+  protected readonly isInAccordion$$ = computed(() => this.accordionPosition$$() !== null);
+
+  protected readonly isAccordionMiddle$$ = computed(() => {
+    const pos = this.accordionPosition$$();
+    return pos !== null && !pos.isFirst && !pos.isLast;
+  });
+
+  protected readonly isPanelExpanded$$ = computed(() => {
+    const accordionPos = this.accordionPosition$$();
+    if (accordionPos) {
+      return accordionPos.isOpen();
+    }
+    return this._isExpanded$$();
+  });
 
   public readonly paddingString$$ = computed(() => {
     const padding = this.config$$().padding;
@@ -68,10 +91,19 @@ export class VExpand {
   }
 
   public isPanelExpanded(): boolean {
-    return this._isExpanded$$();
+    return this.isPanelExpanded$$();
   }
 
   protected toggle(): void {
-    this._isExpanded$$.set(!this._isExpanded$$());
+    const accordionPos = this.accordionPosition$$();
+    if (accordionPos) {
+      accordionPos.toggle();
+    } else {
+      this._isExpanded$$.set(!this._isExpanded$$());
+    }
+  }
+
+  public registerInAccordion(position: AccordionItemPosition): void {
+    this.accordionPosition$$.set(position);
   }
 }

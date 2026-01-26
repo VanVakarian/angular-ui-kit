@@ -2,16 +2,56 @@
   display: block;
   overflow: hidden;
   position: relative;
+  border: 1px solid var(--v-color-border-subtle);
+  border-radius: var(--v-expand-border-radius);
+  background: var(--v-color-surface);
+  transition:
+    border-color var(--animation-duration-fast) var(--v-expand-animation-timing-function),
+    background-color var(--animation-duration-fast) var(--v-expand-animation-timing-function),
+    border-radius var(--animation-duration-fast) ease-in-out;
+}
+
+/*
+ * Fade out collapsed panels without header (standalone mode only)
+ * Problem: Collapsed panel without header shows visible border/background (2px height)
+ * Solution: Animate border-color and background-color to transparent
+ * Selectors:
+ *   - .collapsed: Panel is closed
+ *   - :not(:has([v-header])): No header content provided
+ *   - :not(.accordion-item): NOT part of accordion group (standalone only)
+ * Why complexity: Accordion items must keep background/border for visual continuity
+ */
+:host.collapsed:not(:has([v-header])):not(.accordion-item) {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+:host.accordion-item {
+  border-radius: 0;
+  border-top: none;
+}
+
+:host.accordion-first {
+  border-top: 1px solid var(--v-color-border-subtle);
+  border-radius: var(--v-expand-border-radius) var(--v-expand-border-radius) 0 0;
+}
+
+:host.accordion-last {
+  border-radius: 0 0 var(--v-expand-border-radius) var(--v-expand-border-radius);
+}
+
+:host.accordion-first.accordion-last {
+  border-radius: var(--v-expand-border-radius);
 }
 
 .header {
-  border-radius: var(--v-expand-border-radius);
   cursor: pointer;
   user-select: none;
   transition: background-color var(--animation-duration-fast) var(--v-expand-animation-timing-function);
 }
 
 .header:hover {
+  background: color-mix(in oklab, var(--v-color-text) 5%, transparent);
 }
 
 .header-content {
@@ -19,6 +59,7 @@
 
 .body {
   height: 0;
+  overflow: hidden;
   transition: height var(--animation-duration-fast) var(--v-expand-animation-timing-function);
 }
 

@@ -10,7 +10,7 @@ export class OuterShadowDirective implements OnInit {
   public ngOnInit() {
     const element = this.el.nativeElement;
 
-    this.renderer.setStyle(element, 'box-shadow', ` var(--v-shadow-outer-1) `);
+    this.renderer.setStyle(element, 'border', '1px solid var(--v-color-border-subtle)');
   }
 }
 
@@ -26,8 +26,9 @@ export class OuterShadowRoundedDirective implements OnInit {
   public ngOnInit() {
     const element = this.el.nativeElement;
 
-    this.renderer.setStyle(element, 'box-shadow', ` var(--v-shadow-outer-1) `);
+    this.renderer.setStyle(element, 'border', '1px solid var(--v-color-border-subtle)');
     this.renderer.setStyle(element, 'border-radius', `var(--unit-${this.shadowBorderRadius()})`);
+    this.renderer.setStyle(element, 'background', 'var(--v-color-surface)');
   }
 }
 
@@ -41,7 +42,7 @@ export class InnerShadowDirective implements OnInit {
   public ngOnInit() {
     const element = this.el.nativeElement;
 
-    this.renderer.setStyle(element, 'box-shadow', ` var(--v-shadow-inset-2) `);
+    this.renderer.setStyle(element, 'border', '1px solid var(--v-color-border-subtle)');
   }
 }
 
@@ -57,7 +58,8 @@ export class InnerShadowRoundedDirective implements OnInit {
   public ngOnInit() {
     const element = this.el.nativeElement;
 
-    this.renderer.setStyle(element, 'box-shadow', ` var(--v-shadow-inset-2) `);
+    this.renderer.setStyle(element, 'border', '1px solid var(--v-color-border-subtle)');
     this.renderer.setStyle(element, 'border-radius', `var(--unit-${this.shadowBorderRadius()})`);
+    this.renderer.setStyle(element, 'background', 'var(--v-color-surface)');
   }
 }

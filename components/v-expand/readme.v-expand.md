@@ -1,69 +1,122 @@
-# V-Expand Component
+# V-Expand
+
+Expandable/collapsible panel with flat design and accordion support. Works standalone or within `v-accordion` container. Supports dark theme.
 
 ## Basic Usage
 
 ```html
-<v-expand [expanded]="true">
-  <div v-header>Header</div>
-  <div v-body>Body content</div>
+<v-expand>
+  <div v-header>Click to Toggle</div>
+  <div v-body>
+    <p>Expandable content</p>
+  </div>
 </v-expand>
 ```
 
-## Accordion
-
-### Click on header
+## Controlled Expansion
 
 ```html
-<v-expand accordion="my-group" accordionId="panel-1">
-  <div v-header>Item 1</div>
-  <div v-body>Content 1</div>
-</v-expand>
+<!-- Button-controlled panel (no header, auto-hidden when collapsed) -->
+<v-button (click)="isExpanded = !isExpanded">Toggle</v-button>
 
-<v-expand accordion="my-group" accordionId="panel-2">
-  <div v-header>Item 2</div>
-  <div v-body>Content 2</div>
+<v-expand [isExpanded]="isExpanded">
+  <div v-body>
+    <p>Content controlled by external state</p>
+  </div>
 </v-expand>
 ```
 
-### External buttons
-
-```typescript
-private accordionService = inject(AccordionService);
-
-openPanel() {
-  this.accordionService.toggle('my-group', 'panel-1');
-}
-```
+## Accordion Mode (Single Open)
 
 ```html
-<button (click)="openPanel()">Open Panel</button>
-
-<v-expand accordion="my-group" accordionId="panel-1">
-  <div v-body>Content</div>
-</v-expand>
-```
-
-### Dynamic IDs
-
-```html
-@for (item of items; track item.id) {
-  <v-expand [accordion]="'my-group'"
-            [accordionId]="'item-' + item.id">
-    <div v-header>{{ item.name }}</div>
-    <div v-body>{{ item.content }}</div>
+<v-accordion>
+  <v-expand>
+    <h4 v-header>Section 1</h4>
+    <div v-body><p>Content 1</p></div>
   </v-expand>
+
+  <v-expand>
+    <h4 v-header>Section 2</h4>
+    <div v-body><p>Content 2</p></div>
+  </v-expand>
+
+  <v-expand>
+    <h4 v-header>Section 3</h4>
+    <div v-body><p>Content 3</p></div>
+  </v-expand>
+</v-accordion>
+```
+
+## Multiple Panels Open
+
+```html
+<v-accordion [multiple]="true">
+  <v-expand>
+    <div v-header>Panel 1</div>
+    <div v-body>Content 1</div>
+  </v-expand>
+
+  <v-expand>
+    <div v-header>Panel 2</div>
+    <div v-body>Content 2</div>
+  </v-expand>
+</v-accordion>
+```
+
+## Dynamic Accordion
+
+```html
+<v-accordion>
+  @for (item of items; track item.id) {
+    <v-expand>
+      <div v-header>{{ item.title }}</div>
+      <div v-body>{{ item.content }}</div>
+    </v-expand>
+  }
+</v-accordion>
+```
+
+## With Configuration
+
+```html
+<!-- Custom padding, border radius, no animation -->
+<v-expand [config]="{
+  padding: 3,
+  borderRadius: 4,
+  animationTimingFunction: 'ease-out',
+  isWithoutAnimation: false
+}">
+  <div v-header>Custom Styled Panel</div>
+  <div v-body>Content with custom settings</div>
+</v-expand>
+```
+
+## Config API
+
+```ts
+interface VExpandConfig {
+  padding?: CssUnitValue;
+  borderRadius?: CssUnitValue;
+  animationTimingFunction?: 'ease-in-out' | 'linear' | 'ease' | 'ease-in' | 'ease-out';
+  isWithoutAnimation?: boolean;
 }
 ```
 
-## Properties
+Defaults: `padding=2`, `borderRadius=2`, `animationTimingFunction='ease-in-out'`, `isWithoutAnimation=false`.
 
-- `borderRadius`: `input<CssUnitValue>(2)`
-- `padding`: `input<CssUnitValue>(2)`
-- `expanded`: `input<boolean>(false)`
-- `accordion`: `input.required<string>()` - group name
-- `accordionId`: `input.required<string>()` - unique panel ID
+## VAccordion API
+
+```ts
+// Inputs
+multiple: boolean = false  // Allow multiple panels open
+```
+
+## Events
+
+- `onOpened: CustomEvent<boolean>`
 
 ## Methods
 
 - `toggle()`: void
-- `setExpanded(expanded: boolean)`: void
+- `setExpanded(state: boolean)`: void
+- `isPanelExpanded()`: boolean
