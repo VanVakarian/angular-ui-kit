@@ -1,5 +1,4 @@
 import { Component, computed, input } from '@angular/core';
-import { ProgressBarStyle } from '@ui-kit/components/types';
 import { CssUnitValue } from '@ui-kit/types';
 
 export interface VProgressConfig {
@@ -9,7 +8,6 @@ export interface VProgressConfig {
   height?: CssUnitValue;
   borderRadius?: CssUnitValue;
   barColor?: string;
-  barStyle?: ProgressBarStyle;
   barGap?: number;
   isShowValues?: boolean;
   valueSuffix?: string;
@@ -22,11 +20,10 @@ const DEFAULT_V_PROGRESS_CONFIG: Required<VProgressConfig> = {
   height: 3,
   borderRadius: 2,
   barColor: 'var(--v-color-primary)',
-  barStyle: ProgressBarStyle.Flat,
   barGap: 1,
   isShowValues: false,
   valueSuffix: '',
-} as const;
+};
 
 @Component({
   selector: 'v-progress',
@@ -35,11 +32,10 @@ const DEFAULT_V_PROGRESS_CONFIG: Required<VProgressConfig> = {
   host: {
     '[style.--v-progress-height]': 'heightString$$()',
     '[style.--v-progress-border-radius]': 'borderRadiusString$$()',
-    '[style.--v-progress-bar-color]': 'barColor$$()',
     '[style.--v-progress-percentage]': 'percentage$$()',
+    '[style.--v-progress-bar-color]': 'barColor$$()',
     '[style.--v-progress-bar-gap]': 'barGap$$()',
     '[style.--v-progress-value]': 'settings$$().value',
-    '[attr.bar-style]': 'barStyle$$()',
   },
 })
 export class VProgress {
@@ -53,19 +49,6 @@ export class VProgress {
   protected readonly heightString$$ = computed(() => `var(--unit-${this.settings$$().height})`);
   protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.settings$$().borderRadius})`);
   protected readonly barColor$$ = computed(() => this.settings$$().barColor);
-  protected readonly barStyle$$ = computed(() => {
-    const style = this.settings$$().barStyle;
-    switch (style) {
-      case ProgressBarStyle.Flat:
-        return 'flat';
-      case ProgressBarStyle.Raised:
-        return 'raised';
-      case ProgressBarStyle.Inset:
-        return 'inset';
-      default:
-        return 'flat';
-    }
-  });
   protected readonly barGap$$ = computed(() => `${this.settings$$().barGap}px`);
 
   protected readonly isShowValues$$ = computed(() => this.settings$$().isShowValues);

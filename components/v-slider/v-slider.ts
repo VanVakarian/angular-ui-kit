@@ -351,11 +351,13 @@ export class VSlider {
     if (rect.width <= 0) return this.min$$();
 
     const trackWidth = rect.width;
+    const borderWidth = rect.borderWidth;
     const thumbSize = this.getThumbSizePx();
-    const edgeMin = thumbSize;
-    const edgeMax = trackWidth - thumbSize;
+    const edgeMin = thumbSize - borderWidth;
+    const edgeMax = trackWidth - thumbSize + borderWidth;
     const edgeWidth = Math.max(0, edgeMax - edgeMin);
-    const edgePos = Math.min(edgeMax, Math.max(edgeMin, event.clientX - rect.left));
+    const clickPos = event.clientX - rect.left - borderWidth;
+    const edgePos = Math.min(edgeMax, Math.max(edgeMin, clickPos));
 
     const { min, range } = this.getRangeMetrics();
     const ratio = edgeWidth === 0 ? 0 : (edgePos - edgeMin) / edgeWidth;
@@ -366,14 +368,14 @@ export class VSlider {
     const { min, range } = this.getRangeMetrics();
     if (range === 0) return '0%';
 
-    const width = this.getTrackRect().width;
+    const { width, borderWidth } = this.getTrackRect();
     if (width <= 0) return '0%';
 
     const thumbSize = this.getThumbSizePx();
     const halfThumb = thumbSize / 2;
-    const effectiveWidth = Math.max(0, width - thumbSize);
+    const effectiveWidth = Math.max(0, width - thumbSize + borderWidth * 2);
     const ratio = (value - min) / range;
-    const position = halfThumb + ratio * effectiveWidth;
+    const position = halfThumb - borderWidth + ratio * effectiveWidth;
     const percent = (position / width) * 100;
 
     return `${percent}%`;
@@ -395,13 +397,13 @@ export class VSlider {
     const { min, range } = this.getRangeMetrics();
     if (range === 0) return '0%';
 
-    const width = this.getTrackRect().width;
+    const { width, borderWidth } = this.getTrackRect();
     if (width <= 0) return '0%';
 
     const thumbSize = this.getThumbSizePx();
     const halfThumb = thumbSize / 2;
-    const edgeMin = thumbSize;
-    const edgeMax = width - thumbSize;
+    const edgeMin = thumbSize - borderWidth;
+    const edgeMax = width - thumbSize + borderWidth;
     const edgeWidth = Math.max(0, edgeMax - edgeMin);
     const ratio = (value - min) / range;
     const edgePos = edgeMin + ratio * edgeWidth;
@@ -453,16 +455,38 @@ export class VSlider {
     if (range === 0) return 0;
 
     const thumbSize = this.getThumbSizePx();
+    const borderWidth = rect.borderWidth;
     const availableWidth =
-      mode === 'single' ? Math.max(0, rect.width - thumbSize) : Math.max(0, rect.width - thumbSize * 2);
+      mode === 'single'
+        ? Math.max(0, rect.width - thumbSize + borderWidth * 2)
+        : Math.max(0, rect.width - thumbSize * 2 + borderWidth * 2);
 
     if (availableWidth === 0) return 0;
 
     return (deltaX / availableWidth) * range;
   }
 
-  private getTrackRect(): DOMRect {
-    return this.trackElement().nativeElement.getBoundingClientRect();
+  private getTrackRect(): {
+    width: number;
+    height: number;
+    left: number;
+    top: number;
+    right: number;
+    bottom: number;
+    borderWidth: number;
+  } {
+    const element = this.trackElement().nativeElement;
+    const rect = element.getBoundingClientRect();
+    const borderWidth = (element.offsetWidth - element.clientWidth) / 2;
+    return {
+      width: element.clientWidth,
+      height: element.clientHeight,
+      left: rect.left,
+      top: rect.top,
+      right: rect.right,
+      bottom: rect.bottom,
+      borderWidth,
+    };
   }
 
   private getThumbSizePx(): number {

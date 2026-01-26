@@ -15,9 +15,10 @@
   margin: var(--v-slider-track-margin, 0px) 0;
   border-radius: var(--v-slider-border-radius, var(--unit-2));
   background: var(--v-slider-track-color, var(--v-color-surface));
-  box-shadow: var(--v-shadow-inset-2);
+  border: 1px solid var(--v-color-border-subtle);
   touch-action: none;
 }
+
 .fill {
   position: absolute;
   top: 0;
@@ -76,13 +77,26 @@
   border-radius: var(--v-slider-thumb-border-radius, 50%);
   transform: translate(-50%, -50%);
   background: var(--v-color-surface);
-  box-shadow: var(--v-slider-thumb-shadow);
-  cursor: pointer;
   border: 2px solid var(--v-color-primary);
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    background: color-mix(in oklab, var(--v-color-surface) 95%, var(--v-color-primary));
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    background: color-mix(in oklab, var(--v-color-surface) 90%, var(--v-color-primary));
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .thumb-grip {
@@ -97,16 +111,75 @@
   width: 100%;
   height: 100%;
   border-radius: 2px;
-  background: var(--v-color-surface);
-  box-shadow:
-    inset 1px 1px 2px var(--v-shadow-color-dark),
-    inset -1px -1px 2px var(--v-shadow-color-light);
+  background: color-mix(in oklab, var(--v-color-text) 25%, transparent);
 }
 
-.thumb:hover {
-  box-shadow: var(--v-slider-thumb-shadow-hover);
+:host-context(.dark) .thumb-grip-line {
+  background: color-mix(in oklab, var(--v-color-text) 60%, transparent);
 }
 
-.thumb:active {
-  box-shadow: var(--v-slider-thumb-shadow-active);
+:host(.v-primary) {
+  .fill {
+    background: var(--v-color-primary);
+  }
+
+  .thumb {
+    border-color: var(--v-color-primary);
+
+    &:hover {
+      background: color-mix(in oklab, var(--v-color-surface) 95%, var(--v-color-primary));
+    }
+
+    &:active {
+      background: color-mix(in oklab, var(--v-color-surface) 90%, var(--v-color-primary));
+    }
+  }
+
+  .thumb-hit-area {
+    background: color-mix(in srgb, var(--v-color-primary) 14%, transparent);
+  }
+}
+
+:host(.v-danger) {
+  .fill {
+    background: var(--v-color-danger);
+  }
+
+  .thumb {
+    border-color: var(--v-color-danger);
+
+    &:hover {
+      background: color-mix(in oklab, var(--v-color-surface) 95%, var(--v-color-danger));
+    }
+
+    &:active {
+      background: color-mix(in oklab, var(--v-color-surface) 90%, var(--v-color-danger));
+    }
+  }
+
+  .thumb-hit-area {
+    background: color-mix(in srgb, var(--v-color-danger) 14%, transparent);
+  }
+}
+
+:host(.v-accent) {
+  .fill {
+    background: var(--v-color-accent);
+  }
+
+  .thumb {
+    border-color: var(--v-color-accent);
+
+    &:hover {
+      background: color-mix(in oklab, var(--v-color-surface) 95%, var(--v-color-accent));
+    }
+
+    &:active {
+      background: color-mix(in oklab, var(--v-color-surface) 90%, var(--v-color-accent));
+    }
+  }
+
+  .thumb-hit-area {
+    background: color-mix(in srgb, var(--v-color-accent) 14%, transparent);
+  }
 }

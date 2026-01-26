@@ -1,6 +1,6 @@
 # V-Progress
 
-Neumorphic progress bar with unified config and three visual styles.
+Flat design progress bar with unified config and custom color support.
 
 ## Basic Usage
 
@@ -18,32 +18,45 @@ interface VProgressConfig {
   height?: CssUnitValue;
   borderRadius?: CssUnitValue;
   barColor?: string;
-  barStyle?: ProgressBarStyle; // Flat | Raised | Inset
   barGap?: number;
   isShowValues?: boolean;
   valueSuffix?: string;
 }
 ```
 
-Defaults: `value=0`, `min=0`, `max=100`, `height=3`, `borderRadius=2`, `barColor='var(--v-color-primary)'`, `barStyle=Flat`, `barGap=1`, `isShowValues=false`, `valueSuffix=''`.
+Defaults: `value=0`, `min=0`, `max=100`, `height=3`, `borderRadius=2`, `barColor='var(--v-color-primary)'`, `barGap=1`, `isShowValues=false`, `valueSuffix=''`.
+
+## Color Classes
+
+Use `.v-primary`, `.v-danger`, or `.v-accent` to change bar color:
+
+```html
+<v-progress class="v-danger" [config]="{ value: 75 }" />
+```
+
+Or use custom colors via config:
+
+```html
+<v-progress [config]="{ value: 50, barColor: 'green' }" />
+<v-progress [config]="{ value: 75, barColor: '#EBACCA' }" />
+```
 
 ## Examples (minimal but diverse)
 
 ```html
-<!-- Raised bar with custom height/color -->
+<!-- Custom color with value labels -->
 <v-progress [config]="{
   value: 68,
-  barStyle: ProgressBarStyle.Raised,
+  barColor: 'var(--v-color-success)',
   height: 4,
-  barColor: 'var(--v-color-success)'
+  isShowValues: true
 }" />
 
-<!-- Inset bar with value labels and suffix -->
+<!-- Value labels with suffix -->
 <v-progress [config]="{
   value: 75,
   min: 0,
   max: 200,
-  barStyle: ProgressBarStyle.Inset,
   isShowValues: true,
   valueSuffix: '%'
 }" />
