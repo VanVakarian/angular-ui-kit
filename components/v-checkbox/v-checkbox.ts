@@ -25,7 +25,7 @@ const DEFAULT_V_CHECKBOX_CONFIG: Required<VCheckboxConfig> = {
   isDisabled: false,
   mode: 'checkbox',
   size: 6,
-  checkIconSize: 6,
+  checkIconSize: 5,
   borderRadius: 2,
   gap: 2,
   switchWidth: 14,
