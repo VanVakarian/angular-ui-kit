@@ -2,7 +2,6 @@
   border-radius: var(--v-card-border-radius, var(--unit-2));
   padding: var(--v-card-padding, var(--unit-2));
   box-sizing: border-box;
-  width: 100%;
   display: flex;
   flex-direction: column;
   --v-card-transition-duration: 0.2s;
