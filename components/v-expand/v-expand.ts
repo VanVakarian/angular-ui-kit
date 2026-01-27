@@ -77,8 +77,10 @@ export class VExpand {
   private readonly _isExpanded$$ = signal(false);
 
   private readonly onExpandedChangeEmitEffect$$ = effect(() => {
-    const current = this._isExpanded$$();
-    this.onOpened.emit(new CustomEvent('opened', { detail: current }));
+    if (!this.isInAccordion$$()) {
+      const current = this._isExpanded$$();
+      this.onOpened.emit(new CustomEvent('opened', { detail: current }));
+    }
   });
 
   private readonly syncIsExpandedEffect$$ = effect(() => {
@@ -87,7 +89,16 @@ export class VExpand {
   });
 
   public setExpanded(state: boolean): void {
-    this._isExpanded$$.set(state);
+    const accordionPos = this.accordionPosition$$();
+
+    if (accordionPos) {
+      const currentState = accordionPos.isOpen();
+      if (currentState !== state) {
+        accordionPos.toggle();
+      }
+    } else {
+      this._isExpanded$$.set(state);
+    }
   }
 
   public isPanelExpanded(): boolean {
@@ -105,5 +116,9 @@ export class VExpand {
 
   public registerInAccordion(position: AccordionItemPosition): void {
     this.accordionPosition$$.set(position);
+  }
+
+  public notifyStateChange(isOpen: boolean): void {
+    this.onOpened.emit(new CustomEvent('opened', { detail: isOpen }));
   }
 }

@@ -55,7 +55,6 @@
 }
 
 ::ng-deep [v-header] {
-  border-bottom: 0.5px solid var(--v-color-border-subtle);
   font-weight: 600;
   color: var(--v-color-text);
   flex-shrink: 0;
