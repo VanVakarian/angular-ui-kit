@@ -88,14 +88,16 @@
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 
-  &:hover {
-    background: color-mix(in oklab, var(--v-color-surface) 95%, var(--v-color-primary));
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  }
-
   &:active {
     background: color-mix(in oklab, var(--v-color-surface) 90%, var(--v-color-primary));
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@media (hover: hover) {
+  .thumb:hover {
+    background: color-mix(in oklab, var(--v-color-surface) 95%, var(--v-color-primary));
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   }
 }
 
@@ -126,12 +128,14 @@
   .thumb {
     border-color: var(--v-color-primary);
 
-    &:hover {
-      background: color-mix(in oklab, var(--v-color-surface) 95%, var(--v-color-primary));
-    }
-
     &:active {
       background: color-mix(in oklab, var(--v-color-surface) 90%, var(--v-color-primary));
+    }
+  }
+
+  @media (hover: hover) {
+    .thumb:hover {
+      background: color-mix(in oklab, var(--v-color-surface) 95%, var(--v-color-primary));
     }
   }
 
@@ -148,12 +152,14 @@
   .thumb {
     border-color: var(--v-color-danger);
 
-    &:hover {
-      background: color-mix(in oklab, var(--v-color-surface) 95%, var(--v-color-danger));
-    }
-
     &:active {
       background: color-mix(in oklab, var(--v-color-surface) 90%, var(--v-color-danger));
+    }
+  }
+
+  @media (hover: hover) {
+    .thumb:hover {
+      background: color-mix(in oklab, var(--v-color-surface) 95%, var(--v-color-danger));
     }
   }
 
@@ -170,12 +176,14 @@
   .thumb {
     border-color: var(--v-color-accent);
 
-    &:hover {
-      background: color-mix(in oklab, var(--v-color-surface) 95%, var(--v-color-accent));
-    }
-
     &:active {
       background: color-mix(in oklab, var(--v-color-surface) 90%, var(--v-color-accent));
+    }
+  }
+
+  @media (hover: hover) {
+    .thumb:hover {
+      background: color-mix(in oklab, var(--v-color-surface) 95%, var(--v-color-accent));
     }
   }
 

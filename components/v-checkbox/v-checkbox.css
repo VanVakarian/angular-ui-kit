@@ -39,8 +39,10 @@
     background var(--v-checkbox-transition-duration) ease,
     border-color var(--v-checkbox-transition-duration) ease,
     color var(--v-checkbox-transition-duration) ease;
+}
 
-  &:hover {
+@media (hover: hover) {
+  .control:hover {
     border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
   }
 }
@@ -66,8 +68,10 @@
   .control {
     background: var(--v-color-primary);
     border-color: var(--v-color-primary);
+  }
 
-    &:hover {
+  @media (hover: hover) {
+    .control:hover {
       background: color-mix(
         in oklab,
         var(--v-color-primary) var(--v-checkbox-mix-hover),
@@ -79,25 +83,25 @@
         black var(--v-checkbox-mix-hover-contrast)
       );
     }
+
+    :host-context(.dark) & .control:hover {
+      background: color-mix(
+        in oklab,
+        var(--v-color-primary) var(--v-checkbox-mix-hover),
+        white var(--v-checkbox-mix-hover-contrast)
+      );
+      border-color: color-mix(
+        in oklab,
+        var(--v-color-primary) var(--v-checkbox-mix-hover),
+        white var(--v-checkbox-mix-hover-contrast)
+      );
+    }
   }
 
   .check-icon {
     color: var(--v-color-text-on-accent, white);
     opacity: 1;
     transform: scale(1);
-  }
-
-  :host-context(.dark) & .control:hover {
-    background: color-mix(
-      in oklab,
-      var(--v-color-primary) var(--v-checkbox-mix-hover),
-      white var(--v-checkbox-mix-hover-contrast)
-    );
-    border-color: color-mix(
-      in oklab,
-      var(--v-color-primary) var(--v-checkbox-mix-hover),
-      white var(--v-checkbox-mix-hover-contrast)
-    );
   }
 }
 
@@ -110,8 +114,10 @@
     justify-content: flex-start;
     background: var(--v-color-surface);
     border-color: var(--v-color-border-subtle);
+  }
 
-    &:hover {
+  @media (hover: hover) {
+    .control:hover {
       border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
     }
   }
@@ -152,8 +158,10 @@
     .control {
       background: var(--v-color-primary);
       border-color: var(--v-color-primary);
+    }
 
-      &:hover {
+    @media (hover: hover) {
+      .control:hover {
         background: color-mix(
           in oklab,
           var(--v-color-primary) var(--v-checkbox-mix-hover),
@@ -163,6 +171,19 @@
           in oklab,
           var(--v-color-primary) var(--v-checkbox-mix-hover),
           black var(--v-checkbox-mix-hover-contrast)
+        );
+      }
+
+      :host-context(.dark) & .control:hover {
+        background: color-mix(
+          in oklab,
+          var(--v-color-primary) var(--v-checkbox-mix-hover),
+          white var(--v-checkbox-mix-hover-contrast)
+        );
+        border-color: color-mix(
+          in oklab,
+          var(--v-color-primary) var(--v-checkbox-mix-hover),
+          white var(--v-checkbox-mix-hover-contrast)
         );
       }
     }
@@ -186,19 +207,6 @@
       color: var(--v-color-primary);
       transform: scale(1);
       opacity: 1;
-    }
-
-    :host-context(.dark) & .control:hover {
-      background: color-mix(
-        in oklab,
-        var(--v-color-primary) var(--v-checkbox-mix-hover),
-        white var(--v-checkbox-mix-hover-contrast)
-      );
-      border-color: color-mix(
-        in oklab,
-        var(--v-color-primary) var(--v-checkbox-mix-hover),
-        white var(--v-checkbox-mix-hover-contrast)
-      );
     }
   }
 }

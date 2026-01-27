@@ -106,12 +106,14 @@ button > :not(.prefix):not(.postfix) {
       border-color: transparent;
     }
 
-    button:hover {
-      background: color-mix(
-        in oklab,
-        var(--v-color-primary) var(--v-button-mix-hover),
-        black var(--v-button-mix-hover-contrast)
-      );
+    @media (hover: hover) {
+      button:hover {
+        background: color-mix(
+          in oklab,
+          var(--v-color-primary) var(--v-button-mix-hover),
+          black var(--v-button-mix-hover-contrast)
+        );
+      }
     }
 
     button:active {
@@ -130,12 +132,14 @@ button > :not(.prefix):not(.postfix) {
       border-color: transparent;
     }
 
-    button:hover {
-      background: color-mix(
-        in oklab,
-        var(--v-color-danger) var(--v-button-mix-hover),
-        black var(--v-button-mix-hover-contrast)
-      );
+    @media (hover: hover) {
+      button:hover {
+        background: color-mix(
+          in oklab,
+          var(--v-color-danger) var(--v-button-mix-hover),
+          black var(--v-button-mix-hover-contrast)
+        );
+      }
     }
 
     button:active {
@@ -154,12 +158,14 @@ button > :not(.prefix):not(.postfix) {
       border-color: transparent;
     }
 
-    button:hover {
-      background: color-mix(
-        in oklab,
-        var(--v-color-accent) var(--v-button-mix-hover),
-        black var(--v-button-mix-hover-contrast)
-      );
+    @media (hover: hover) {
+      button:hover {
+        background: color-mix(
+          in oklab,
+          var(--v-color-accent) var(--v-button-mix-hover),
+          black var(--v-button-mix-hover-contrast)
+        );
+      }
     }
 
     button:active {
@@ -177,8 +183,10 @@ button > :not(.prefix):not(.postfix) {
     background: var(--v-color-surface);
     border-color: var(--v-color-border-subtle);
     box-shadow: none;
+  }
 
-    &:hover {
+  @media (hover: hover) {
+    button:hover {
       border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
     }
   }
@@ -190,13 +198,25 @@ button > :not(.prefix):not(.postfix) {
       border-color: transparent;
     }
 
-    button:hover {
-      background: color-mix(
-        in oklab,
-        var(--v-color-primary) var(--v-button-mix-hover),
-        black var(--v-button-mix-hover-contrast)
-      );
-      border-color: transparent;
+    @media (hover: hover) {
+      button:hover {
+        background: color-mix(
+          in oklab,
+          var(--v-color-primary) var(--v-button-mix-hover),
+          black var(--v-button-mix-hover-contrast)
+        );
+        border-color: transparent;
+      }
+
+      :host-context(.dark) & {
+        button:hover {
+          background: color-mix(
+            in oklab,
+            var(--v-color-primary) var(--v-button-mix-hover),
+            white var(--v-button-mix-hover-contrast)
+          );
+        }
+      }
     }
 
     button:active {
@@ -205,16 +225,6 @@ button > :not(.prefix):not(.postfix) {
         var(--v-color-primary) var(--v-button-mix-active),
         black var(--v-button-mix-active-contrast)
       );
-    }
-
-    :host-context(.dark) & {
-      button:hover {
-        background: color-mix(
-          in oklab,
-          var(--v-color-primary) var(--v-button-mix-hover),
-          white var(--v-button-mix-hover-contrast)
-        );
-      }
     }
   }
 
@@ -225,13 +235,25 @@ button > :not(.prefix):not(.postfix) {
       border-color: transparent;
     }
 
-    button:hover {
-      background: color-mix(
-        in oklab,
-        var(--v-color-danger) var(--v-button-mix-hover),
-        black var(--v-button-mix-hover-contrast)
-      );
-      border-color: transparent;
+    @media (hover: hover) {
+      button:hover {
+        background: color-mix(
+          in oklab,
+          var(--v-color-danger) var(--v-button-mix-hover),
+          black var(--v-button-mix-hover-contrast)
+        );
+        border-color: transparent;
+      }
+
+      :host-context(.dark) & {
+        button:hover {
+          background: color-mix(
+            in oklab,
+            var(--v-color-danger) var(--v-button-mix-hover),
+            white var(--v-button-mix-hover-contrast)
+          );
+        }
+      }
     }
 
     button:active {
@@ -240,16 +262,6 @@ button > :not(.prefix):not(.postfix) {
         var(--v-color-danger) var(--v-button-mix-active),
         black var(--v-button-mix-active-contrast)
       );
-    }
-
-    :host-context(.dark) & {
-      button:hover {
-        background: color-mix(
-          in oklab,
-          var(--v-color-danger) var(--v-button-mix-hover),
-          white var(--v-button-mix-hover-contrast)
-        );
-      }
     }
   }
 
@@ -260,13 +272,25 @@ button > :not(.prefix):not(.postfix) {
       border-color: transparent;
     }
 
-    button:hover {
-      background: color-mix(
-        in oklab,
-        var(--v-color-accent) var(--v-button-mix-hover),
-        black var(--v-button-mix-hover-contrast)
-      );
-      border-color: transparent;
+    @media (hover: hover) {
+      button:hover {
+        background: color-mix(
+          in oklab,
+          var(--v-color-accent) var(--v-button-mix-hover),
+          black var(--v-button-mix-hover-contrast)
+        );
+        border-color: transparent;
+      }
+
+      :host-context(.dark) & {
+        button:hover {
+          background: color-mix(
+            in oklab,
+            var(--v-color-accent) var(--v-button-mix-hover),
+            white var(--v-button-mix-hover-contrast)
+          );
+        }
+      }
     }
 
     button:active {
@@ -275,16 +299,6 @@ button > :not(.prefix):not(.postfix) {
         var(--v-color-accent) var(--v-button-mix-active),
         black var(--v-button-mix-active-contrast)
       );
-    }
-
-    :host-context(.dark) & {
-      button:hover {
-        background: color-mix(
-          in oklab,
-          var(--v-color-accent) var(--v-button-mix-hover),
-          white var(--v-button-mix-hover-contrast)
-        );
-      }
     }
   }
 }
@@ -294,12 +308,14 @@ button > :not(.prefix):not(.postfix) {
     background: var(--v-color-surface);
     box-shadow: var(--v-shadow-outer-1);
 
-    &:hover {
-      box-shadow: var(--v-shadow-outer-2);
-    }
-
     &:active {
       box-shadow: var(--v-shadow-outer-1);
+    }
+  }
+
+  @media (hover: hover) {
+    button:hover {
+      box-shadow: var(--v-shadow-outer-2);
     }
   }
 
@@ -307,19 +323,25 @@ button > :not(.prefix):not(.postfix) {
     button {
       border-color: var(--v-color-border-subtle);
     }
+  }
 
-    button:hover {
-      border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+  @media (hover: hover) {
+    &:not(.v-primary):not(.v-danger):not(.v-accent) {
+      button:hover {
+        border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+      }
+    }
+
+    :host-context(.dark) &:not(.v-primary):not(.v-danger):not(.v-accent) {
+      button:hover {
+        border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+      }
     }
   }
 
   :host-context(.dark) &:not(.v-primary):not(.v-danger):not(.v-accent) {
     button {
       border-color: var(--v-color-border-subtle);
-    }
-
-    button:hover {
-      border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
     }
   }
 
@@ -331,13 +353,25 @@ button > :not(.prefix):not(.postfix) {
       box-shadow: var(--v-button-shadow-role);
     }
 
-    button:hover {
-      background: color-mix(
-        in oklab,
-        var(--v-color-primary) var(--v-button-mix-hover),
-        black var(--v-button-mix-hover-contrast)
-      );
-      box-shadow: var(--v-button-shadow-role-hover);
+    @media (hover: hover) {
+      button:hover {
+        background: color-mix(
+          in oklab,
+          var(--v-color-primary) var(--v-button-mix-hover),
+          black var(--v-button-mix-hover-contrast)
+        );
+        box-shadow: var(--v-button-shadow-role-hover);
+      }
+
+      :host-context(.dark) & {
+        button:hover {
+          background: color-mix(
+            in oklab,
+            var(--v-color-primary) var(--v-button-mix-hover),
+            white var(--v-button-mix-hover-contrast)
+          );
+        }
+      }
     }
 
     button:active {
@@ -347,16 +381,6 @@ button > :not(.prefix):not(.postfix) {
         black var(--v-button-mix-active-contrast)
       );
       box-shadow: var(--v-button-shadow-role);
-    }
-
-    :host-context(.dark) & {
-      button:hover {
-        background: color-mix(
-          in oklab,
-          var(--v-color-primary) var(--v-button-mix-hover),
-          white var(--v-button-mix-hover-contrast)
-        );
-      }
     }
   }
 
@@ -368,13 +392,25 @@ button > :not(.prefix):not(.postfix) {
       box-shadow: var(--v-button-shadow-role);
     }
 
-    button:hover {
-      background: color-mix(
-        in oklab,
-        var(--v-color-danger) var(--v-button-mix-hover),
-        black var(--v-button-mix-hover-contrast)
-      );
-      box-shadow: var(--v-button-shadow-role-hover);
+    @media (hover: hover) {
+      button:hover {
+        background: color-mix(
+          in oklab,
+          var(--v-color-danger) var(--v-button-mix-hover),
+          black var(--v-button-mix-hover-contrast)
+        );
+        box-shadow: var(--v-button-shadow-role-hover);
+      }
+
+      :host-context(.dark) & {
+        button:hover {
+          background: color-mix(
+            in oklab,
+            var(--v-color-danger) var(--v-button-mix-hover),
+            white var(--v-button-mix-hover-contrast)
+          );
+        }
+      }
     }
 
     button:active {
@@ -384,16 +420,6 @@ button > :not(.prefix):not(.postfix) {
         black var(--v-button-mix-active-contrast)
       );
       box-shadow: var(--v-button-shadow-role);
-    }
-
-    :host-context(.dark) & {
-      button:hover {
-        background: color-mix(
-          in oklab,
-          var(--v-color-danger) var(--v-button-mix-hover),
-          white var(--v-button-mix-hover-contrast)
-        );
-      }
     }
   }
 
@@ -405,13 +431,25 @@ button > :not(.prefix):not(.postfix) {
       box-shadow: var(--v-button-shadow-role);
     }
 
-    button:hover {
-      background: color-mix(
-        in oklab,
-        var(--v-color-accent) var(--v-button-mix-hover),
-        black var(--v-button-mix-hover-contrast)
-      );
-      box-shadow: var(--v-button-shadow-role-hover);
+    @media (hover: hover) {
+      button:hover {
+        background: color-mix(
+          in oklab,
+          var(--v-color-accent) var(--v-button-mix-hover),
+          black var(--v-button-mix-hover-contrast)
+        );
+        box-shadow: var(--v-button-shadow-role-hover);
+      }
+
+      :host-context(.dark) & {
+        button:hover {
+          background: color-mix(
+            in oklab,
+            var(--v-color-accent) var(--v-button-mix-hover),
+            white var(--v-button-mix-hover-contrast)
+          );
+        }
+      }
     }
 
     button:active {
@@ -421,16 +459,6 @@ button > :not(.prefix):not(.postfix) {
         black var(--v-button-mix-active-contrast)
       );
       box-shadow: var(--v-button-shadow-role);
-    }
-
-    :host-context(.dark) & {
-      button:hover {
-        background: color-mix(
-          in oklab,
-          var(--v-color-accent) var(--v-button-mix-hover),
-          white var(--v-button-mix-hover-contrast)
-        );
-      }
     }
   }
 }
@@ -442,11 +470,6 @@ button > :not(.prefix):not(.postfix) {
     box-shadow: none;
     color: var(--v-color-text);
 
-    &:hover {
-      color: var(--v-color-primary);
-      text-decoration: underline;
-    }
-
     &:active {
       color: color-mix(
         in oklab,
@@ -456,9 +479,18 @@ button > :not(.prefix):not(.postfix) {
     }
   }
 
-  &.v-link-static {
+  @media (hover: hover) {
     button:hover {
-      color: var(--v-color-text);
+      color: var(--v-color-primary);
+      text-decoration: underline;
+    }
+  }
+
+  @media (hover: hover) {
+    &.v-link-static {
+      button:hover {
+        color: var(--v-color-text);
+      }
     }
   }
 
@@ -469,12 +501,24 @@ button > :not(.prefix):not(.postfix) {
       color: var(--v-color-primary);
     }
 
-    button:hover {
-      color: color-mix(
-        in oklab,
-        var(--v-color-primary) var(--v-button-mix-link-hover),
-        black var(--v-button-mix-link-hover-contrast)
-      );
+    @media (hover: hover) {
+      button:hover {
+        color: color-mix(
+          in oklab,
+          var(--v-color-primary) var(--v-button-mix-link-hover),
+          black var(--v-button-mix-link-hover-contrast)
+        );
+      }
+
+      :host-context(.dark) & {
+        button:hover {
+          color: color-mix(
+            in oklab,
+            var(--v-color-primary) var(--v-button-mix-link-hover),
+            white var(--v-button-mix-link-hover-contrast)
+          );
+        }
+      }
     }
 
     button:active {
@@ -483,16 +527,6 @@ button > :not(.prefix):not(.postfix) {
         var(--v-color-primary) var(--v-button-mix-active),
         black var(--v-button-mix-active-contrast)
       );
-    }
-
-    :host-context(.dark) & {
-      button:hover {
-        color: color-mix(
-          in oklab,
-          var(--v-color-primary) var(--v-button-mix-link-hover),
-          white var(--v-button-mix-link-hover-contrast)
-        );
-      }
     }
   }
 
@@ -503,12 +537,24 @@ button > :not(.prefix):not(.postfix) {
       color: var(--v-color-danger);
     }
 
-    button:hover {
-      color: color-mix(
-        in oklab,
-        var(--v-color-danger) var(--v-button-mix-link-hover),
-        black var(--v-button-mix-link-hover-contrast)
-      );
+    @media (hover: hover) {
+      button:hover {
+        color: color-mix(
+          in oklab,
+          var(--v-color-danger) var(--v-button-mix-link-hover),
+          black var(--v-button-mix-link-hover-contrast)
+        );
+      }
+
+      :host-context(.dark) & {
+        button:hover {
+          color: color-mix(
+            in oklab,
+            var(--v-color-danger) var(--v-button-mix-link-hover),
+            white var(--v-button-mix-link-hover-contrast)
+          );
+        }
+      }
     }
 
     button:active {
@@ -517,16 +563,6 @@ button > :not(.prefix):not(.postfix) {
         var(--v-color-danger) var(--v-button-mix-active),
         black var(--v-button-mix-active-contrast)
       );
-    }
-
-    :host-context(.dark) & {
-      button:hover {
-        color: color-mix(
-          in oklab,
-          var(--v-color-danger) var(--v-button-mix-link-hover),
-          white var(--v-button-mix-link-hover-contrast)
-        );
-      }
     }
   }
 
@@ -537,12 +573,24 @@ button > :not(.prefix):not(.postfix) {
       color: var(--v-color-accent);
     }
 
-    button:hover {
-      color: color-mix(
-        in oklab,
-        var(--v-color-accent) var(--v-button-mix-link-hover),
-        black var(--v-button-mix-link-hover-contrast)
-      );
+    @media (hover: hover) {
+      button:hover {
+        color: color-mix(
+          in oklab,
+          var(--v-color-accent) var(--v-button-mix-link-hover),
+          black var(--v-button-mix-link-hover-contrast)
+        );
+      }
+
+      :host-context(.dark) & {
+        button:hover {
+          color: color-mix(
+            in oklab,
+            var(--v-color-accent) var(--v-button-mix-link-hover),
+            white var(--v-button-mix-link-hover-contrast)
+          );
+        }
+      }
     }
 
     button:active {
@@ -551,16 +599,6 @@ button > :not(.prefix):not(.postfix) {
         var(--v-color-accent) var(--v-button-mix-active),
         black var(--v-button-mix-active-contrast)
       );
-    }
-
-    :host-context(.dark) & {
-      button:hover {
-        color: color-mix(
-          in oklab,
-          var(--v-color-accent) var(--v-button-mix-link-hover),
-          white var(--v-button-mix-link-hover-contrast)
-        );
-      }
     }
   }
 }
@@ -573,10 +611,12 @@ button > :not(.prefix):not(.postfix) {
       border-color: var(--v-color-border-subtle);
     }
 
-    button:hover {
-      color: var(--v-color-text-on-accent, white);
-      background: var(--v-color-primary);
-      border-color: var(--v-color-primary);
+    @media (hover: hover) {
+      button:hover {
+        color: var(--v-color-text-on-accent, white);
+        background: var(--v-color-primary);
+        border-color: var(--v-color-primary);
+      }
     }
 
     button:active {
@@ -595,10 +635,12 @@ button > :not(.prefix):not(.postfix) {
       border-color: var(--v-color-border-subtle);
     }
 
-    button:hover {
-      color: var(--v-color-text-on-accent, white);
-      background: var(--v-color-danger);
-      border-color: var(--v-color-danger);
+    @media (hover: hover) {
+      button:hover {
+        color: var(--v-color-text-on-accent, white);
+        background: var(--v-color-danger);
+        border-color: var(--v-color-danger);
+      }
     }
 
     button:active {
@@ -617,10 +659,12 @@ button > :not(.prefix):not(.postfix) {
       border-color: var(--v-color-border-subtle);
     }
 
-    button:hover {
-      color: var(--v-color-text-on-accent, white);
-      background: var(--v-color-accent);
-      border-color: var(--v-color-accent);
+    @media (hover: hover) {
+      button:hover {
+        color: var(--v-color-text-on-accent, white);
+        background: var(--v-color-accent);
+        border-color: var(--v-color-accent);
+      }
     }
 
     button:active {

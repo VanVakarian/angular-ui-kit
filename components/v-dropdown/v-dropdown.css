@@ -28,8 +28,10 @@
     width: var(--unit-6);
     height: var(--unit-6);
   }
+}
 
-  &:hover {
+@media (hover: hover) {
+  .clear-icon:hover {
     color: var(--v-color-text);
   }
 }
@@ -58,10 +60,6 @@
   transition: background var(--animation-duration-medium) ease;
   color: var(--v-color-text);
 
-  &:hover {
-    background: color-mix(in oklab, var(--v-color-text) 8%, transparent);
-  }
-
   &:first-child {
     border-radius: var(--unit-1) var(--unit-1) 0 0;
   }
@@ -78,9 +76,11 @@
     color: var(--v-color-text-muted);
     cursor: default;
     font-style: italic;
+  }
 
-    &:hover {
-      box-shadow: none;
+  @media (hover: hover) {
+    &:not(.empty):hover {
+      background: color-mix(in oklab, var(--v-color-text) 8%, transparent);
     }
   }
 }

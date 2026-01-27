@@ -36,16 +36,18 @@
     border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
   }
 
-  &:not(.disabled):hover {
-    border-color: color-mix(in oklab, var(--v-color-text) 25%, transparent);
-  }
-
   .prefix,
   .postfix {
     display: flex;
     min-width: var(--unit-2);
     position: relative;
     z-index: 1;
+  }
+
+  @media (hover: hover) {
+    &:not(.disabled):hover {
+      border-color: color-mix(in oklab, var(--v-color-text) 25%, transparent);
+    }
   }
 }
 
