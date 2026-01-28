@@ -21,9 +21,10 @@
   box-sizing: border-box;
   transition:
     background var(--v-input-transition-duration) ease,
-    border-color var(--v-input-transition-duration) ease;
+    outline-color var(--v-input-transition-duration) ease;
   isolation: isolate;
-  border: 1px solid var(--v-color-border-subtle);
+  outline: 1px solid var(--v-color-border-subtle);
+  outline-offset: -1px;
   background: var(--v-color-surface);
 
   &.disabled {
@@ -33,7 +34,7 @@
   }
 
   &.focused {
-    border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+    outline-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
   }
 
   .prefix,
@@ -46,7 +47,7 @@
 
   @media (hover: hover) {
     &:not(.disabled):hover {
-      border-color: color-mix(in oklab, var(--v-color-text) 25%, transparent);
+      outline-color: color-mix(in oklab, var(--v-color-text) 25%, transparent);
     }
   }
 }

@@ -15,7 +15,8 @@
   margin: var(--v-slider-track-margin, 0px) 0;
   border-radius: var(--v-slider-border-radius, var(--unit-2));
   background: var(--v-slider-track-color, var(--v-color-surface));
-  border: 1px solid var(--v-color-border-subtle);
+  outline: 1px solid var(--v-color-border-subtle);
+  outline-offset: -1px;
   touch-action: none;
 }
 
@@ -77,7 +78,8 @@
   border-radius: var(--v-slider-thumb-border-radius, 50%);
   transform: translate(-50%, -50%);
   background: var(--v-color-surface);
-  border: 2px solid var(--v-color-primary);
+  outline: 2px solid var(--v-color-primary);
+  outline-offset: -2px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -85,7 +87,7 @@
   overflow: hidden;
   transition:
     background 0.2s ease,
-    border-color 0.2s ease,
+    outline-color 0.2s ease,
     box-shadow 0.2s ease;
 
   &:active {
@@ -126,7 +128,7 @@
   }
 
   .thumb {
-    border-color: var(--v-color-primary);
+    outline-color: var(--v-color-primary);
 
     &:active {
       background: color-mix(in oklab, var(--v-color-surface) 90%, var(--v-color-primary));
@@ -150,7 +152,7 @@
   }
 
   .thumb {
-    border-color: var(--v-color-danger);
+    outline-color: var(--v-color-danger);
 
     &:active {
       background: color-mix(in oklab, var(--v-color-surface) 90%, var(--v-color-danger));
@@ -174,7 +176,7 @@
   }
 
   .thumb {
-    border-color: var(--v-color-accent);
+    outline-color: var(--v-color-accent);
 
     &:active {
       background: color-mix(in oklab, var(--v-color-surface) 90%, var(--v-color-accent));

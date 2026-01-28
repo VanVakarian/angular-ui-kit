@@ -9,7 +9,8 @@
   height: var(--v-progress-height, var(--unit-3));
   border-radius: var(--v-progress-border-radius, var(--unit-2));
   background: var(--v-color-surface);
-  border: 1px solid var(--v-color-border-subtle);
+  outline: 1px solid var(--v-color-border-subtle);
+  outline-offset: -1px;
   overflow: hidden;
 }
 
