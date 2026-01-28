@@ -21,8 +21,8 @@ button {
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid transparent;
-  outline: none;
+  outline: 1px solid transparent;
+  outline-offset: -1px;
   cursor: pointer;
   font-family: inherit;
   font-size: 1rem;
@@ -39,7 +39,7 @@ button {
   transition:
     background var(--v-button-transition-duration) ease,
     box-shadow var(--v-button-transition-duration) ease,
-    border-color var(--v-button-transition-duration) ease,
+    outline-color var(--v-button-transition-duration) ease,
     color var(--v-button-transition-duration) ease;
 
   &:disabled {
@@ -103,7 +103,7 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text-on-accent, white);
       background: color-mix(in oklab, var(--v-color-primary) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
-      border-color: transparent;
+      outline-color: transparent;
     }
 
     @media (hover: hover) {
@@ -129,7 +129,7 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text-on-accent, white);
       background: color-mix(in oklab, var(--v-color-danger) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
-      border-color: transparent;
+      outline-color: transparent;
     }
 
     @media (hover: hover) {
@@ -155,7 +155,7 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text-on-accent, white);
       background: color-mix(in oklab, var(--v-color-accent) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
-      border-color: transparent;
+      outline-color: transparent;
     }
 
     @media (hover: hover) {
@@ -181,13 +181,13 @@ button > :not(.prefix):not(.postfix) {
 :host(.v-flat) {
   button {
     background: var(--v-color-surface);
-    border-color: var(--v-color-border-subtle);
+    outline-color: var(--v-color-border-subtle);
     box-shadow: none;
   }
 
   @media (hover: hover) {
     button:hover {
-      border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+      outline-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
     }
   }
 
@@ -195,7 +195,7 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text-on-accent, white);
       background: color-mix(in oklab, var(--v-color-primary) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
-      border-color: transparent;
+      outline-color: transparent;
     }
 
     @media (hover: hover) {
@@ -205,7 +205,7 @@ button > :not(.prefix):not(.postfix) {
           var(--v-color-primary) var(--v-button-mix-hover),
           black var(--v-button-mix-hover-contrast)
         );
-        border-color: transparent;
+        outline-color: transparent;
       }
 
       :host-context(.dark) & {
@@ -232,7 +232,7 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text-on-accent, white);
       background: color-mix(in oklab, var(--v-color-danger) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
-      border-color: transparent;
+      outline-color: transparent;
     }
 
     @media (hover: hover) {
@@ -242,7 +242,7 @@ button > :not(.prefix):not(.postfix) {
           var(--v-color-danger) var(--v-button-mix-hover),
           black var(--v-button-mix-hover-contrast)
         );
-        border-color: transparent;
+        outline-color: transparent;
       }
 
       :host-context(.dark) & {
@@ -269,7 +269,7 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text-on-accent, white);
       background: color-mix(in oklab, var(--v-color-accent) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
-      border-color: transparent;
+      outline-color: transparent;
     }
 
     @media (hover: hover) {
@@ -279,7 +279,7 @@ button > :not(.prefix):not(.postfix) {
           var(--v-color-accent) var(--v-button-mix-hover),
           black var(--v-button-mix-hover-contrast)
         );
-        border-color: transparent;
+        outline-color: transparent;
       }
 
       :host-context(.dark) & {
@@ -321,27 +321,27 @@ button > :not(.prefix):not(.postfix) {
 
   &:not(.v-primary):not(.v-danger):not(.v-accent) {
     button {
-      border-color: var(--v-color-border-subtle);
+      outline-color: var(--v-color-border-subtle);
     }
   }
 
   @media (hover: hover) {
     &:not(.v-primary):not(.v-danger):not(.v-accent) {
       button:hover {
-        border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+        outline-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
       }
     }
 
     :host-context(.dark) &:not(.v-primary):not(.v-danger):not(.v-accent) {
       button:hover {
-        border-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+        outline-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
       }
     }
   }
 
   :host-context(.dark) &:not(.v-primary):not(.v-danger):not(.v-accent) {
     button {
-      border-color: var(--v-color-border-subtle);
+      outline-color: var(--v-color-border-subtle);
     }
   }
 
@@ -349,7 +349,7 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text-on-accent, white);
       background: color-mix(in oklab, var(--v-color-primary) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
-      border-color: transparent;
+      outline-color: transparent;
       box-shadow: var(--v-button-shadow-role);
     }
 
@@ -388,7 +388,7 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text-on-accent, white);
       background: color-mix(in oklab, var(--v-color-danger) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
-      border-color: transparent;
+      outline-color: transparent;
       box-shadow: var(--v-button-shadow-role);
     }
 
@@ -427,7 +427,7 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text-on-accent, white);
       background: color-mix(in oklab, var(--v-color-accent) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
-      border-color: transparent;
+      outline-color: transparent;
       box-shadow: var(--v-button-shadow-role);
     }
 
@@ -466,7 +466,7 @@ button > :not(.prefix):not(.postfix) {
 :host(.v-link) {
   button {
     background: transparent;
-    border-color: transparent;
+    outline-color: transparent;
     box-shadow: none;
     color: var(--v-color-text);
 
@@ -608,14 +608,14 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text);
       background: var(--v-color-surface);
-      border-color: var(--v-color-border-subtle);
+      outline-color: var(--v-color-border-subtle);
     }
 
     @media (hover: hover) {
       button:hover {
         color: var(--v-color-text-on-accent, white);
         background: var(--v-color-primary);
-        border-color: var(--v-color-primary);
+        outline-color: var(--v-color-primary);
       }
     }
 
@@ -632,14 +632,14 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text);
       background: var(--v-color-surface);
-      border-color: var(--v-color-border-subtle);
+      outline-color: var(--v-color-border-subtle);
     }
 
     @media (hover: hover) {
       button:hover {
         color: var(--v-color-text-on-accent, white);
         background: var(--v-color-danger);
-        border-color: var(--v-color-danger);
+        outline-color: var(--v-color-danger);
       }
     }
 
@@ -656,14 +656,14 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text);
       background: var(--v-color-surface);
-      border-color: var(--v-color-border-subtle);
+      outline-color: var(--v-color-border-subtle);
     }
 
     @media (hover: hover) {
       button:hover {
         color: var(--v-color-text-on-accent, white);
         background: var(--v-color-accent);
-        border-color: var(--v-color-accent);
+        outline-color: var(--v-color-accent);
       }
     }
 
