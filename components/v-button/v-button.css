@@ -21,8 +21,8 @@ button {
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  outline: 1px solid transparent;
-  outline-offset: -1px;
+  outline: var(--v-outline-transparent);
+  outline-offset: var(--v-outline-offset);
   cursor: pointer;
   font-family: inherit;
   font-size: 1rem;
@@ -39,7 +39,7 @@ button {
   transition:
     background var(--v-button-transition-duration) ease,
     box-shadow var(--v-button-transition-duration) ease,
-    outline-color var(--v-button-transition-duration) ease,
+    var(--v-outline-transition),
     color var(--v-button-transition-duration) ease;
 
   &:disabled {
@@ -181,13 +181,13 @@ button > :not(.prefix):not(.postfix) {
 :host(.v-flat) {
   button {
     background: var(--v-color-surface);
-    outline-color: var(--v-color-border-subtle);
+    outline: var(--v-outline);
     box-shadow: none;
   }
 
   @media (hover: hover) {
     button:hover {
-      outline-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+      outline-color: var(--v-outline-hover);
     }
   }
 
@@ -321,27 +321,27 @@ button > :not(.prefix):not(.postfix) {
 
   &:not(.v-primary):not(.v-danger):not(.v-accent) {
     button {
-      outline-color: var(--v-color-border-subtle);
+      outline: var(--v-outline);
     }
   }
 
   @media (hover: hover) {
     &:not(.v-primary):not(.v-danger):not(.v-accent) {
       button:hover {
-        outline-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+        outline-color: var(--v-outline-hover);
       }
     }
 
     :host-context(.dark) &:not(.v-primary):not(.v-danger):not(.v-accent) {
       button:hover {
-        outline-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+        outline-color: var(--v-outline-hover);
       }
     }
   }
 
   :host-context(.dark) &:not(.v-primary):not(.v-danger):not(.v-accent) {
     button {
-      outline-color: var(--v-color-border-subtle);
+      outline: var(--v-outline);
     }
   }
 
@@ -608,7 +608,7 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text);
       background: var(--v-color-surface);
-      outline-color: var(--v-color-border-subtle);
+      outline: var(--v-outline);
     }
 
     @media (hover: hover) {
@@ -632,7 +632,7 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text);
       background: var(--v-color-surface);
-      outline-color: var(--v-color-border-subtle);
+      outline: var(--v-outline);
     }
 
     @media (hover: hover) {
@@ -656,7 +656,7 @@ button > :not(.prefix):not(.postfix) {
     button {
       color: var(--v-color-text);
       background: var(--v-color-surface);
-      outline-color: var(--v-color-border-subtle);
+      outline: var(--v-outline);
     }
 
     @media (hover: hover) {

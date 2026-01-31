@@ -45,8 +45,8 @@
   max-height: 200px;
   overflow-y: auto;
   background: var(--v-color-surface);
-  outline: 1px solid var(--v-color-border-subtle);
-  outline-offset: -1px;
+  outline: var(--v-outline);
+  outline-offset: var(--v-outline-offset);
   margin-top: var(--unit-1);
 
   &.align-left {

@@ -6,13 +6,13 @@
   flex-direction: column;
   --v-card-transition-duration: 0.2s;
 
-  outline: 1px solid var(--v-color-border-subtle);
-  outline-offset: -1px;
+  outline: var(--v-outline);
+  outline-offset: var(--v-outline-offset);
   background: var(--v-color-surface);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   transition:
     background var(--v-card-transition-duration) ease,
-    outline-color var(--v-card-transition-duration) ease;
+    var(--v-outline-transition);
 }

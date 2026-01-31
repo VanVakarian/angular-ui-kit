@@ -29,6 +29,7 @@ export interface VSliderConfig {
   isRange?: boolean;
   isTouchMode?: boolean;
   touchAreaSize?: CssUnitValue;
+  isDisabled?: boolean;
 }
 
 const DEFAULT_V_SLIDER_CONFIG: Required<VSliderConfig> = {
@@ -45,6 +46,7 @@ const DEFAULT_V_SLIDER_CONFIG: Required<VSliderConfig> = {
   isRange: false,
   isTouchMode: false,
   touchAreaSize: 12,
+  isDisabled: false,
 };
 
 @Component({
@@ -54,6 +56,7 @@ const DEFAULT_V_SLIDER_CONFIG: Required<VSliderConfig> = {
   host: {
     '[class.touch-mode]': 'isTouchMode$$()',
     '[class.dragging]': 'isDragging$$()',
+    '[class.disabled]': 'isDisabled$$()',
     '[style.--v-slider-height]': 'heightString$$()',
     '[style.--v-slider-border-radius]': 'borderRadiusString$$()',
     '[style.--v-slider-track-color]': 'trackColor$$()',
@@ -83,6 +86,7 @@ export class VSlider {
   }));
 
   protected readonly isTouchMode$$ = computed(() => this.settings$$().isTouchMode);
+  protected readonly isDisabled$$ = computed(() => this.settings$$().isDisabled);
   protected readonly touchAreaSizeString$$ = computed(() => `var(--unit-${this.settings$$().touchAreaSize})`);
 
   protected readonly valueList$$ = computed(() => {
@@ -211,6 +215,7 @@ export class VSlider {
   });
 
   protected onTrackPointerDown(event: PointerEvent): void {
+    if (this.isDisabled$$()) return;
     if (event.button !== 0) return;
 
     event.preventDefault();
@@ -225,6 +230,7 @@ export class VSlider {
   }
 
   protected onFillPointerDown(event: PointerEvent): void {
+    if (this.isDisabled$$()) return;
     if (event.button !== 0) return;
 
     event.preventDefault();
@@ -239,6 +245,7 @@ export class VSlider {
   }
 
   protected onThumbPointerDown(event: PointerEvent, thumb: ActiveThumb): void {
+    if (this.isDisabled$$()) return;
     if (event.button !== 0) return;
 
     event.preventDefault();

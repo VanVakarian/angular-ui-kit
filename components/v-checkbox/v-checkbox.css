@@ -2,10 +2,6 @@
   display: inline-flex;
   align-items: center;
   --v-checkbox-transition-duration: 0.2s;
-  --v-checkbox-mix-hover: 88%;
-  --v-checkbox-mix-active: 82%;
-  --v-checkbox-mix-hover-contrast: 12%;
-  --v-checkbox-mix-active-contrast: 18%;
 }
 
 .checkbox {
@@ -31,20 +27,20 @@
   height: var(--v-checkbox-size, var(--unit-6));
   border-radius: var(--v-checkbox-border-radius, var(--unit-2));
   background: var(--v-color-surface);
-  outline: 1px solid var(--v-color-border-subtle);
-  outline-offset: -1px;
+  outline: var(--v-outline);
+  outline-offset: var(--v-outline-offset);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transition:
     background var(--v-checkbox-transition-duration) ease,
-    outline-color var(--v-checkbox-transition-duration) ease,
+    var(--v-outline-transition),
     color var(--v-checkbox-transition-duration) ease;
 }
 
 @media (hover: hover) {
   .control:hover {
-    outline-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+    outline-color: var(--v-outline-hover);
   }
 }
 
@@ -114,12 +110,12 @@
     padding: var(--v-checkbox-switch-padding, var(--unit-1));
     justify-content: flex-start;
     background: var(--v-color-surface);
-    outline-color: var(--v-color-border-subtle);
+    outline: var(--v-outline);
   }
 
   @media (hover: hover) {
     .control:hover {
-      outline-color: color-mix(in oklab, var(--v-color-text) 35%, transparent);
+      outline-color: var(--v-outline-hover);
     }
   }
 
@@ -139,7 +135,7 @@
     transition:
       transform 0.18s ease,
       background var(--v-checkbox-transition-duration) ease,
-      outline-color var(--v-checkbox-transition-duration) ease;
+      var(--v-outline-transition);
   }
 
   .thumb-icon {
@@ -163,28 +159,20 @@
 
     @media (hover: hover) {
       .control:hover {
-        background: color-mix(
-          in oklab,
-          var(--v-color-primary) var(--v-checkbox-mix-hover),
-          black var(--v-checkbox-mix-hover-contrast)
-        );
+        background: color-mix(in oklab, var(--v-color-primary) var(--v-mix-hover), black var(--v-mix-hover-contrast));
         outline-color: color-mix(
           in oklab,
-          var(--v-color-primary) var(--v-checkbox-mix-hover),
-          black var(--v-checkbox-mix-hover-contrast)
+          var(--v-color-primary) var(--v-mix-hover),
+          black var(--v-mix-hover-contrast)
         );
       }
 
       :host-context(.dark) & .control:hover {
-        background: color-mix(
-          in oklab,
-          var(--v-color-primary) var(--v-checkbox-mix-hover),
-          white var(--v-checkbox-mix-hover-contrast)
-        );
+        background: color-mix(in oklab, var(--v-color-primary) var(--v-mix-hover), white var(--v-mix-hover-contrast));
         outline-color: color-mix(
           in oklab,
-          var(--v-color-primary) var(--v-checkbox-mix-hover),
-          white var(--v-checkbox-mix-hover-contrast)
+          var(--v-color-primary) var(--v-mix-hover),
+          white var(--v-mix-hover-contrast)
         );
       }
     }

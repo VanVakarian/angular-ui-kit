@@ -15,8 +15,8 @@
   margin: var(--v-slider-track-margin, 0px) 0;
   border-radius: var(--v-slider-border-radius, var(--unit-2));
   background: var(--v-slider-track-color, var(--v-color-surface));
-  outline: 1px solid var(--v-color-border-subtle);
-  outline-offset: -1px;
+  outline: var(--v-outline);
+  outline-offset: var(--v-outline-offset);
   touch-action: none;
 }
 
@@ -68,6 +68,12 @@
 
 :host(.dragging) {
   cursor: pointer;
+}
+
+:host(.disabled) {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 .thumb {
