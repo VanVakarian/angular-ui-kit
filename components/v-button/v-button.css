@@ -676,15 +676,3 @@ button > :not(.prefix):not(.postfix) {
     }
   }
 }
-
-:host(.v-no-shadow) button {
-  box-shadow: none !important;
-
-  &:hover {
-    box-shadow: none !important;
-  }
-
-  &:active {
-    box-shadow: none !important;
-  }
-}

@@ -30,12 +30,11 @@ interface VButtonConfig {
   paddingY?: CssUnitValue;
   paddingX?: CssUnitValue;
   isDisabled?: boolean;
-  isWithoutShadow?: boolean;
   bgOpacity?: '0' | '1' | `0.${number}`;
 }
 ```
 
-Defaults: `type='button'`, `paddingY=2`, `paddingX=4`, `isDisabled=false`, `isWithoutShadow=false`, `bgOpacity='1'`.
+Defaults: `type='button'`, `paddingY=2`, `paddingX=4`, `isDisabled=false`, `bgOpacity='1'`.
 
 ## Events
 

@@ -12,7 +12,6 @@ export interface VButtonConfig {
   paddingX?: CssUnitValue;
   gap?: CssUnitValue;
   isDisabled?: boolean;
-  isWithoutShadow?: boolean;
   bgOpacity?: '0' | '1' | `0.${number}`;
   isLabelHidden?: boolean;
   textAlign?: 'left' | 'center' | 'right';
@@ -27,7 +26,6 @@ const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
   paddingX: 2,
   gap: 2,
   isDisabled: false,
-  isWithoutShadow: false,
   bgOpacity: '1',
   isLabelHidden: false,
   textAlign: undefined as unknown as 'left' | 'center' | 'right',
@@ -39,7 +37,6 @@ const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
   styleUrl: './v-button.css',
   host: {
     '[style.width]': 'settings$$().width || null',
-    '[class.v-no-shadow]': 'settings$$().isWithoutShadow',
     '[style.--v-button-border-radius]': 'borderRadiusString$$()',
     '[style.--v-button-bg-opacity]': 'settings$$().bgOpacity',
     '[style.--v-button-padding-y]': 'paddingYString$$()',
