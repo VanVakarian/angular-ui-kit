@@ -1,6 +1,7 @@
 :host {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   --v-input-transition-duration: 0.2s;
 }
 
