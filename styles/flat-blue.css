@@ -30,6 +30,24 @@
   --v-input-auto-submit-progress-color: #137fec;
   --v-input-auto-submit-success-color: #22c55e;
   --v-input-auto-submit-error-color: #ef4444;
+
+  /* TONAL VARIABLE COLOR THEME EXPERIMENT: */
+  --color-base-offset: 10%;
+  --color-base-light: color-mix(in oklch, white calc(100% - var(--color-base-offset)), black var(--color-base-offset));
+  --color-base-dark: color-mix(in oklch, black calc(100% - var(--color-base-offset)), white var(--color-base-offset));
+
+  --v-color-primary-new: #0000ff;
+  --color-base: var(--color-base-light);
+
+  --color-primary-level-0: var(--v-color-primary-new);
+  --color-primary-level-1: color-mix(in oklch, var(--v-color-primary-new) 93%, black 7%);
+  --color-primary-level-2: color-mix(in oklch, var(--v-color-primary-new) 85%, black 15%);
+  --color-primary-level-3: color-mix(in oklch, var(--v-color-primary-new) 75%, black 25%);
+
+  --color-surface-level-0: color-mix(in oklch, white 88%, var(--v-color-primary-new) 12%);
+  --color-surface-level-1: color-mix(in oklch, white 84%, var(--v-color-primary-new) 16%);
+  --color-surface-level-2: color-mix(in oklch, white 80%, var(--v-color-primary-new) 20%);
+  --color-surface-level-3: color-mix(in oklch, white 76%, var(--v-color-primary-new) 24%);
 }
 
 .dark [v-theme='flat-blue'],
@@ -66,4 +84,19 @@
   --v-input-auto-submit-progress-color: #137fec;
   --v-input-auto-submit-success-color: #22c55e;
   --v-input-auto-submit-error-color: #ef4444;
+
+  /*
+  --color-base: var(--color-base-dark);
+  background-color: var(--color-surface-level-0);
+
+  --color-primary-level-0: var(--v-color-primary-new);
+  --color-primary-level-1: color-mix(in oklch, var(--v-color-primary-new) 90%, black 10%);
+  --color-primary-level-2: color-mix(in oklch, var(--v-color-primary-new) 80%, black 20%);
+  --color-primary-level-3: color-mix(in oklch, var(--v-color-primary-new) 70%, black 30%);
+
+  --color-surface-level-0: color-mix(in oklch, var(--color-base-dark) 85%, var(--v-color-primary-new) 15%);
+  --color-surface-level-1: color-mix(in oklch, var(--color-base-dark) 78%, var(--v-color-primary-new) 22%);
+  --color-surface-level-2: color-mix(in oklch, var(--color-base-dark) 70%, var(--v-color-primary-new) 30%);
+  --color-surface-level-3: color-mix(in oklch, var(--color-base-dark) 62%, var(--v-color-primary-new) 38%);
+  */
 }
