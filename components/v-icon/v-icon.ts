@@ -2,12 +2,14 @@ import { Component, computed, input } from '@angular/core';
 import { CssUnitValue } from '@ui-kit/types';
 
 export enum IconName {
+  AccontBalanceWallet = 'account_balance_wallet',
   Add = 'add',
   Analytics = 'analytics',
   Article = 'article',
   Bar = 'bar',
   Cached = 'cached',
   CalendarMonth = 'calendar_month',
+  Category = 'category',
   Check = 'check',
   ChevronLeft = 'chevron_left',
   Close = 'close',
@@ -23,6 +25,7 @@ export enum IconName {
   LeftPanelClose = 'left_panel_close',
   LeftPanelOpen = 'left_panel_open',
   LightMode = 'light_mode',
+  List = 'list',
   Login = 'login',
   Logout = 'logout',
   Menu = 'menu',
@@ -39,6 +42,7 @@ export enum IconName {
   Star = 'star',
   SwapHoriz = 'swap_horiz',
   Undo = 'undo',
+  UniversalCurrency = 'universal_currency',
   ViewCozy = 'view_cozy',
   Warning = 'warning',
 }

@@ -490,6 +490,7 @@ button > :not(.prefix):not(.postfix) {
     &.v-link-static {
       button:hover {
         color: var(--v-color-text);
+        text-decoration: none;
       }
     }
   }
