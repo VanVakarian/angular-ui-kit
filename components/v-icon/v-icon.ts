@@ -16,6 +16,7 @@ export enum IconName {
   DarkMode = 'dark_mode',
   Delete = 'delete',
   Edit = 'edit',
+  Enterprise = 'enterprise',
   History = 'history',
   Info = 'info',
   KeyboardArrowDown = 'keyboard_arrow_down',
