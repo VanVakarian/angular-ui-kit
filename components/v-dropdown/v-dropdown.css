@@ -8,7 +8,7 @@
   position: relative;
   width: 100%;
   background: var(--v-color-surface);
-  border-radius: var(--unit-1);
+  border-radius: var(--unit-2);
 
   &.open {
     z-index: var(--v-dropdown-z-index);
@@ -41,7 +41,7 @@
   top: 100%;
   left: 0;
   z-index: calc(var(--v-dropdown-z-index) + 1);
-  border-radius: var(--unit-1);
+  border-radius: var(--unit-2);
   max-height: 200px;
   overflow-y: auto;
   background: var(--v-color-surface);
@@ -62,15 +62,15 @@
   color: var(--v-color-text);
 
   &:first-child {
-    border-radius: var(--unit-1) var(--unit-1) 0 0;
+    border-radius: var(--unit-2) var(--unit-2) 0 0;
   }
 
   &:last-child {
-    border-radius: 0 0 var(--unit-1) var(--unit-1);
+    border-radius: 0 0 var(--unit-2) var(--unit-2);
   }
 
   &:only-child {
-    border-radius: var(--unit-1);
+    border-radius: var(--unit-2);
   }
 
   &.empty {

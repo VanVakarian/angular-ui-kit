@@ -125,7 +125,8 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   });
 
   public writeValue(value: string | null): void {
-    this.value$$.set(value || '');
+    const resolvedValue = this.resolveDisplayValue(value || '');
+    this.value$$.set(resolvedValue);
     this.internalForm.get('search')?.setValue(this.value$$(), { emitEvent: false });
     this.updateFilteredItems();
     this.validateInput();
@@ -192,6 +193,12 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
         this.items().filter((item) => item.label.toLowerCase().includes(this.value$$().toLowerCase())),
       );
     }
+  }
+
+  private resolveDisplayValue(value: string): string {
+    if (!value) return '';
+    const matched = this.items().find((item) => item.value === value);
+    return matched ? matched.label : value;
   }
 
   private validateInput(): void {
