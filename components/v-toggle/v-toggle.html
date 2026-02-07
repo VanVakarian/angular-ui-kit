@@ -1,0 +1,16 @@
+<v-card class="v-toggle-card"
+        [config]="cardConfig$$()">
+  <div class="toggle-group"
+       role="group"
+       [attr.aria-disabled]="settings$$().isDisabled ? 'true' : 'false'">
+    @for (item of items(); track item.id) {
+      <v-button [class]="'toggle-button ' + getButtonClass(item)"
+                [config]="getItemButtonConfig(item)"
+                [attr.aria-pressed]="isItemActive(item) ? 'true' : 'false'"
+                [attr.aria-disabled]="isItemDisabled(item) ? 'true' : 'false'"
+                (click)="onToggleClick(item)">
+        {{ item.label }}
+      </v-button>
+    }
+  </div>
+</v-card>
