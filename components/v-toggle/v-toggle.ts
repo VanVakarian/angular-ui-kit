@@ -18,6 +18,7 @@ export interface VToggleConfig {
   padding?: CssUnitValue;
   gap?: CssUnitValue;
   buttonConfig?: VButtonConfig;
+  fitContent?: boolean;
 }
 
 const DEFAULT_V_TOGGLE_CONFIG: Required<VToggleConfig> = {
@@ -29,6 +30,7 @@ const DEFAULT_V_TOGGLE_CONFIG: Required<VToggleConfig> = {
   padding: 1,
   gap: 1,
   buttonConfig: {},
+  fitContent: false,
 };
 
 @Component({
@@ -38,6 +40,7 @@ const DEFAULT_V_TOGGLE_CONFIG: Required<VToggleConfig> = {
   imports: [VCard, VButton],
   host: {
     '[style.--v-toggle-gap]': 'gapString$$()',
+    '[class.v-toggle-fit-host]': 'settings$$().fitContent',
   },
 })
 export class VToggle {
@@ -59,9 +62,10 @@ export class VToggle {
   }));
 
   protected readonly buttonConfig$$ = computed<VButtonConfig>(() => {
-    const buttonConfig = this.settings$$().buttonConfig || {};
+    const settings = this.settings$$();
+    const buttonConfig = settings.buttonConfig || {};
     return {
-      width: '100%',
+      ...(settings.fitContent ? {} : { width: '100%' }),
       padding: 1,
       ...buttonConfig,
     };

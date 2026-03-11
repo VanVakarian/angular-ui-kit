@@ -2,6 +2,10 @@
   display: block;
 }
 
+:host.v-toggle-fit-host {
+  width: fit-content;
+}
+
 .v-toggle-card {
   width: 100%;
 }
@@ -13,7 +17,14 @@
   gap: var(--v-toggle-gap, var(--unit-1));
 }
 
+.v-toggle-fit .toggle-group {
+  width: auto;
+}
+
 .toggle-button {
   flex: 1;
-  min-width: 0;
+}
+
+.v-toggle-fit .toggle-button {
+  flex: 0 0 auto;
 }
