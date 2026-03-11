@@ -71,6 +71,9 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   protected readonly filteredItems$$ = signal<DropdownItem[]>([]);
   protected readonly validationError$$ = signal('');
   protected readonly dropdownWidth$$ = signal(0);
+  protected readonly dropdownFixedTop$$ = signal(0);
+  protected readonly dropdownFixedLeft$$ = signal<number | null>(null);
+  protected readonly dropdownFixedRight$$ = signal<number | null>(null);
   protected readonly zIndex$$ = signal(100);
   protected readonly backdropZIndex$$ = signal(90);
   protected readonly internalForm = new FormGroup({
@@ -119,6 +122,21 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
       styles['width'] = `${dropdownWidth}px`;
     } else if (this.minDropdownWidth()) {
       styles['min-width'] = this.minDropdownWidth();
+    }
+
+    const top = this.dropdownFixedTop$$();
+    if (top > 0) {
+      styles['top'] = `${top}px`;
+    }
+
+    const left = this.dropdownFixedLeft$$();
+    if (left !== null) {
+      styles['left'] = `${left}px`;
+    }
+
+    const right = this.dropdownFixedRight$$();
+    if (right !== null) {
+      styles['right'] = `${right}px`;
     }
 
     return styles;
@@ -224,9 +242,35 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
     setTimeout(() => {
       const hostElement = this.elementRef.nativeElement;
       const hostRect = hostElement.getBoundingClientRect();
+      const cbRect = this.getFixedContainingBlockRect();
+
+      const offsetTop = cbRect ? cbRect.top : 0;
+      const offsetLeft = cbRect ? cbRect.left : 0;
+      const offsetRight = cbRect ? cbRect.right : window.innerWidth;
+
       const minWidthValue = this.minDropdownWidth() ? parseInt(this.minDropdownWidth().replace(/[^\d]/g, '')) || 0 : 0;
       this.dropdownWidth$$.set(Math.max(hostRect.width, minWidthValue));
+      this.dropdownFixedTop$$.set(hostRect.bottom - offsetTop);
+      if (this.expandDirection() === ddExpandDirection.Left) {
+        this.dropdownFixedLeft$$.set(null);
+        this.dropdownFixedRight$$.set(offsetRight - hostRect.right);
+      } else {
+        this.dropdownFixedLeft$$.set(hostRect.left - offsetLeft);
+        this.dropdownFixedRight$$.set(null);
+      }
     }, 0);
+  }
+
+  private getFixedContainingBlockRect(): DOMRect | null {
+    let el = this.elementRef.nativeElement.parentElement as HTMLElement | null;
+    while (el && el !== document.documentElement) {
+      const style = window.getComputedStyle(el);
+      if (style.transform !== 'none' || style.filter !== 'none' || style.perspective !== 'none') {
+        return el.getBoundingClientRect();
+      }
+      el = el.parentElement;
+    }
+    return null;
   }
 
   private registerLayer(): void {

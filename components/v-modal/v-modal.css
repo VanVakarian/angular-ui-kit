@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
-  overflow: visible; /* TODO[121]: fix cutting out of the dropdown list popup */
+  overflow: visible;
   padding: var(--v-modal-padding-y, var(--unit-2)) var(--v-modal-padding-x, var(--unit-2));
 }
 

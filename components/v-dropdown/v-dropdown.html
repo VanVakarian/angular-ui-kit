@@ -30,7 +30,6 @@
 
   @if (isOpen$$() && filteredItems$$().length > 0) {
     <div class="dropdown-list"
-         [class.align-left]="expandDirection() === 'left'"
          [ngStyle]="dropdownListStyles$$()">
       @for (item of filteredItems$$(); track item.value) {
         <div class="dropdown-item"
@@ -43,7 +42,6 @@
 
   @if (isOpen$$() && filteredItems$$().length === 0 && value$$()) {
     <div class="dropdown-list"
-         [class.align-left]="expandDirection() === 'left'"
          [ngStyle]="dropdownListStyles$$()">
       <div class="dropdown-item empty">
         No items found

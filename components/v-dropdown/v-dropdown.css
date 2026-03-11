@@ -37,9 +37,7 @@
 }
 
 .dropdown-list {
-  position: absolute;
-  top: 100%;
-  left: 0;
+  position: fixed;
   z-index: calc(var(--v-dropdown-z-index) + 1);
   border-radius: var(--unit-2);
   max-height: 200px;
@@ -47,12 +45,6 @@
   background: var(--v-color-surface);
   outline: var(--v-outline);
   outline-offset: var(--v-outline-offset);
-  margin-top: var(--unit-1);
-
-  &.align-left {
-    left: auto;
-    right: 0;
-  }
 }
 
 .dropdown-item {
