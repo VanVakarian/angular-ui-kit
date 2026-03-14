@@ -33,8 +33,12 @@
          [ngStyle]="dropdownListStyles$$()">
       @for (item of filteredItems$$(); track item.value) {
         <div class="dropdown-item"
+             [class.has-right-label]="!!item.rightLabel"
              (click)="selectItem(item)">
-          {{ item.label }}
+          <span>{{ item.label }}</span>
+          @if (item.rightLabel) {
+            <span class="dropdown-item-right">{{ item.rightLabel }}</span>
+          }
         </div>
       }
     </div>

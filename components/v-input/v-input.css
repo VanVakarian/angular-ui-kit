@@ -11,6 +11,18 @@
   margin-left: calc(var(--unit-2));
   display: block;
   margin-bottom: var(--unit-1);
+
+  &.label-split {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-right: calc(var(--unit-2));
+  }
+}
+
+.label-right {
+  font-size: 0.75rem;
+  color: var(--v-color-text-muted);
 }
 
 .input-wrapper {

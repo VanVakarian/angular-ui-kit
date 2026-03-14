@@ -1,6 +1,12 @@
-@if (settings$$().label) {
+@if (settings$$().label || settings$$().labelRight) {
   <label class="label"
-         [for]="inputId">{{ settings$$().label }}</label>
+         [class.label-split]="!!settings$$().labelRight"
+         [for]="inputId">
+    <span>{{ settings$$().label }}</span>
+    @if (settings$$().labelRight) {
+      <span class="label-right">{{ settings$$().labelRight }}</span>
+    }
+  </label>
 }
 
 <div class="input-wrapper"

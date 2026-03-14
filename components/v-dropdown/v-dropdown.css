@@ -53,6 +53,13 @@
   transition: background var(--animation-duration-medium) ease;
   color: var(--v-color-text);
 
+  &.has-right-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--unit-3);
+  }
+
   &:first-child {
     border-radius: var(--unit-2) var(--unit-2) 0 0;
   }
@@ -76,4 +83,11 @@
       background: color-mix(in oklab, var(--v-color-text) 8%, transparent);
     }
   }
+}
+
+.dropdown-item-right {
+  color: var(--v-color-text-muted);
+  font-size: 0.85em;
+  flex-shrink: 0;
+  text-align: right;
 }

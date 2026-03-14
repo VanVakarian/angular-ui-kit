@@ -37,6 +37,7 @@ export interface VInputConfig {
   inputmode?: InputMode;
   pattern?: string;
   label?: string;
+  labelRight?: string;
   placeholder?: string;
   errorMessage?: string;
   name?: string;
@@ -60,6 +61,7 @@ const DEFAULT_V_INPUT_CONFIG: Required<VInputConfig> = {
   inputmode: 'text',
   pattern: '',
   label: '',
+  labelRight: '',
   placeholder: '',
   errorMessage: '',
   name: '',

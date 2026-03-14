@@ -26,6 +26,7 @@ export enum ddExpandDirection {
 export interface DropdownItem {
   value: string;
   label: string;
+  rightLabel?: string;
 }
 
 @Component({
@@ -47,6 +48,7 @@ export interface DropdownItem {
 })
 export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   public readonly label = input<string>('');
+  public readonly labelRight = input<string>('');
   public readonly placeholder = input<string>('');
   public readonly isDisabled = input<boolean>(false);
   public readonly isRequired = input<boolean>(false);
@@ -61,6 +63,7 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
 
   protected readonly inputConfig$$ = computed<VInputConfig>(() => ({
     label: this.label(),
+    labelRight: this.labelRight() || undefined,
     placeholder: this.placeholder(),
     isDisabled: this.isDisabled(),
     errorMessage: this.computedErrorMessage$$(),
