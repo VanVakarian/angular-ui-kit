@@ -50,6 +50,7 @@ export enum IconName {
   Savings = 'savings',
   Scale = 'scale',
   Settings = 'settings',
+  Sort = 'sort',
   Star = 'star',
   SwapHoriz = 'swap_horiz',
   Undo = 'undo',
