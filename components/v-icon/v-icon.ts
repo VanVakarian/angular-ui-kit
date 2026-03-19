@@ -57,6 +57,8 @@ export enum IconName {
   UniversalCurrencyAlt = 'universal_currency_alt',
   UniversalCurrency = 'universal_currency',
   ViewCozy = 'view_cozy',
+  VisibilityOff = 'visibility_off',
+  Visibility = 'visibility',
   Warning = 'warning',
 }
 
