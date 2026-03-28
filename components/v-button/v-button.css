@@ -1,3 +1,9 @@
+/* Blocks clicks on the host when disabled — prevents events from bypassing the inner <button disabled> via pointer-events:none bubbling up to Angular's (click) binding */
+:host([aria-disabled='true']) {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 :host {
   display: block;
   width: max-content;
