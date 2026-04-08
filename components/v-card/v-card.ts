@@ -4,6 +4,8 @@ import { CssUnitValue } from '@ui-kit/types';
 export interface VCardConfig {
   borderRadius?: CssUnitValue;
   padding?: CssUnitValue;
+  paddingX?: CssUnitValue;
+  paddingY?: CssUnitValue;
   backgroundImageUrl?: string | null;
   backgroundImageOpacity?: number;
   minHeight?: string;
@@ -11,7 +13,9 @@ export interface VCardConfig {
 
 const DEFAULT_V_CARD_CONFIG: Required<VCardConfig> = {
   borderRadius: 4,
-  padding: 2,
+  padding: undefined as unknown as CssUnitValue,
+  paddingX: 2,
+  paddingY: 2,
   backgroundImageUrl: null,
   backgroundImageOpacity: 1,
   minHeight: 'auto',
@@ -23,7 +27,8 @@ const DEFAULT_V_CARD_CONFIG: Required<VCardConfig> = {
   styleUrl: './v-card.css',
   host: {
     '[style.--v-card-border-radius]': 'borderRadiusString$$()',
-    '[style.--v-card-padding]': 'paddingString$$()',
+    '[style.--v-card-padding-x]': 'paddingXString$$()',
+    '[style.--v-card-padding-y]': 'paddingYString$$()',
     '[style.backgroundImage]': 'cardBackgroundImage$$()',
     '[style.minHeight]': 'settings$$().minHeight',
   },
@@ -39,7 +44,10 @@ export class VCard {
   }));
 
   protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.settings$$().borderRadius})`);
-  protected readonly paddingString$$ = computed(() => `var(--unit-${this.settings$$().padding})`);
+  protected readonly paddingX$$ = computed(() => this.getPaddingX());
+  protected readonly paddingY$$ = computed(() => this.getPaddingY());
+  protected readonly paddingXString$$ = computed(() => `var(--unit-${this.paddingX$$()})`);
+  protected readonly paddingYString$$ = computed(() => `var(--unit-${this.paddingY$$()})`);
 
   protected readonly cardBackgroundImage$$ = computed(() => {
     const { backgroundImageUrl, backgroundImageOpacity } = this.settings$$();
@@ -49,5 +57,19 @@ export class VCard {
 
   protected onClick(event: MouseEvent): void {
     this.onCardclick.emit(event);
+  }
+
+  private getPaddingX(): CssUnitValue {
+    const config = this.config();
+    if (config.paddingX !== undefined) return config.paddingX;
+    if (config.padding !== undefined) return config.padding;
+    return this.settings$$().paddingX;
+  }
+
+  private getPaddingY(): CssUnitValue {
+    const config = this.config();
+    if (config.paddingY !== undefined) return config.paddingY;
+    if (config.padding !== undefined) return config.padding;
+    return this.settings$$().paddingY;
   }
 }

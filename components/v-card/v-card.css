@@ -1,6 +1,6 @@
 :host {
   border-radius: var(--v-card-border-radius, var(--unit-2));
-  padding: var(--v-card-padding, var(--unit-2));
+  padding: var(--v-card-padding-y, var(--unit-2)) var(--v-card-padding-x, var(--unit-2));
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
