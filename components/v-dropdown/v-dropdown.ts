@@ -14,6 +14,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { IconName, VIcon } from '@ui-kit/components/v-icon/v-icon';
 import { VInput, VInputConfig } from '@ui-kit/components/v-input/v-input';
 import { VBackdropDirective } from '@ui-kit/directives/backdrop.directive';
 import { LayerController, PARENT_LAYER_ID, ZLayerService } from '@ui-kit/services/z-layer.service';
@@ -27,7 +28,20 @@ export interface DropdownItem {
   value: string;
   label: string;
   rightLabel?: string;
+  iconName?: IconName;
+  iconRotationDeg?: number;
 }
+
+type DropdownItemWithIcon = DropdownItem & {
+  iconName: IconName;
+};
+
+export const DropdownMode = {
+  Search: 'search',
+  Select: 'select',
+} as const;
+
+export type DropdownMode = (typeof DropdownMode)[keyof typeof DropdownMode];
 
 @Component({
   selector: 'v-dropdown',
@@ -44,7 +58,7 @@ export interface DropdownItem {
       multi: true,
     },
   ],
-  imports: [CommonModule, VInput, ReactiveFormsModule, VBackdropDirective],
+  imports: [CommonModule, VInput, VIcon, ReactiveFormsModule, VBackdropDirective],
 })
 export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   public readonly label = input<string>('');
@@ -56,20 +70,45 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   public readonly items = input<DropdownItem[]>([]);
   public readonly minDropdownWidth = input<string>('');
   public readonly expandDirection = input<ddExpandDirection>(ddExpandDirection.Left);
+  public readonly mode = input<DropdownMode>(DropdownMode.Search);
 
   public readonly onSelectionChanged = output<DropdownItem | null>();
 
   protected readonly inputComponent = viewChild.required<VInput>('inputComponent');
+  protected readonly isSelectMode$$ = computed(() => this.mode() === DropdownMode.Select);
+  protected readonly selectedItem$$ = computed(() => {
+    const selectedValue = this.selectedValue$$();
+
+    if (!selectedValue) {
+      return null;
+    }
+
+    return this.items().find((item) => item.value === selectedValue) || null;
+  });
+  protected readonly selectedItemWithIcon$$ = computed<DropdownItemWithIcon | null>(() => {
+    const selectedItem = this.selectedItem$$();
+
+    if (!selectedItem?.iconName) {
+      return null;
+    }
+
+    return selectedItem as DropdownItemWithIcon;
+  });
 
   protected readonly inputConfig$$ = computed<VInputConfig>(() => ({
     label: this.label(),
     labelRight: this.labelRight() || undefined,
     placeholder: this.placeholder(),
     isDisabled: this.isDisabled(),
+    isReadonly: this.isSelectMode$$(),
+    isClickable: this.isSelectMode$$(),
+    inputSize: this.isSelectMode$$() ? this.getSelectInputSize() : null,
+    inputmode: this.isSelectMode$$() ? 'none' : 'text',
     errorMessage: this.computedErrorMessage$$(),
   }));
 
   protected readonly value$$ = signal('');
+  protected readonly selectedValue$$ = signal('');
   protected readonly isOpen$$ = signal(false);
   protected readonly filteredItems$$ = signal<DropdownItem[]>([]);
   protected readonly validationError$$ = signal('');
@@ -96,6 +135,13 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   ) {
     this.internalForm.get('search')?.valueChanges.subscribe((value) => {
       this.value$$.set(value || '');
+
+      if (this.isSelectMode$$()) {
+        this.updateFilteredItems();
+        return;
+      }
+
+      this.selectedValue$$.set('');
       this.onChange(this.value$$());
       this.updateFilteredItems();
       this.isOpen$$.set(true);
@@ -145,7 +191,18 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
     return styles;
   });
 
+  protected readonly iconRotationStyle = (item: DropdownItem | null): { transform: string } | null => {
+    if (!item?.iconRotationDeg) {
+      return null;
+    }
+
+    return {
+      transform: `rotate(${item.iconRotationDeg}deg)`,
+    };
+  };
+
   public writeValue(value: string | null): void {
+    this.selectedValue$$.set(value || '');
     const resolvedValue = this.resolveDisplayValue(value || '');
     this.value$$.set(resolvedValue);
     this.internalForm.get('search')?.setValue(this.value$$(), { emitEvent: false });
@@ -176,6 +233,7 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   }
 
   protected selectItem(item: DropdownItem): void {
+    this.selectedValue$$.set(item.value);
     this.value$$.set(item.label);
     this.validationError$$.set('');
     this.internalForm.get('search')?.setValue(this.value$$(), { emitEvent: false });
@@ -192,6 +250,11 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   }
 
   protected clearInput(): void {
+    if (this.isSelectMode$$()) {
+      return;
+    }
+
+    this.selectedValue$$.set('');
     this.value$$.set('');
     this.validationError$$.set('');
     this.internalForm.get('search')?.setValue('', { emitEvent: false });
@@ -207,7 +270,7 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   }
 
   private updateFilteredItems(): void {
-    if (!this.value$$().trim()) {
+    if (this.isSelectMode$$() || !this.value$$().trim()) {
       this.filteredItems$$.set(this.items());
     } else {
       this.filteredItems$$.set(
@@ -220,6 +283,14 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
     if (!value) return '';
     const matched = this.items().find((item) => item.value === value);
     return matched ? matched.label : value;
+  }
+
+  private getSelectInputSize(): number {
+    const displayValue = this.value$$().trim();
+    const placeholder = this.placeholder().trim();
+    const textLength = Math.max(displayValue.length, placeholder.length, 12);
+
+    return textLength + 2;
   }
 
   private validateInput(): void {

@@ -11,6 +11,7 @@
 
 <div class="input-wrapper"
      [class.focused]="isFocused$$()"
+     [class.clickable-readonly]="settings$$().isReadonly && settings$$().isClickable"
      [class.disabled]="settings$$().isDisabled">
 
   <div class="prefix">
@@ -47,6 +48,7 @@
            [placeholder]="settings$$().placeholder"
            [disabled]="settings$$().isDisabled"
            [readonly]="settings$$().isReadonly"
+           [attr.size]="settings$$().inputSize"
            [attr.inputmode]="settings$$().inputmode || null"
            [attr.pattern]="settings$$().pattern || null"
            [style.text-align]="settings$$().textAlign"

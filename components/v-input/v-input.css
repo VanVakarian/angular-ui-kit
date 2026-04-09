@@ -50,6 +50,21 @@
     outline-color: var(--v-outline-hover);
   }
 
+  &.clickable-readonly {
+    cursor: pointer;
+
+    .prefix,
+    .postfix,
+    .input-field {
+      cursor: pointer;
+    }
+
+    .input-field {
+      user-select: none;
+      caret-color: transparent;
+    }
+  }
+
   .prefix,
   .postfix {
     display: flex;

@@ -13,6 +13,10 @@
   &.open {
     z-index: var(--v-dropdown-z-index);
   }
+
+  &.select-mode {
+    cursor: pointer;
+  }
 }
 
 .clear-icon {
@@ -28,6 +32,16 @@
     width: var(--unit-6);
     height: var(--unit-6);
   }
+}
+
+.selected-item-icon {
+  padding-left: var(--unit-2);
+  padding-right: var(--unit-1);
+  color: var(--v-color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
 }
 
 @media (hover: hover) {
@@ -52,6 +66,10 @@
   cursor: pointer;
   transition: background var(--animation-duration-medium) ease;
   color: var(--v-color-text);
+
+  &.selected {
+    font-weight: 700;
+  }
 
   &.has-right-label {
     display: flex;
@@ -90,4 +108,7 @@
   font-size: 0.85em;
   flex-shrink: 0;
   text-align: right;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--unit-2);
 }

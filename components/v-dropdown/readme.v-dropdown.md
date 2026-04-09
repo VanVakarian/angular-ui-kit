@@ -31,6 +31,7 @@ isDisabled: boolean = false
 errorMessage: string = ''
 minDropdownWidth: string = ''
 expandDirection: 'left' | 'right' = 'left'
+mode: 'search' | 'select' = 'search'
 ```
 
 ## Events
@@ -54,6 +55,13 @@ expandDirection: 'left' | 'right' = 'left'
   placeholder="Quick select"
   [items]="options"
   [expandDirection]="'right'"
+/>
+
+<!-- Select-only mode -->
+<v-dropdown
+  placeholder="Sort"
+  [items]="options"
+  [mode]="'select'"
 />
 
 <!-- Disabled state -->

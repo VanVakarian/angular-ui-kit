@@ -23,6 +23,7 @@ export enum IconName {
   Edit = 'edit',
   Enterprise = 'enterprise',
   FeaturedSeasonalAndGifts = 'featured_seasonal_and_gifts',
+  FilterList = 'filter_list',
   History = 'history',
   Info = 'info',
   KeepOff = 'keep_off',

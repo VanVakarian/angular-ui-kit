@@ -33,6 +33,8 @@ type TextAlign = 'left' | 'right' | 'center';
 export interface VInputConfig {
   isDisabled?: boolean;
   isReadonly?: boolean;
+  isClickable?: boolean;
+  inputSize?: number | null;
   type?: InputType;
   inputmode?: InputMode;
   pattern?: string;
@@ -57,6 +59,8 @@ export interface VInputConfig {
 const DEFAULT_V_INPUT_CONFIG: Required<VInputConfig> = {
   isDisabled: false,
   isReadonly: false,
+  isClickable: false,
+  inputSize: null,
   type: 'text',
   inputmode: 'text',
   pattern: '',
