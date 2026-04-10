@@ -1,4 +1,14 @@
-import { Component, computed, effect, ElementRef, input, model, signal, viewChild } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  input,
+  model,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { ProgressBarStyle } from '@ui-kit/components/types';
 import { CssUnitValue } from '@ui-kit/types';
 
@@ -30,6 +40,7 @@ export interface VSliderConfig {
   isTouchMode?: boolean;
   touchAreaSize?: CssUnitValue;
   isDisabled?: boolean;
+  minSpan?: number;
 }
 
 const DEFAULT_V_SLIDER_CONFIG: Required<VSliderConfig> = {
@@ -47,6 +58,7 @@ const DEFAULT_V_SLIDER_CONFIG: Required<VSliderConfig> = {
   isTouchMode: false,
   touchAreaSize: 12,
   isDisabled: false,
+  minSpan: 0,
 };
 
 @Component({
@@ -110,6 +122,7 @@ export class VSlider {
   });
 
   protected readonly isRange$$ = computed(() => this.settings$$().isRange);
+  private readonly minSpan$$ = computed(() => this.settings$$().minSpan);
 
   protected readonly heightString$$ = computed(() => `var(--unit-${this.settings$$().height})`);
   protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.settings$$().borderRadius})`);
@@ -191,13 +204,25 @@ export class VSlider {
   protected readonly touchActive$$ = signal(false);
   protected readonly activeTouchThumb$$ = signal<ActiveThumb | null>(null);
 
+  private readonly isBrowser$$ = signal(false);
+
   private readonly normalizeEffect = effect(() => {
     if (this.isRange$$()) {
       const current = this.range();
       const clampedStart = this.normalizeValue(current[0]);
       const clampedEnd = this.normalizeValue(current[1]);
-      const nextStart = Math.min(clampedStart, clampedEnd);
-      const nextEnd = Math.max(clampedStart, clampedEnd);
+      const minSpan = this.minSpan$$();
+      let nextStart = Math.min(clampedStart, clampedEnd);
+      let nextEnd = Math.max(clampedStart, clampedEnd);
+
+      if (minSpan > 0 && nextEnd - nextStart < minSpan) {
+        const pushed = this.normalizeValue(nextStart + minSpan);
+        if (pushed <= this.max$$()) {
+          nextEnd = pushed;
+        } else {
+          nextStart = Math.max(this.normalizeValue(nextEnd - minSpan), this.min$$());
+        }
+      }
 
       if (current[0] !== nextStart || current[1] !== nextEnd) {
         this.range.set([nextStart, nextEnd]);
@@ -213,6 +238,10 @@ export class VSlider {
       this.value.set(clampedValue);
     }
   });
+
+  constructor() {
+    afterNextRender(() => this.isBrowser$$.set(true));
+  }
 
   protected onTrackPointerDown(event: PointerEvent): void {
     if (this.isDisabled$$()) return;
@@ -282,13 +311,17 @@ export class VSlider {
     const [start, end] = dragState.startRange;
 
     if (dragState.mode === 'range-start') {
-      const nextStart = Math.min(this.normalizeValue(start + deltaValue), end);
+      const minSpan = this.minSpan$$();
+      const cap = minSpan > 0 ? this.normalizeValue(end - minSpan) : end;
+      const nextStart = Math.min(this.normalizeValue(start + deltaValue), cap);
       this.range.set([nextStart, end]);
       return;
     }
 
     if (dragState.mode === 'range-end') {
-      const nextEnd = Math.max(this.normalizeValue(end + deltaValue), start);
+      const minSpan = this.minSpan$$();
+      const floor = minSpan > 0 ? this.normalizeValue(start + minSpan) : start;
+      const nextEnd = Math.max(this.normalizeValue(end + deltaValue), floor);
       this.range.set([start, nextEnd]);
       return;
     }
@@ -482,9 +515,14 @@ export class VSlider {
     bottom: number;
     borderWidth: number;
   } {
+    if (!this.isBrowser$$()) {
+      return { width: 0, height: 0, left: 0, top: 0, right: 0, bottom: 0, borderWidth: 0 };
+    }
+
     const element = this.trackElement().nativeElement;
     const rect = element.getBoundingClientRect();
     const borderWidth = (element.offsetWidth - element.clientWidth) / 2;
+
     return {
       width: element.clientWidth,
       height: element.clientHeight,
