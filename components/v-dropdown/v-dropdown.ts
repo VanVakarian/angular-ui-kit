@@ -16,7 +16,6 @@ import {
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { IconName, VIcon } from '@ui-kit/components/v-icon/v-icon';
 import { VInput, VInputConfig } from '@ui-kit/components/v-input/v-input';
-import { VBackdropDirective } from '@ui-kit/directives/backdrop.directive';
 import { LayerController, PARENT_LAYER_ID, ZLayerService } from '@ui-kit/services/z-layer.service';
 
 export enum ddExpandDirection {
@@ -49,7 +48,6 @@ export type DropdownMode = (typeof DropdownMode)[keyof typeof DropdownMode];
   styleUrl: './v-dropdown.css',
   host: {
     '[style.--v-dropdown-z-index]': 'zIndex$$()',
-    '[style.--v-dropdown-backdrop-z-index]': 'backdropZIndex$$()',
   },
   providers: [
     {
@@ -58,7 +56,7 @@ export type DropdownMode = (typeof DropdownMode)[keyof typeof DropdownMode];
       multi: true,
     },
   ],
-  imports: [CommonModule, VInput, VIcon, ReactiveFormsModule, VBackdropDirective],
+  imports: [CommonModule, VInput, VIcon, ReactiveFormsModule],
 })
 export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   public readonly label = input<string>('');
@@ -117,7 +115,6 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   protected readonly dropdownFixedLeft$$ = signal<number | null>(null);
   protected readonly dropdownFixedRight$$ = signal<number | null>(null);
   protected readonly zIndex$$ = signal(100);
-  protected readonly backdropZIndex$$ = signal(90);
   protected readonly internalForm = new FormGroup({
     search: new FormControl(''),
   });
@@ -350,6 +347,5 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
   private registerLayer(): void {
     this.layerController = this.zLayerService.registerLayer('dropdown', this.parentLayerId);
     this.zIndex$$.set(this.layerController.zIndex);
-    this.backdropZIndex$$.set(this.layerController.getBackdropZIndex());
   }
 }

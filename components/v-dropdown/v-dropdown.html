@@ -1,9 +1,7 @@
 <div class="dropdown-wrapper"
      [class.select-mode]="isSelectMode$$()"
      [class.open]="isOpen$$()"
-     [formGroup]="internalForm"
-     [vBackdrop]="isOpen$$()"
-     (backdropClick)="closeDropdown()">
+     [formGroup]="internalForm">
 
   <v-input #inputComponent
            [config]="inputConfig$$()"
