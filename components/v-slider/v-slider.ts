@@ -91,6 +91,8 @@ export class VSlider {
 
   protected readonly rootElement = viewChild.required<ElementRef<HTMLDivElement>>('root');
   protected readonly trackElement = viewChild.required<ElementRef<HTMLDivElement>>('track');
+  protected readonly thumbStartElem = viewChild.required<ElementRef<HTMLDivElement>>('thumbStart');
+  protected readonly thumbEndElem = viewChild<ElementRef<HTMLDivElement>>('thumbEnd');
 
   protected readonly settings$$ = computed(() => ({
     ...DEFAULT_V_SLIDER_CONFIG,
@@ -364,6 +366,29 @@ export class VSlider {
     }
   }
 
+  protected onThumbKeydown(event: KeyboardEvent, thumb: ActiveThumb): void {
+    if (this.isDisabled$$()) return;
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+
+    event.preventDefault();
+
+    const dir = event.key === 'ArrowRight' ? 1 : -1;
+
+    if (!this.isRange$$()) {
+      this.value.set(this.stepValue(this.displayValue$$(), dir));
+      return;
+    }
+
+    const [start, end] = this.displayRange$$();
+
+    if (thumb === 'start') {
+      this.range.set([Math.min(this.stepValue(start, dir), end), end]);
+      return;
+    }
+
+    this.range.set([start, Math.max(this.stepValue(end, dir), start)]);
+  }
+
   private startDrag(event: PointerEvent, mode: DragMode): void {
     this.isDragging$$.set(true);
     this.pointerId$$.set(event.pointerId);
@@ -376,6 +401,7 @@ export class VSlider {
       startValue,
       startRange,
     });
+    this.focusActiveThumb(mode);
   }
 
   private getClosestThumb(value: number): ActiveThumb {
@@ -544,5 +570,20 @@ export class VSlider {
 
   private clampToBounds(value: number, min: number, max: number): number {
     return Math.min(max, Math.max(min, value));
+  }
+
+  private stepValue(current: number, dir: 1 | -1): number {
+    const list = this.valueList$$();
+    if (list.length > 0) {
+      const idx = list.indexOf(current);
+      return list[Math.max(0, Math.min(list.length - 1, idx + dir))];
+    }
+    return this.clampToBounds(current + dir, this.min$$(), this.max$$());
+  }
+
+  private focusActiveThumb(mode: DragMode): void {
+    if (mode === 'range-shift') return;
+    const elem = mode === 'range-end' ? this.thumbEndElem()?.nativeElement : this.thumbStartElem().nativeElement;
+    elem?.focus({ preventScroll: true });
   }
 }

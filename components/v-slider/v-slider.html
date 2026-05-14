@@ -17,7 +17,10 @@
          (pointerdown)="onThumbPointerDown($event, 'start')"></div>
 
     <div class="thumb"
+         #thumbStart
+         [attr.tabindex]="isDisabled$$() ? -1 : 0"
          [style.left]="thumbStartPosition$$()"
+         (keydown)="onThumbKeydown($event, 'start')"
          (pointerdown)="onThumbPointerDown($event, 'start')">
 
       <div class="thumb-grip">
@@ -35,7 +38,10 @@
            (pointerdown)="onThumbPointerDown($event, 'end')"></div>
 
       <div class="thumb"
+           #thumbEnd
+           [attr.tabindex]="isDisabled$$() ? -1 : 0"
            [style.left]="thumbEndPosition$$()"
+           (keydown)="onThumbKeydown($event, 'end')"
            (pointerdown)="onThumbPointerDown($event, 'end')">
 
         <div class="thumb-grip">

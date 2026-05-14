@@ -109,6 +109,11 @@
   }
 }
 
+.thumb:focus {
+  outline: 2px solid var(--v-color-primary);
+  outline-offset: -2px;
+}
+
 .thumb-grip {
   display: flex;
   gap: 2px;
