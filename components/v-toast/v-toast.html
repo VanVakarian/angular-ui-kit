@@ -1,0 +1,24 @@
+<div class="toast-icon">
+  <v-icon [name]="icon$$()"
+          [size]="5"
+          [class.spin]="isPending()" />
+</div>
+
+<div class="toast-message">{{ message() }}</div>
+
+@if (isCloseButtonVisible()) {
+  <v-button class="v-flat close-button"
+            [config]="{ padding: 1 }"
+            (onClick)="onCloseButtonClick($event)">
+    <svg width="10"
+         height="10"
+         viewBox="0 0 12 12"
+         fill="none">
+      <path d="M9 3L3 9M3 3L9 9"
+            stroke="currentColor"
+            stroke-width="1"
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+    </svg>
+  </v-button>
+}
