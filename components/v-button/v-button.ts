@@ -15,6 +15,7 @@ export interface VButtonConfig {
   bgOpacity?: '0' | '1' | `0.${number}`;
   isLabelHidden?: boolean;
   textAlign?: 'left' | 'center' | 'right';
+  color?: string;
 }
 
 const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
@@ -29,6 +30,7 @@ const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
   bgOpacity: '1',
   isLabelHidden: false,
   textAlign: undefined as unknown as 'left' | 'center' | 'right',
+  color: undefined as unknown as string,
 } as const;
 
 @Component({
@@ -42,6 +44,7 @@ const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
     '[style.--v-button-padding-y]': 'paddingYString$$()',
     '[style.--v-button-padding-x]': 'paddingXString$$()',
     '[style.--v-button-gap]': 'gapString$$()',
+    '[style.--v-color-primary]': 'settings$$().color || null',
     '[attr.text-align]': 'settings$$().textAlign || null',
     '[attr.aria-disabled]': 'settings$$().isDisabled ? "true" : "false"',
   },

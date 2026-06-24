@@ -1,0 +1,22 @@
+<span #triggerElem
+      class="trigger"
+      tabindex="0"
+      (mouseenter)="open()"
+      (mouseleave)="close()"
+      (focus)="open()"
+      (blur)="close()"
+      (click)="onTriggerClick($event)">
+  <ng-content />
+</span>
+
+@if (isOpen$$()) {
+  <div #panelElem
+       class="panel"
+       [class.below]="placement$$() === 'bottom'"
+       [class.visible]="isPositioned$$()"
+       [style.top.px]="fixedTop$$()"
+       [style.left.px]="fixedLeft$$()"
+       [style.max-width]="maxWidth()">
+    {{ text() }}
+  </div>
+}

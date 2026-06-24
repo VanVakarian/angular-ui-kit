@@ -1,0 +1,43 @@
+:host {
+  display: inline-flex;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  cursor: help;
+  outline: var(--v-outline-transparent);
+  outline-offset: var(--v-outline-offset);
+  border-radius: var(--unit-1);
+  transition: var(--v-outline-transition);
+}
+
+.panel {
+  position: fixed;
+  z-index: var(--v-tooltip-z-index);
+  background: var(--v-color-surface-accent);
+  color: var(--v-color-text);
+  border: 1px solid var(--v-color-border-subtle);
+  border-radius: var(--unit-2);
+  box-shadow: var(--v-shadow-outer-2);
+  padding: var(--unit-2) var(--unit-3);
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: left;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity var(--animation-duration-fast) ease,
+    transform var(--animation-duration-fast) ease;
+}
+
+.panel.below {
+  transform: translateY(-4px);
+}
+
+.panel.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

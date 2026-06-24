@@ -7,14 +7,19 @@
   background: var(--v-color-surface);
   transition:
     border-color var(--animation-duration-fast) var(--v-expand-animation-timing-function),
+    border-width var(--animation-duration-fast) var(--v-expand-animation-timing-function),
     background-color var(--animation-duration-fast) var(--v-expand-animation-timing-function),
-    border-radius var(--animation-duration-fast) ease-in-out;
+    border-radius var(--animation-duration-fast) ease-in-out,
+    margin var(--animation-duration-fast) var(--v-expand-animation-timing-function);
 }
 
 /*
- * Fade out collapsed panels without header (standalone mode only)
- * Problem: Collapsed panel without header shows visible border/background (2px height)
- * Solution: Animate border-color and background-color to transparent
+ * Collapse collapsed panels without header down to 0 height and 0 margin (standalone mode only)
+ * Problem: Collapsed panel without header still rendered its own 1px+1px border (2px height),
+ * and any external margin (e.g. consumer's mb-4) stays regardless of the 0 content height
+ * Solution: animate border-width and margin (not just border-color) to 0 together with body height.
+ * :host.collapsed has higher specificity than a plain consumer utility class, so this wins
+ * over any margin set from outside, with no changes needed on the consumer side
  * Selectors:
  *   - .collapsed: Panel is closed
  *   - :not(:has([v-header])): No header content provided
@@ -22,8 +27,9 @@
  * Why complexity: Accordion items must keep background/border for visual continuity
  */
 :host.collapsed:not(:has([v-header])):not(.accordion-item) {
-  border-color: transparent;
+  border-width: 0;
   background-color: transparent;
+  margin: 0;
 }
 
 :host.accordion-item {
