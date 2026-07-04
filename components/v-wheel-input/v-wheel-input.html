@@ -1,0 +1,20 @@
+<div class="wheel-input-wrapper"
+     [class.disabled]="isDisabled()">
+  <div class="prefix">
+    <ng-content select="[v-prefix]" />
+  </div>
+
+  @for (segment of segments(); track segment.id) {
+    <v-wheel-select [items]="itemsFor(segment.id)"
+                     [value]="valueFor(segment.id)"
+                     [isDisabled]="isDisabled()"
+                     (valueChange)="onSegmentValueChange(segment.id, $event)" />
+    @if (segment.separatorAfter) {
+      <span class="separator">{{ segment.separatorAfter }}</span>
+    }
+  }
+
+  <div class="postfix">
+    <ng-content select="[v-postfix]" />
+  </div>
+</div>

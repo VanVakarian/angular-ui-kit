@@ -1,0 +1,90 @@
+:host {
+  display: inline-flex;
+  position: relative;
+}
+
+.wheel-trigger {
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+  color: var(--v-color-text);
+  cursor: pointer;
+  padding: 0 var(--unit-1);
+  border-radius: var(--unit-1);
+  transition: background var(--animation-duration-medium) ease;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+
+  &.open {
+    background: color-mix(in oklab, var(--v-color-text) 8%, transparent);
+  }
+
+  &:focus-visible {
+    outline: var(--v-outline-transparent);
+    background: color-mix(in oklab, var(--v-color-text) 8%, transparent);
+  }
+}
+
+@media (hover: hover) {
+  .wheel-trigger:not(:disabled):hover {
+    background: color-mix(in oklab, var(--v-color-text) 8%, transparent);
+  }
+}
+
+.wheel-overlay {
+  position: fixed;
+  width: 64px;
+  border-radius: var(--unit-2);
+  background: var(--v-color-surface);
+  outline: var(--v-outline);
+  outline-offset: var(--v-outline-offset);
+  box-shadow: var(--v-shadow-outer-2);
+  overflow: hidden;
+  z-index: var(--v-wheel-select-z-index);
+}
+
+.wheel-center-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  border-top: 1px solid var(--v-color-border-subtle);
+  border-bottom: 1px solid var(--v-color-border-subtle);
+}
+
+.wheel-scroll {
+  height: 100%;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.wheel-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: center;
+  cursor: pointer;
+  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+  color: var(--v-color-text-muted);
+  transition: color var(--animation-duration-medium) ease;
+
+  &.selected {
+    color: var(--v-color-text);
+    font-weight: 700;
+  }
+}
+
+@media (hover: hover) {
+  .wheel-row:hover {
+    color: var(--v-color-text);
+  }
+}

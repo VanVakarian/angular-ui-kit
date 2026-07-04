@@ -1,0 +1,28 @@
+<button type="button"
+        class="wheel-trigger"
+        [disabled]="isDisabled()"
+        [class.open]="isOpen$$()"
+        (click)="togglePicker()">{{ currentLabel() }}</button>
+
+@if (isOpen$$()) {
+  <div class="wheel-overlay"
+       [style.top.px]="overlayTop$$()"
+       [style.left.px]="overlayLeft$$()"
+       [style.height.px]="windowHeightPx()">
+    <div class="wheel-center-band"
+         [style.top.px]="rowPaddingPx()"
+         [style.height.px]="rowHeightPx"></div>
+    <div #scrollElem
+         class="wheel-scroll"
+         [style.padding-top.px]="rowPaddingPx()"
+         [style.padding-bottom.px]="rowPaddingPx()"
+         (scroll)="onScroll()">
+      @for (item of items(); track item.value; let i = $index) {
+        <div class="wheel-row"
+             [style.height.px]="rowHeightPx"
+             [class.selected]="isRowPending(i)"
+             (click)="selectRow(item)">{{ item.label }}</div>
+      }
+    </div>
+  </div>
+}
