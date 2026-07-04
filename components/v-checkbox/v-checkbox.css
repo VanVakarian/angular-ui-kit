@@ -69,29 +69,13 @@
 
   @media (hover: hover) {
     .control:hover {
-      background: color-mix(
-        in oklab,
-        var(--v-color-primary) var(--v-checkbox-mix-hover),
-        black var(--v-checkbox-mix-hover-contrast)
-      );
-      outline-color: color-mix(
-        in oklab,
-        var(--v-color-primary) var(--v-checkbox-mix-hover),
-        black var(--v-checkbox-mix-hover-contrast)
-      );
+      background: color-mix(in oklab, var(--v-color-primary) var(--v-mix-hover), black var(--v-mix-hover-contrast));
+      outline-color: color-mix(in oklab, var(--v-color-primary) var(--v-mix-hover), black var(--v-mix-hover-contrast));
     }
 
     :host-context(.dark) & .control:hover {
-      background: color-mix(
-        in oklab,
-        var(--v-color-primary) var(--v-checkbox-mix-hover),
-        white var(--v-checkbox-mix-hover-contrast)
-      );
-      outline-color: color-mix(
-        in oklab,
-        var(--v-color-primary) var(--v-checkbox-mix-hover),
-        white var(--v-checkbox-mix-hover-contrast)
-      );
+      background: color-mix(in oklab, var(--v-color-primary) var(--v-mix-hover), white var(--v-mix-hover-contrast));
+      outline-color: color-mix(in oklab, var(--v-color-primary) var(--v-mix-hover), white var(--v-mix-hover-contrast));
     }
   }
 
