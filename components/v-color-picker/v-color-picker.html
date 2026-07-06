@@ -1,0 +1,21 @@
+<div class="swatches">
+  <label class="custom">
+    <input type="color"
+           class="custom-input"
+           aria-label="Custom color"
+           [value]="customColorValue$$()"
+           (input)="onCustomColorChange($event)" />
+  </label>
+
+  <span class="separator"
+        aria-hidden="true"></span>
+
+  @for (preset of presets$$(); track preset) {
+    <button type="button"
+            class="swatch"
+            [class.selected]="value() === preset"
+            [style.background]="preset"
+            [attr.aria-label]="preset"
+            (click)="selectPreset(preset)"></button>
+  }
+</div>

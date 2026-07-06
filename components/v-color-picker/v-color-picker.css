@@ -1,0 +1,69 @@
+:host {
+  display: inline-flex;
+}
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--v-color-picker-gap, var(--unit-2));
+}
+
+.swatch {
+  width: var(--v-color-picker-swatch-size, var(--unit-6));
+  height: var(--v-color-picker-swatch-size, var(--unit-6));
+  border-radius: var(--unit-1);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: var(--v-outline);
+  outline-offset: var(--v-outline-offset);
+  transition: var(--v-outline-transition);
+}
+
+@media (hover: hover) {
+  .swatch:hover {
+    outline-color: var(--v-outline-hover);
+  }
+}
+
+.swatch.selected {
+  outline: 2px solid var(--v-color-primary);
+  outline-offset: 2px;
+}
+
+.separator {
+  align-self: stretch;
+  width: 1px;
+  min-height: var(--v-color-picker-swatch-size, var(--unit-6));
+  /* background: var(--v-color-border-subtle); */
+  background: var(--v-color-primary);
+}
+
+.custom {
+  width: var(--v-color-picker-swatch-size, var(--unit-6));
+  height: var(--v-color-picker-swatch-size, var(--unit-6));
+  border-radius: var(--unit-1);
+  overflow: hidden;
+  display: inline-flex;
+  cursor: pointer;
+  outline: var(--v-outline);
+  outline-offset: var(--v-outline-offset);
+  transition: var(--v-outline-transition);
+}
+
+@media (hover: hover) {
+  .custom:hover {
+    outline-color: var(--v-outline-hover);
+  }
+}
+
+.custom-input {
+  width: calc(var(--v-color-picker-swatch-size, var(--unit-6)) + var(--unit-2));
+  height: calc(var(--v-color-picker-swatch-size, var(--unit-6)) + var(--unit-2));
+  margin: calc(var(--unit-1) * -1);
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background: none;
+}
