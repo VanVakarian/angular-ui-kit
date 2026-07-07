@@ -22,11 +22,20 @@ const TRIGGER_GAP_PX = 8;
   styleUrl: './v-tooltip.css',
   host: {
     '[style.--v-tooltip-z-index]': 'zIndex$$()',
+    '[class.fill]': 'fill()',
+    '[class.no-wrap]': 'noWrap()',
   },
 })
 export class VTooltip implements OnDestroy {
   public readonly text = input.required<string>();
   public readonly maxWidth = input<string>('280px');
+  // When true, the trigger stretches to fill its positioned parent instead
+  // of sizing to its content — for wrapping an already-sized container
+  // (e.g. a timeline segment too small to show its own label).
+  public readonly fill = input(false);
+  // When true, the panel text is forced to a single line regardless of
+  // maxWidth instead of wrapping.
+  public readonly noWrap = input(false);
 
   protected readonly triggerElem = viewChild.required<ElementRef<HTMLElement>>('triggerElem');
   protected readonly panelElem = viewChild<ElementRef<HTMLElement>>('panelElem');

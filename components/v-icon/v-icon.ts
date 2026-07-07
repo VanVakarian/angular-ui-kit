@@ -2,11 +2,12 @@ import { Component, computed, input } from '@angular/core';
 import { CssUnitValue } from '@ui-kit/types';
 
 export enum IconName {
-  AccontBalanceWallet = 'account_balance_wallet',
-  AccontBalance = 'account_balance',
+  AccountBalanceWallet = 'account_balance_wallet',
+  AccountBalance = 'account_balance',
   Add = 'add',
   Analytics = 'analytics',
   Article = 'article',
+  AvgTime = 'avg_time',
   Bar = 'bar',
   Cached = 'cached',
   CalendarMonth = 'calendar_month',
@@ -16,6 +17,7 @@ export enum IconName {
   CheckBox = 'check_box',
   Check = 'check',
   ChevronLeft = 'chevron_left',
+  ChevronLineUp = 'chevron_line_up',
   CloseFullscreen = 'close_fullscreen',
   Close = 'close',
   CreditCard = 'credit_card',
@@ -27,6 +29,7 @@ export enum IconName {
   FeaturedSeasonalAndGifts = 'featured_seasonal_and_gifts',
   FilterList = 'filter_list',
   History = 'history',
+  HourglassEmpty = 'hourglass_empty',
   Info = 'info',
   KeepOff = 'keep_off',
   Keep = 'keep',
@@ -34,6 +37,10 @@ export enum IconName {
   KeyboardArrowLeft = 'keyboard_arrow_left',
   KeyboardArrowRight = 'keyboard_arrow_right',
   KeyboardArrowUp = 'keyboard_arrow_up',
+  KeyboardDoubleArrowDown = 'keyboard_double_arrow_down',
+  KeyboardDoubleArrowLeft = 'keyboard_double_arrow_left',
+  KeyboardDoubleArrowRight = 'keyboard_double_arrow_right',
+  KeyboardDoubleArrowUp = 'keyboard_double_arrow_up',
   LeftPanelClose = 'left_panel_close',
   LeftPanelOpen = 'left_panel_open',
   LightMode = 'light_mode',
@@ -44,6 +51,7 @@ export enum IconName {
   Mic = 'mic',
   MoneyBag = 'money_bag',
   MoneyOff = 'money_off',
+  Monitoring = 'monitoring',
   OpenInFull = 'open_in_full',
   OpenInNew = 'open_in_new',
   Paid = 'paid',
@@ -77,6 +85,7 @@ export enum IconName {
   VisibilityOff = 'visibility_off',
   Visibility = 'visibility',
   Warning = 'warning',
+  WatchScreentime = 'watch_screentime',
 }
 
 @Component({

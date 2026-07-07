@@ -2,16 +2,25 @@
 }
 
 .modal-container {
+  /* Centered via flexbox, not top/left/transform: a `transform` on an
+     ancestor creates a new containing block for `position: fixed`
+     descendants, which broke any fixed-positioned overlay rendered inside
+     modal content (e.g. v-tooltip) — its coordinates are computed against
+     the real viewport via getBoundingClientRect(), so they only line up
+     correctly when nothing between it and the viewport is transformed. */
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 100vw;
-  max-height: 100dvh;
+  inset: 0;
   z-index: var(--v-modal-z-index);
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   cursor: default;
+  /* This box now spans the whole viewport (unlike the old shrink-to-fit
+     translate-centered box), so it must be transparent to clicks itself —
+     otherwise it, not the click-outside-to-close backdrop element sitting
+     underneath, would catch every click anywhere on screen, including the
+     empty space around the card, and outside-click close would stop working. */
+  pointer-events: none;
 }
 
 .modal-content {
@@ -22,6 +31,7 @@
   min-height: 0;
   overflow: visible;
   padding: var(--v-modal-padding-y, var(--unit-2)) var(--v-modal-padding-x, var(--unit-2));
+  pointer-events: auto;
 }
 
 .modal-content::before {

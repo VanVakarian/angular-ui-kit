@@ -2,6 +2,11 @@
   display: inline-flex;
 }
 
+:host(.fill) {
+  position: absolute;
+  inset: 0;
+}
+
 .trigger {
   display: inline-flex;
   align-items: center;
@@ -10,6 +15,15 @@
   outline-offset: var(--v-outline-offset);
   border-radius: var(--unit-1);
   transition: var(--v-outline-transition);
+}
+
+:host(.fill) .trigger {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: var(--v-tooltip-fill-padding, 0);
+  box-sizing: border-box;
+  cursor: inherit;
 }
 
 .panel {
@@ -40,4 +54,9 @@
 .panel.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+:host(.no-wrap) .panel {
+  max-width: none;
+  white-space: nowrap;
 }
