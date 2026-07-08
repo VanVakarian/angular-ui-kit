@@ -12,9 +12,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { LayerController, PARENT_LAYER_ID, ZLayerService } from '@ui-kit/services/z-layer.service';
-
-const VIEWPORT_MARGIN_PX = 8;
-const TRIGGER_GAP_PX = 8;
+import { computeTooltipPosition } from './tooltip-position';
 
 @Component({
   selector: 'v-tooltip',
@@ -91,21 +89,11 @@ export class VTooltip implements OnDestroy {
     if (!panel) return;
 
     const triggerRect = this.triggerElem().nativeElement.getBoundingClientRect();
-    const panelRect = panel.getBoundingClientRect();
+    const position = computeTooltipPosition(triggerRect, panel.getBoundingClientRect());
 
-    const fitsAbove = triggerRect.top - panelRect.height - TRIGGER_GAP_PX >= VIEWPORT_MARGIN_PX;
-    this.placement$$.set(fitsAbove ? 'top' : 'bottom');
-
-    const top = fitsAbove
-      ? triggerRect.top - panelRect.height - TRIGGER_GAP_PX
-      : triggerRect.bottom + TRIGGER_GAP_PX;
-
-    const idealLeft = triggerRect.left + triggerRect.width / 2 - panelRect.width / 2;
-    const maxLeft = window.innerWidth - panelRect.width - VIEWPORT_MARGIN_PX;
-    const left = Math.min(Math.max(idealLeft, VIEWPORT_MARGIN_PX), Math.max(maxLeft, VIEWPORT_MARGIN_PX));
-
-    this.fixedTop$$.set(top);
-    this.fixedLeft$$.set(left);
+    this.placement$$.set(position.placement);
+    this.fixedTop$$.set(position.top);
+    this.fixedLeft$$.set(position.left);
     this.isPositioned$$.set(true);
   }
 }

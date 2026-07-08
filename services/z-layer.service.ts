@@ -68,8 +68,8 @@ export class LayerController {
   providedIn: 'root',
 })
 export class ZLayerService {
-  /** Current maximum z-index (starts from 100) */
-  private currentZIndex = 100;
+  /** Base z-index — the floor for top-level (parentless) layers */
+  private readonly baseZIndex = 100;
 
   /** Counter for generating unique layer IDs */
   private idCounter = 0;
@@ -131,7 +131,24 @@ export class ZLayerService {
       }
     }
 
-    return ++this.currentZIndex;
+    return this.getMaxTopLevelZIndex() + 1;
+  }
+
+  /**
+   * Highest z-index among currently registered top-level (parentless) layers.
+   * Derived from the live registry instead of a standalone counter, so it
+   * naturally falls back to baseZIndex once all such layers are closed,
+   * rather than climbing forever across the app's lifetime.
+   *
+   * @returns Highest live top-level z-index, or baseZIndex if none are open
+   * @private
+   */
+  private getMaxTopLevelZIndex(): number {
+    let max = this.baseZIndex;
+    for (const layer of this.layers.values()) {
+      if (!layer.parentId) max = Math.max(max, layer.zIndex);
+    }
+    return max;
   }
 
   /**
