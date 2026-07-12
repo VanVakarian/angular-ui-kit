@@ -25,6 +25,12 @@
 
 .modal-content {
   width: var(--v-modal-width, 400px);
+  /* modal-container centers via align-items/justify-content now (see above),
+     so it no longer caps this box's size the way the old max-width/max-height
+     on modal-container did — without these, tall content grows unbounded
+     past the viewport instead of triggering modal-body's overflow-y: auto. */
+  max-width: 100vw;
+  max-height: 100dvh;
   position: relative;
   display: flex;
   flex-direction: column;
