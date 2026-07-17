@@ -9,6 +9,7 @@ export interface VCardConfig {
   backgroundImageUrl?: string | null;
   backgroundImageOpacity?: number;
   minHeight?: string;
+  isSelected?: boolean;
 }
 
 const DEFAULT_V_CARD_CONFIG: Required<VCardConfig> = {
@@ -19,6 +20,7 @@ const DEFAULT_V_CARD_CONFIG: Required<VCardConfig> = {
   backgroundImageUrl: null,
   backgroundImageOpacity: 1,
   minHeight: 'auto',
+  isSelected: false,
 };
 
 @Component({
@@ -31,6 +33,7 @@ const DEFAULT_V_CARD_CONFIG: Required<VCardConfig> = {
     '[style.--v-card-padding-y]': 'paddingYString$$()',
     '[style.backgroundImage]': 'cardBackgroundImage$$()',
     '[style.minHeight]': 'settings$$().minHeight',
+    '[class.v-card-selected]': 'settings$$().isSelected',
   },
 })
 export class VCard {

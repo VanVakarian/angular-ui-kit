@@ -16,3 +16,7 @@
     background var(--v-card-transition-duration) ease,
     var(--v-outline-transition);
 }
+
+:host(.v-card-selected) {
+  outline: 2px solid var(--v-color-primary);
+}
