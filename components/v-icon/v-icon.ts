@@ -23,6 +23,7 @@ export enum IconName {
   CollapseContent = 'collapse_content',
   CreditCard = 'credit_card',
   CurrencyBitcoin = 'currency_bitcoin',
+  CurrencyExchange = 'currency_exchange',
   DarkMode = 'dark_mode',
   Delete = 'delete',
   Edit = 'edit',
