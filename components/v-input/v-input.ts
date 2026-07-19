@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { getValidationErrorMessage } from '@ui-kit/components/v-input/validators';
-import { CssUnitValue } from '@ui-kit/types';
+import { CssUnitOrRawValue, CssUnitValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 import { VInputAutoSubmitManager, VInputAutoSubmitResult, VInputAutoSubmitState } from './v-input-auto-submit';
 
 type InputValue = string | number | null;
@@ -47,6 +47,8 @@ export interface VInputConfig {
   fontWeight?: FontWeight;
   textAlign?: TextAlign;
   borderRadius?: CssUnitValue;
+  paddingX?: CssUnitOrRawValue;
+  paddingY?: CssUnitOrRawValue;
   isTextarea?: boolean;
   rows?: number;
   cols?: number;
@@ -73,6 +75,8 @@ const DEFAULT_V_INPUT_CONFIG: Required<VInputConfig> = {
   fontWeight: 400,
   textAlign: 'left',
   borderRadius: 2,
+  paddingX: 0,
+  paddingY: 2,
   isTextarea: false,
   rows: 3,
   cols: 50,
@@ -90,6 +94,8 @@ let uniqueId = 0;
   styleUrls: ['./v-input.css', './v-input-auto-submit.css'],
   host: {
     '[style.--v-input-border-radius]': 'borderRadiusString$$()',
+    '[style.--v-input-padding-x]': 'paddingXString$$()',
+    '[style.--v-input-padding-y]': 'paddingYString$$()',
     '[style.--v-input-auto-submit-delay]': 'autoSubmitDelayString$$()',
     '[style.--v-input-auto-submit-result-fade-duration]': 'autoSubmitResultFadeDurationString$$()',
     '[class]': '"v-input"',
@@ -119,6 +125,8 @@ export class VInput implements ControlValueAccessor, OnDestroy {
   }));
 
   protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.settings$$().borderRadius})`);
+  protected readonly paddingXString$$ = computed(() => resolveCssUnitOrRawValue(this.settings$$().paddingX));
+  protected readonly paddingYString$$ = computed(() => resolveCssUnitOrRawValue(this.settings$$().paddingY));
   protected readonly autoSubmitDelayString$$ = computed(() => `${this.settings$$().autoSubmitDelay}ms`);
   protected readonly autoSubmitResultFadeDurationString$$ = computed(
     () => `${this.settings$$().autoSubmitResultFadeDuration}ms`,
@@ -219,6 +227,19 @@ export class VInput implements ControlValueAccessor, OnDestroy {
 
     this.onInputChanged.emit(event);
     this.autoSubmitManager.handleChange();
+  }
+
+  // Lets a click anywhere in the wrapper (padding, prefix/postfix decoration)
+  // focus the real field, same as clicking the field itself. A descendant opts
+  // out by calling preventDefault() on its own mousedown — the existing reset
+  // buttons in v-prefix/v-postfix already do this to avoid stealing focus, so
+  // this reuses that same signal instead of adding a separate config flag.
+  protected onWrapperMouseDown(event: MouseEvent): void {
+    if (this.settings$$().isDisabled || event.defaultPrevented) return;
+    const inputEl = this.inputElement().nativeElement;
+    if (event.target === inputEl) return;
+    event.preventDefault();
+    inputEl.focus();
   }
 
   protected onFocus(): void {

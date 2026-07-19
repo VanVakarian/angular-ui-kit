@@ -12,7 +12,8 @@
 <div class="input-wrapper"
      [class.focused]="isFocused$$()"
      [class.clickable-readonly]="settings$$().isReadonly && settings$$().isClickable"
-     [class.disabled]="settings$$().isDisabled">
+     [class.disabled]="settings$$().isDisabled"
+     (mousedown)="onWrapperMouseDown($event)">
 
   <div class="prefix">
     <ng-content select="[v-prefix]" />

@@ -29,9 +29,10 @@
   position: relative;
   display: flex;
   align-items: center;
-  padding: var(--unit-2) 0;
+  padding: var(--v-input-padding-y, var(--unit-2)) var(--v-input-padding-x, 0);
   border-radius: var(--v-input-border-radius, var(--unit-2));
   box-sizing: border-box;
+  cursor: text;
   transition:
     background var(--v-input-transition-duration) ease,
     var(--v-outline-transition);

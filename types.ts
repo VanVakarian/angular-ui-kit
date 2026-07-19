@@ -36,6 +36,12 @@ export type CssUnitValue =
   | 100 // 400px
   | 128; // 512px
 
+export type CssUnitOrRawValue = CssUnitValue | string;
+
+export function resolveCssUnitOrRawValue(value: CssUnitOrRawValue): string {
+  return typeof value === 'number' ? `var(--unit-${value})` : value;
+}
+
 export enum ButtonStyle {
   Primary = 'primary',
   Raised = 'raised',
