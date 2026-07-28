@@ -1,37 +1,37 @@
-@if (settings$$().label || settings$$().labelRight) {
+@if (label() || labelRight()) {
   <label class="label"
-         [class.label-split]="!!settings$$().labelRight"
+         [class.label-split]="!!labelRight()"
          [for]="inputId">
-    <span>{{ settings$$().label }}</span>
-    @if (settings$$().labelRight) {
-      <span class="label-right">{{ settings$$().labelRight }}</span>
+    <span>{{ label() }}</span>
+    @if (labelRight()) {
+      <span class="label-right">{{ labelRight() }}</span>
     }
   </label>
 }
 
 <div class="input-wrapper"
      [class.focused]="isFocused$$()"
-     [class.clickable-readonly]="settings$$().isReadonly && settings$$().isClickable"
-     [class.disabled]="settings$$().isDisabled"
+     [class.clickable-readonly]="isReadonly() && isClickable()"
+     [class.disabled]="isDisabled()"
      (mousedown)="onWrapperMouseDown($event)">
 
   <div class="prefix">
     <ng-content select="[v-prefix]" />
   </div>
 
-  @if (settings$$().isTextarea) {
+  @if (isTextarea()) {
     <textarea #inputElement
               [id]="inputId"
               [value]="displayValue$$()"
-              [name]="settings$$().name || inputId"
-              [placeholder]="settings$$().placeholder"
-              [disabled]="settings$$().isDisabled"
-              [readonly]="settings$$().isReadonly"
-              [rows]="settings$$().rows"
-              [cols]="settings$$().cols"
-              [style.text-align]="settings$$().textAlign"
-              [style.--v-input-font-weight]="settings$$().fontWeight"
-              [style.--v-input-font-size]="settings$$().fontSize"
+              [name]="name() || inputId"
+              [placeholder]="placeholder()"
+              [disabled]="isDisabled()"
+              [readonly]="isReadonly()"
+              [rows]="rows()"
+              [cols]="cols()"
+              [style.text-align]="textAlign()"
+              [style.--v-input-font-weight]="fontWeight()"
+              [style.--v-input-font-size]="fontSize()"
               class="input-field textarea-field"
               (input)="onInputChange($event)"
               (change)="onInputChange($event)"
@@ -44,17 +44,17 @@
     <input #inputElement
            [id]="inputId"
            [value]="displayValue$$()"
-           [name]="settings$$().name || inputId"
-           [type]="settings$$().type"
-           [placeholder]="settings$$().placeholder"
-           [disabled]="settings$$().isDisabled"
-           [readonly]="settings$$().isReadonly"
-           [attr.size]="settings$$().inputSize"
-           [attr.inputmode]="settings$$().inputmode || null"
-           [attr.pattern]="settings$$().pattern || null"
-           [style.text-align]="settings$$().textAlign"
-           [style.--v-input-font-weight]="settings$$().fontWeight"
-           [style.--v-input-font-size]="settings$$().fontSize"
+           [name]="name() || inputId"
+           [type]="type()"
+           [placeholder]="placeholder()"
+           [disabled]="isDisabled()"
+           [readonly]="isReadonly()"
+           [attr.size]="inputSize()"
+           [attr.inputmode]="inputmode() || null"
+           [attr.pattern]="pattern() || null"
+           [style.text-align]="textAlign()"
+           [style.--v-input-font-weight]="fontWeight()"
+           [style.--v-input-font-size]="fontSize()"
            class="input-field"
            (input)="onInputChange($event)"
            (change)="onInputChange($event)"

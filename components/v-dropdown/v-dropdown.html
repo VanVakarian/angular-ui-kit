@@ -4,7 +4,15 @@
      [formGroup]="internalForm">
 
   <v-input #inputComponent
-           [config]="inputConfig$$()"
+           [label]="label()"
+           [labelRight]="labelRight()"
+           [placeholder]="placeholder()"
+           [isDisabled]="isDisabled()"
+           [isReadonly]="isSelectMode$$()"
+           [isClickable]="isSelectMode$$()"
+           [inputSize]="isSelectMode$$() ? getSelectInputSize() : null"
+           [inputmode]="isSelectMode$$() ? 'none' : 'text'"
+           [errorMessage]="computedErrorMessage$$()"
            formControlName="search"
            (onFocused)="onFocus()"
            (onBlurred)="onBlur()">

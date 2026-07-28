@@ -26,7 +26,6 @@ import { computeTooltipPosition } from './tooltip-position';
 })
 export class VTooltip implements OnDestroy {
   public readonly text = input.required<string>();
-  public readonly maxWidth = input<string>('280px');
   // When true, the trigger stretches to fill its positioned parent instead
   // of sizing to its content — for wrapping an already-sized container
   // (e.g. a timeline segment too small to show its own label).
@@ -34,6 +33,7 @@ export class VTooltip implements OnDestroy {
   // When true, the panel text is forced to a single line regardless of
   // maxWidth instead of wrapping.
   public readonly noWrap = input(false);
+  public readonly maxWidth = input<string>('280px');
 
   protected readonly triggerElem = viewChild.required<ElementRef<HTMLElement>>('triggerElem');
   protected readonly panelElem = viewChild<ElementRef<HTMLElement>>('panelElem');

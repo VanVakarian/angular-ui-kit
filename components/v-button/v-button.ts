@@ -3,76 +3,52 @@ import { CssUnitValue } from '@ui-kit/types';
 
 type ButtonType = 'button' | 'submit' | 'reset';
 
-export interface VButtonConfig {
-  type?: ButtonType;
-  width?: string;
-  borderRadius?: CssUnitValue;
-  padding?: CssUnitValue;
-  paddingY?: CssUnitValue;
-  paddingX?: CssUnitValue;
-  gap?: CssUnitValue;
-  isDisabled?: boolean;
-  bgOpacity?: '0' | '1' | `0.${number}`;
-  isLabelHidden?: boolean;
-  textAlign?: 'left' | 'center' | 'right';
-  color?: string;
-}
-
-const DEFAULT_V_BUTTON_CONFIG: Required<VButtonConfig> = {
-  type: 'button',
-  width: undefined as unknown as string,
-  borderRadius: 2,
-  padding: undefined as unknown as CssUnitValue,
-  paddingY: 2,
-  paddingX: 2,
-  gap: 2,
-  isDisabled: false,
-  bgOpacity: '1',
-  isLabelHidden: false,
-  textAlign: undefined as unknown as 'left' | 'center' | 'right',
-  color: undefined as unknown as string,
-} as const;
-
 @Component({
   selector: 'v-button',
   templateUrl: './v-button.html',
   styleUrl: './v-button.css',
   host: {
-    '[style.width]': 'settings$$().width || null',
+    '[style.width]': 'width() || null',
     '[style.--v-button-border-radius]': 'borderRadiusString$$()',
-    '[style.--v-button-bg-opacity]': 'settings$$().bgOpacity',
+    '[style.--v-button-bg-opacity]': 'bgOpacity()',
     '[style.--v-button-padding-y]': 'paddingYString$$()',
     '[style.--v-button-padding-x]': 'paddingXString$$()',
     '[style.--v-button-gap]': 'gapString$$()',
-    '[style.--v-color-primary]': 'settings$$().color || null',
-    '[attr.text-align]': 'settings$$().textAlign || null',
-    '[attr.aria-disabled]': 'settings$$().isDisabled ? "true" : "false"',
+    '[style.--v-color-primary]': 'color() || null',
+    '[attr.text-align]': 'textAlign() || null',
+    '[attr.aria-disabled]': 'isDisabled() ? "true" : "false"',
   },
 })
 export class VButton {
-  public readonly config = input<VButtonConfig>({});
+  public readonly type = input<ButtonType>('button');
+  public readonly isDisabled = input<boolean>(false);
+  public readonly isLabelHidden = input<boolean>(false);
+  public readonly width = input<string>();
+  public readonly borderRadius = input<CssUnitValue>(2);
+  public readonly padding = input<CssUnitValue>();
+  public readonly paddingX = input<CssUnitValue>();
+  public readonly paddingY = input<CssUnitValue>();
+  public readonly gap = input<CssUnitValue>(2);
+  public readonly bgOpacity = input<'0' | '1' | `0.${number}`>('1');
+  public readonly textAlign = input<'left' | 'center' | 'right'>();
+  public readonly color = input<string>();
   public readonly tabindex = input<number | string | undefined>(undefined);
-
-  protected readonly settings$$ = computed(() => ({
-    ...DEFAULT_V_BUTTON_CONFIG,
-    ...this.config(),
-  }));
-
-  protected readonly paddingY$$ = computed(() => this.getPaddingY());
-  protected readonly paddingX$$ = computed(() => this.getPaddingX());
 
   protected readonly onClick = output<MouseEvent>();
 
-  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.settings$$().borderRadius})`);
+  protected readonly paddingX$$ = computed(() => this.paddingX() ?? this.padding() ?? 2);
+  protected readonly paddingY$$ = computed(() => this.paddingY() ?? this.padding() ?? 2);
+
+  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
   protected readonly paddingYString$$ = computed(() => `var(--unit-${this.paddingY$$()})`);
   protected readonly paddingXString$$ = computed(() => `var(--unit-${this.paddingX$$()})`);
-  protected readonly gapString$$ = computed(() => `var(--unit-${this.settings$$().gap})`);
+  protected readonly gapString$$ = computed(() => `var(--unit-${this.gap()})`);
 
   private readonly elementRef = inject(ElementRef);
   private readonly renderer = inject(Renderer2);
 
   protected onButtonClick(event: MouseEvent): void {
-    if (this.settings$$().isDisabled) {
+    if (this.isDisabled()) {
       event.preventDefault();
       event.stopPropagation();
       return;
@@ -81,7 +57,7 @@ export class VButton {
   }
 
   protected onPointerDown(event: PointerEvent): void {
-    if (this.settings$$().isDisabled || this.isLink()) return;
+    if (this.isDisabled() || this.isLink()) return;
     const button = event.currentTarget as HTMLElement | null;
     if (!button) return;
 
@@ -94,7 +70,7 @@ export class VButton {
   }
 
   protected onKeyDown(event: KeyboardEvent): void {
-    if (this.settings$$().isDisabled || this.isLink()) return;
+    if (this.isDisabled() || this.isLink()) return;
     if (event.key !== 'Enter' && event.key !== ' ') return;
 
     const button = event.currentTarget as HTMLElement | null;
@@ -111,20 +87,6 @@ export class VButton {
   private isLink(): boolean {
     const element = this.elementRef.nativeElement as HTMLElement;
     return element.classList.contains('v-link');
-  }
-
-  private getPaddingY(): CssUnitValue {
-    const config = this.config();
-    if (config.paddingY !== undefined) return config.paddingY;
-    if (config.padding !== undefined) return config.padding;
-    return this.settings$$().paddingY;
-  }
-
-  private getPaddingX(): CssUnitValue {
-    const config = this.config();
-    if (config.paddingX !== undefined) return config.paddingX;
-    if (config.padding !== undefined) return config.padding;
-    return this.settings$$().paddingX;
   }
 
   private createRipple(button: HTMLElement, x: number, y: number, size: number): void {

@@ -1,12 +1,6 @@
 import { Component, computed, input, model, output } from '@angular/core';
 import { CssUnitValue } from '@ui-kit/types';
 
-export interface VColorPickerConfig {
-  presets?: string[];
-  swatchSize?: CssUnitValue;
-  gap?: CssUnitValue;
-}
-
 const DEFAULT_PRESETS: string[] = [
   '#495057',
   '#E03131',
@@ -22,12 +16,6 @@ const DEFAULT_PRESETS: string[] = [
   '#868E96',
 ];
 
-const DEFAULT_V_COLOR_PICKER_CONFIG: Required<VColorPickerConfig> = {
-  presets: DEFAULT_PRESETS,
-  swatchSize: 6,
-  gap: 2,
-};
-
 @Component({
   selector: 'v-color-picker',
   templateUrl: './v-color-picker.html',
@@ -38,18 +26,15 @@ const DEFAULT_V_COLOR_PICKER_CONFIG: Required<VColorPickerConfig> = {
   },
 })
 export class VColorPicker {
-  public readonly config = input<VColorPickerConfig>({});
+  public readonly presets = input<string[]>(DEFAULT_PRESETS);
+  public readonly swatchSize = input<CssUnitValue>(6);
+  public readonly gap = input<CssUnitValue>(2);
+
   public readonly value = model<string | null>(null);
   public readonly onChanged = output<string | null>();
 
-  protected readonly settings$$ = computed(() => ({
-    ...DEFAULT_V_COLOR_PICKER_CONFIG,
-    ...this.config(),
-  }));
-
-  protected readonly presets$$ = computed(() => this.settings$$().presets);
-  protected readonly swatchSizeString$$ = computed(() => `var(--unit-${this.settings$$().swatchSize})`);
-  protected readonly gapString$$ = computed(() => `var(--unit-${this.settings$$().gap})`);
+  protected readonly swatchSizeString$$ = computed(() => `var(--unit-${this.swatchSize()})`);
+  protected readonly gapString$$ = computed(() => `var(--unit-${this.gap()})`);
   protected readonly customColorValue$$ = computed(() => this.value() ?? '#000000');
 
   protected selectPreset(color: string): void {

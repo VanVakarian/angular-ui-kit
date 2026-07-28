@@ -1,63 +1,55 @@
 # V-Progress
 
-Flat design progress bar with unified config and custom color support.
+Flat design progress bar with individual property API and custom color support.
 
 ## Basic Usage
 
 ```html
-<v-progress [config]="{ value: 42, min: 0, max: 100 }" />
+<v-progress [value]="42" [min]="0" [max]="100" />
 ```
 
-## Config API
+## Properties
 
 ```ts
-interface VProgressConfig {
-  value?: number;
-  min?: number;
-  max?: number;
-  height?: CssUnitValue;
-  borderRadius?: CssUnitValue;
-  barColor?: string;
-  barGap?: number;
-  isShowValues?: boolean;
-  valueSuffix?: string;
-}
+value: number = 0
+isShowValues: boolean = false
+min: number = 0
+max: number = 100
+height: CssUnitValue = 3
+borderRadius: CssUnitValue = 2
+barGap: number = 1
+barColor: string = 'var(--v-color-primary)'
+valueSuffix: string = ''
 ```
-
-Defaults: `value=0`, `min=0`, `max=100`, `height=3`, `borderRadius=2`, `barColor='var(--v-color-primary)'`, `barGap=1`, `isShowValues=false`, `valueSuffix=''`.
 
 ## Color Classes
 
 Use `.v-primary`, `.v-danger`, or `.v-accent` to change bar color:
 
 ```html
-<v-progress class="v-danger" [config]="{ value: 75 }" />
+<v-progress class="v-danger" [value]="75" />
 ```
 
-Or use custom colors via config:
+Or use a custom color via the `barColor` property:
 
 ```html
-<v-progress [config]="{ value: 50, barColor: 'green' }" />
-<v-progress [config]="{ value: 75, barColor: '#EBACCA' }" />
+<v-progress [value]="50" barColor="green" />
+<v-progress [value]="75" barColor="#EBACCA" />
 ```
 
 ## Examples (minimal but diverse)
 
 ```html
 <!-- Custom color with value labels -->
-<v-progress [config]="{
-  value: 68,
-  barColor: 'var(--v-color-success)',
-  height: 4,
-  isShowValues: true
-}" />
+<v-progress [value]="68"
+            barColor="var(--v-color-success)"
+            [height]="4"
+            [isShowValues]="true" />
 
 <!-- Value labels with suffix -->
-<v-progress [config]="{
-  value: 75,
-  min: 0,
-  max: 200,
-  isShowValues: true,
-  valueSuffix: '%'
-}" />
+<v-progress [value]="75"
+            [min]="0"
+            [max]="200"
+            [isShowValues]="true"
+            valueSuffix="%" />
 ```

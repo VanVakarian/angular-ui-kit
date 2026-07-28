@@ -1,12 +1,13 @@
 # V-Slider
 
-Flat design slider with unified config, single or range mode, touch areas, and optional discrete value lists. Supports dark theme and color classes.
+Flat design slider with individual property API, single or range mode, touch areas, and optional discrete value lists. Supports dark theme and color classes.
 
 ## Basic Usage
 
 ```html
 <v-slider
-  [config]="{ min: 0, max: 100 }"
+  [min]="0"
+  [max]="100"
   [value]="value"
   (valueChange)="value = $event" />
 ```
@@ -15,31 +16,32 @@ Flat design slider with unified config, single or range mode, touch areas, and o
 
 ```html
 <v-slider
-  [config]="{ min: 0, max: 100, isRange: true }"
+  [min]="0"
+  [max]="100"
+  [isRange]="true"
   [range]="range"
   (rangeChange)="range = $event" />
 ```
 
-## Config API
+## Properties
 
 ```ts
-interface VSliderConfig {
-  valueList?: number[];
-  min?: number;
-  max?: number;
-  height?: CssUnitValue;
-  borderRadius?: CssUnitValue;
-  thumbBorderRadius?: CssUnitValue | 'full';
-  trackColor?: string;
-  fillColor?: string;
-  thumbSize?: CssUnitValue;
-  isRange?: boolean;
-  isTouchMode?: boolean;
-  touchAreaSize?: CssUnitValue;
-}
+valueList: number[] = []
+isDisabled: boolean = false
+isRange: boolean = false
+isTouchMode: boolean = false
+min: number = 0
+max: number = 100
+height: CssUnitValue = 3
+borderRadius: CssUnitValue = 2
+thumbBorderRadius: CssUnitValue | 'full' = 'full'
+thumbSize: CssUnitValue = 6
+touchAreaSize: CssUnitValue = 12
+minSpan: number = 0
+trackColor: string = 'var(--v-color-surface)'
+fillColor: string = 'var(--v-color-primary)'
+barStyle: ProgressBarStyle = ProgressBarStyle.Flat
 ```
-
-Defaults: `min=0`, `max=100`, `height=3`, `borderRadius=2`, `thumbBorderRadius='full'`, `trackColor='var(--v-color-surface)'`, `fillColor='var(--v-color-primary)'`, `thumbSize=6`, `isRange=false`, `isTouchMode=false`, `touchAreaSize=12`, `valueList=[]`.
 
 ## Events
 
@@ -51,7 +53,7 @@ Defaults: `min=0`, `max=100`, `height=3`, `borderRadius=2`, `thumbBorderRadius='
 Use `.v-primary`, `.v-danger`, or `.v-accent` to change fill and thumb color:
 
 ```html
-<v-slider class="v-danger" [config]="{ min: 0, max: 100 }" [value]="value" (valueChange)="value = $event" />
+<v-slider class="v-danger" [min]="0" [max]="100" [value]="value" (valueChange)="value = $event" />
 ```
 
 ## Examples (minimal but diverse)
@@ -59,31 +61,28 @@ Use `.v-primary`, `.v-danger`, or `.v-accent` to change fill and thumb color:
 ```html
 <!-- Squarish thumbs + touch area -->
 <v-slider
-  [config]="{
-    min: 0,
-    max: 100,
-    isRange: true,
-    thumbBorderRadius: 2,
-    thumbSize: 7,
-    isTouchMode: true,
-    touchAreaSize: 12
-  }"
+  [min]="0"
+  [max]="100"
+  [isRange]="true"
+  [thumbBorderRadius]="2"
+  [thumbSize]="7"
+  [isTouchMode]="true"
+  [touchAreaSize]="12"
   [range]="range"
   (rangeChange)="range = $event" />
 
 <!-- Discrete list (timestamps) -->
 <v-slider
-  [config]="{
-    isRange: true,
-    valueList: dateValues
-  }"
+  [isRange]="true"
+  [valueList]="dateValues"
   [range]="dateRange"
   (rangeChange)="dateRange = $event" />
 
 <!-- Custom color -->
 <v-slider
   class="v-accent"
-  [config]="{ min: 0, max: 100 }"
+  [min]="0"
+  [max]="100"
   [value]="value"
   (valueChange)="value = $event" />
 ```

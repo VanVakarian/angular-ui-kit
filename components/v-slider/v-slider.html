@@ -18,7 +18,7 @@
 
     <div class="thumb"
          #thumbStart
-         [attr.tabindex]="isDisabled$$() ? -1 : 0"
+         [attr.tabindex]="isDisabled() ? -1 : 0"
          [style.left]="thumbStartPosition$$()"
          (keydown)="onThumbKeydown($event, 'start')"
          (pointerdown)="onThumbPointerDown($event, 'start')">
@@ -31,7 +31,7 @@
 
     </div>
 
-    @if (isRange$$()) {
+    @if (isRange()) {
       <div class="thumb-hit-area"
            [class.touch-active]="touchActive$$() && activeTouchThumb$$() === 'end'"
            [style.left]="thumbEndPosition$$()"
@@ -39,7 +39,7 @@
 
       <div class="thumb"
            #thumbEnd
-           [attr.tabindex]="isDisabled$$() ? -1 : 0"
+           [attr.tabindex]="isDisabled() ? -1 : 0"
            [style.left]="thumbEndPosition$$()"
            (keydown)="onThumbKeydown($event, 'end')"
            (pointerdown)="onThumbPointerDown($event, 'end')">

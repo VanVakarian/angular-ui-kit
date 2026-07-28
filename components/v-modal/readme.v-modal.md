@@ -11,20 +11,25 @@ Simple modal window with customizable width, padding, and close button.
 </v-modal>
 ```
 
-## API
+## Properties
 
 ```ts
-// Inputs
+deviceType: 'mobile' | 'desktop'   // picks mobileWidth/desktopWidth over width when set
 isOpen: boolean = false
 isCloseButtonVisible: boolean = false
-width: string = '400px'
+width: string = 'min(100vw, 400px)'
+mobileWidth: string
+desktopWidth: string
 borderRadius: CssUnitValue = 2
-paddingY: CssUnitValue = 2
+padding: CssUnitValue              // shorthand, fills paddingX/paddingY unless set
 paddingX: CssUnitValue = 2
-
-// Events
-onClose: void
+paddingY: CssUnitValue = 2
 ```
+
+## Events
+
+- `onClose: void`
+- `onOpen: void`
 
 ## Examples
 
@@ -63,8 +68,8 @@ onClose: void
   </form>
 
   <div v-footer class="form-actions">
-    <v-button primary (onClick)="saveForm()">Save</v-button>
-    <v-button flat (onClick)="hideForm()">Cancel</v-button>
+    <v-button class="v-primary" (onClick)="saveForm()">Save</v-button>
+    <v-button class="v-flat" (onClick)="hideForm()">Cancel</v-button>
   </div>
 </v-modal>
 
@@ -76,8 +81,8 @@ onClose: void
   <h4 v-header>Confirm Action</h4>
   <p>Are you sure you want to delete this item?</p>
   <div v-footer>
-    <v-button danger (onClick)="confirmDelete()">Delete</v-button>
-    <v-button flat (onClick)="cancelAction()">Cancel</v-button>
+    <v-button class="v-danger" (onClick)="confirmDelete()">Delete</v-button>
+    <v-button class="v-flat" (onClick)="cancelAction()">Cancel</v-button>
   </div>
 </v-modal>
 
@@ -90,7 +95,16 @@ onClose: void
   <div v-header>Quick Info</div>
   <p>Compact modal with minimal spacing</p>
   <div v-footer>
-    <v-button flat (onClick)="closeInfo()">OK</v-button>
+    <v-button class="v-flat" (onClick)="closeInfo()">OK</v-button>
   </div>
+</v-modal>
+
+<!-- Device-specific width -->
+<v-modal [isOpen]="isModalOpen"
+         [deviceType]="deviceInfoService.isDesktopScreen$$() ? 'desktop' : 'mobile'"
+         mobileWidth="100vw"
+         desktopWidth="480px"
+         (onClose)="closeModal()">
+  <div>Modal content</div>
 </v-modal>
 ```

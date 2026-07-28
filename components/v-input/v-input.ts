@@ -30,62 +30,6 @@ type FontWeight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 
 type TextAlign = 'left' | 'right' | 'center';
 
-export interface VInputConfig {
-  isDisabled?: boolean;
-  isReadonly?: boolean;
-  isClickable?: boolean;
-  inputSize?: number | null;
-  type?: InputType;
-  inputmode?: InputMode;
-  pattern?: string;
-  label?: string;
-  labelRight?: string;
-  placeholder?: string;
-  errorMessage?: string;
-  name?: string;
-  fontSize?: FontSize;
-  fontWeight?: FontWeight;
-  textAlign?: TextAlign;
-  borderRadius?: CssUnitValue;
-  paddingX?: CssUnitOrRawValue;
-  paddingY?: CssUnitOrRawValue;
-  isTextarea?: boolean;
-  rows?: number;
-  cols?: number;
-  isAutoSubmitEnabled?: boolean;
-  autoSubmitDelay?: number;
-  autoSubmitResult?: VInputAutoSubmitResult | null;
-  autoSubmitResultFadeDuration?: number;
-}
-
-const DEFAULT_V_INPUT_CONFIG: Required<VInputConfig> = {
-  isDisabled: false,
-  isReadonly: false,
-  isClickable: false,
-  inputSize: null,
-  type: 'text',
-  inputmode: 'text',
-  pattern: '',
-  label: '',
-  labelRight: '',
-  placeholder: '',
-  errorMessage: '',
-  name: '',
-  fontSize: '1rem',
-  fontWeight: 400,
-  textAlign: 'left',
-  borderRadius: 2,
-  paddingX: 0,
-  paddingY: 2,
-  isTextarea: false,
-  rows: 3,
-  cols: 50,
-  isAutoSubmitEnabled: false,
-  autoSubmitDelay: 2000,
-  autoSubmitResult: null,
-  autoSubmitResultFadeDuration: 3000,
-};
-
 let uniqueId = 0;
 
 @Component({
@@ -109,7 +53,31 @@ let uniqueId = 0;
 export class VInput implements ControlValueAccessor, OnDestroy {
   public readonly inputElement = viewChild.required<ElementRef<HTMLInputElement | HTMLTextAreaElement>>('inputElement');
 
-  public readonly config = input<VInputConfig>({});
+  public readonly type = input<InputType>('text');
+  public readonly inputmode = input<InputMode>('text');
+  public readonly name = input<string>('');
+  public readonly label = input<string>('');
+  public readonly labelRight = input<string>('');
+  public readonly placeholder = input<string>('');
+  public readonly isDisabled = input<boolean>(false);
+  public readonly isReadonly = input<boolean>(false);
+  public readonly isClickable = input<boolean>(false);
+  public readonly isTextarea = input<boolean>(false);
+  public readonly pattern = input<string>('');
+  public readonly errorMessage = input<string>('');
+  public readonly inputSize = input<number | null>(null);
+  public readonly borderRadius = input<CssUnitValue>(2);
+  public readonly paddingX = input<CssUnitOrRawValue>(0);
+  public readonly paddingY = input<CssUnitOrRawValue>(2);
+  public readonly rows = input<number>(3);
+  public readonly cols = input<number>(50);
+  public readonly fontSize = input<FontSize>('1rem');
+  public readonly fontWeight = input<FontWeight>(400);
+  public readonly textAlign = input<TextAlign>('left');
+  public readonly isAutoSubmitEnabled = input<boolean>(false);
+  public readonly autoSubmitDelay = input<number>(2000);
+  public readonly autoSubmitResult = input<VInputAutoSubmitResult | null>(null);
+  public readonly autoSubmitResultFadeDuration = input<number>(3000);
 
   public readonly value = model<string>('');
 
@@ -119,17 +87,12 @@ export class VInput implements ControlValueAccessor, OnDestroy {
   public readonly onEnterPressed = output<KeyboardEvent>();
   public readonly onAutoSubmit = output<InputValue>();
 
-  protected readonly settings$$ = computed(() => ({
-    ...DEFAULT_V_INPUT_CONFIG,
-    ...this.config(),
-  }));
-
-  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.settings$$().borderRadius})`);
-  protected readonly paddingXString$$ = computed(() => resolveCssUnitOrRawValue(this.settings$$().paddingX));
-  protected readonly paddingYString$$ = computed(() => resolveCssUnitOrRawValue(this.settings$$().paddingY));
-  protected readonly autoSubmitDelayString$$ = computed(() => `${this.settings$$().autoSubmitDelay}ms`);
+  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
+  protected readonly paddingXString$$ = computed(() => resolveCssUnitOrRawValue(this.paddingX()));
+  protected readonly paddingYString$$ = computed(() => resolveCssUnitOrRawValue(this.paddingY()));
+  protected readonly autoSubmitDelayString$$ = computed(() => `${this.autoSubmitDelay()}ms`);
   protected readonly autoSubmitResultFadeDurationString$$ = computed(
-    () => `${this.settings$$().autoSubmitResultFadeDuration}ms`,
+    () => `${this.autoSubmitResultFadeDuration()}ms`,
   );
 
   protected ngControlValue$$: WritableSignal<string> = signal('');
@@ -141,12 +104,11 @@ export class VInput implements ControlValueAccessor, OnDestroy {
   private isImeComposing = false;
 
   private readonly autoSubmitManager = new VInputAutoSubmitManager({
-    isEnabled: () =>
-      this.settings$$().isAutoSubmitEnabled && !this.settings$$().isDisabled && !this.settings$$().isReadonly,
+    isEnabled: () => this.isAutoSubmitEnabled() && !this.isDisabled() && !this.isReadonly(),
     isValid: () => this.isControlValid(),
     getValue: () => this.displayValue$$(),
-    getAutoSubmitDelay: () => this.settings$$().autoSubmitDelay,
-    getAutoSubmitResultFadeDuration: () => this.settings$$().autoSubmitResultFadeDuration,
+    getAutoSubmitDelay: () => this.autoSubmitDelay(),
+    getAutoSubmitResultFadeDuration: () => this.autoSubmitResultFadeDuration(),
     emitSubmit: (value: string) => this.onAutoSubmit.emit(value),
     onStateChange: (state: VInputAutoSubmitState) => this.autoSubmitState$$.set(state),
   });
@@ -162,7 +124,7 @@ export class VInput implements ControlValueAccessor, OnDestroy {
       this.value();
     }
     if (!this.hasInteracted$$()) return '';
-    return this.settings$$().errorMessage || this.getValidationErrorMessage();
+    return this.errorMessage() || this.getValidationErrorMessage();
   });
 
   protected readonly vInputAutoSubmitState = VInputAutoSubmitState;
@@ -233,9 +195,9 @@ export class VInput implements ControlValueAccessor, OnDestroy {
   // focus the real field, same as clicking the field itself. A descendant opts
   // out by calling preventDefault() on its own mousedown — the existing reset
   // buttons in v-prefix/v-postfix already do this to avoid stealing focus, so
-  // this reuses that same signal instead of adding a separate config flag.
+  // this reuses that same signal instead of adding a separate input flag.
   protected onWrapperMouseDown(event: MouseEvent): void {
-    if (this.settings$$().isDisabled || event.defaultPrevented) return;
+    if (this.isDisabled() || event.defaultPrevented) return;
     const inputEl = this.inputElement().nativeElement;
     if (event.target === inputEl) return;
     event.preventDefault();
@@ -258,7 +220,7 @@ export class VInput implements ControlValueAccessor, OnDestroy {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    if (!this.settings$$().isTextarea) {
+    if (!this.isTextarea()) {
       if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
         const didApply = this.applyArrowStep(event);
         if (didApply) return;
@@ -266,7 +228,7 @@ export class VInput implements ControlValueAccessor, OnDestroy {
 
       if (event.key === 'Enter') {
         if (event.isComposing || this.isImeComposing) return;
-        if (this.settings$$().isAutoSubmitEnabled) {
+        if (this.isAutoSubmitEnabled()) {
           this.autoSubmitManager.triggerSubmit();
         }
         this.onEnterPressed.emit(event);
@@ -283,12 +245,10 @@ export class VInput implements ControlValueAccessor, OnDestroy {
   }
 
   private applyArrowStep(event: KeyboardEvent): boolean {
-    const settings = this.settings$$();
-    if (settings.isTextarea) return false;
-    if (settings.isDisabled || settings.isReadonly) return false;
+    if (this.isTextarea()) return false;
+    if (this.isDisabled() || this.isReadonly()) return false;
 
-    const isNumericLike =
-      settings.type === 'number' || settings.inputmode === 'numeric' || settings.inputmode === 'decimal';
+    const isNumericLike = this.type() === 'number' || this.inputmode() === 'numeric' || this.inputmode() === 'decimal';
     if (!isNumericLike) return false;
 
     const target = event.target as HTMLInputElement | HTMLTextAreaElement;
@@ -316,7 +276,7 @@ export class VInput implements ControlValueAccessor, OnDestroy {
   }
 
   private readonly autoSubmitResultEffect = effect(() => {
-    const result = this.settings$$().autoSubmitResult;
+    const result = this.autoSubmitResult();
     if (result === null) return;
     this.autoSubmitManager.handleResult(result);
   });

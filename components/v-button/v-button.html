@@ -1,5 +1,5 @@
-<button [type]="settings$$().type"
-        [disabled]="settings$$().isDisabled"
+<button [type]="type()"
+        [disabled]="isDisabled()"
         [attr.tabindex]="tabindex() !== undefined ? tabindex() : null"
         (click)="onButtonClick($event)"
         (pointerdown)="onPointerDown($event)"
@@ -8,7 +8,7 @@
   <ng-content select="[v-prefix]"
               class="prefix" />
 
-  @if (!settings$$().isLabelHidden) {
+  @if (!isLabelHidden()) {
     <div class="btn-text">
       <ng-content />
     </div>

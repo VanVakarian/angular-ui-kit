@@ -1,14 +1,12 @@
-@if (settings$$().isOpen) {
+@if (isOpen()) {
   <div class="modal-container"
-       [vBackdrop]="settings$$().isOpen"
+       [vBackdrop]="isOpen()"
        (backdropClick)="closeModal()"
        (click)="$event.stopPropagation()">
     <div class="modal-content">
-      @if (settings$$().isCloseButtonVisible) {
+      @if (isCloseButtonVisible()) {
         <v-button class="v-flat close-button"
-                  [config]="{
-                    padding: 1,
-                  }"
+                  [padding]="1"
                   (onClick)="closeModal()">
           <svg width="12"
                height="12"

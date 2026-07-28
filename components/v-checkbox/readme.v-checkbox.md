@@ -16,35 +16,28 @@ Flat design checkbox with optional switch mode and smooth animations. Supports d
 
 ```html
 <v-checkbox
-  [config]="{ mode: 'switch' }"
+  mode="switch"
   [value]="enabled"
   (valueChange)="enabled = $event">
   Enable notifications
 </v-checkbox>
 ```
 
-## Config API
+## Properties
 
 ```ts
-type VCheckboxMode = 'checkbox' | 'switch';
-type VCheckboxLabelPosition = 'left' | 'right';
-
-interface VCheckboxConfig {
-  labelPosition?: VCheckboxLabelPosition;
-  isDisabled?: boolean;
-  mode?: VCheckboxMode;
-  size?: CssUnitValue;
-  borderRadius?: CssUnitValue;
-  gap?: CssUnitValue;
-  checkIconSize?: CssUnitValue;
-  switchWidth?: CssUnitValue;
-  switchHeight?: CssUnitValue;
-  switchPadding?: CssUnitValue;
-  thumbSize?: CssUnitValue;
-}
+mode: 'checkbox' | 'switch' = 'checkbox'
+isDisabled: boolean = false
+labelPosition: 'left' | 'right' = 'right'
+size: CssUnitValue = 6
+borderRadius: CssUnitValue = 2
+gap: CssUnitValue = 2
+checkIconSize: CssUnitValue = 5
+switchWidth: CssUnitValue = 14
+switchHeight: CssUnitValue = 7
+switchPadding: CssUnitValue = 1
+thumbSize: CssUnitValue = 5
 ```
-
-Defaults: `labelPosition='right'`, `isDisabled=false`, `mode='checkbox'`, `size=6`, `borderRadius=2`, `gap=2`, `checkIconSize=6`, `switchWidth=14`, `switchHeight=7`, `switchPadding=1`, `thumbSize=5`.
 
 ## Events
 

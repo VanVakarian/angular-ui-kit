@@ -1,6 +1,6 @@
 # V-Button
 
-Flat design button with class-based styles and unified config API. Supports dark theme.
+Flat design button with class-based styles and unified props API. Supports dark theme.
 
 ## Basic Usage
 
@@ -20,21 +20,23 @@ Flat design button with class-based styles and unified config API. Supports dark
 - `v-link` — link-style (transparent)
 - `v-hover` — hover-only styling
 
-## Config API
+## Properties
 
 ```ts
-interface VButtonConfig {
-  type?: 'button' | 'submit' | 'reset';
-  width?: string;
-  isLabelHidden?: boolean;
-  paddingY?: CssUnitValue;
-  paddingX?: CssUnitValue;
-  isDisabled?: boolean;
-  bgOpacity?: '0' | '1' | `0.${number}`;
-}
+type: 'button' | 'submit' | 'reset' = 'button'
+isDisabled: boolean = false
+isLabelHidden: boolean = false
+width: string
+borderRadius: CssUnitValue = 2
+padding: CssUnitValue        // shorthand, fills paddingX/paddingY unless set
+paddingX: CssUnitValue = 2
+paddingY: CssUnitValue = 2
+gap: CssUnitValue = 2
+bgOpacity: '0' | '1' | `0.${number}` = '1'
+textAlign: 'left' | 'center' | 'right'
+color: string
+tabindex: number | string
 ```
-
-Defaults: `type='button'`, `paddingY=2`, `paddingX=4`, `isDisabled=false`, `bgOpacity='1'`.
 
 ## Events
 
@@ -44,24 +46,33 @@ Defaults: `type='button'`, `paddingY=2`, `paddingX=4`, `isDisabled=false`, `bgOp
 
 ```html
 <!-- Icon-only: hide label, compact padding -->
-<v-button class="v-flat" [config]="{ isLabelHidden: true, paddingX: 2 }">
+<v-button class="v-flat"
+          [isLabelHidden]="true"
+          [paddingX]="2">
   <span v-prefix>⚙️</span>
   Settings
 </v-button>
 
 <!-- Destructive with custom padding -->
-<v-button class="v-danger" [config]="{ paddingY: 1, paddingX: 6 }">Delete</v-button>
+<v-button class="v-danger"
+          [paddingY]="1"
+          [paddingX]="6">Delete</v-button>
 
 <!-- Full width -->
-<v-button class="v-primary" [config]="{ width: '100%' }">Continue</v-button>
+<v-button class="v-primary"
+          width="100%">Continue</v-button>
 
 <!-- Transparent background -->
-<v-button class="v-flat" [config]="{ bgOpacity: '0', paddingX: 0, paddingY: 0 }">
+<v-button class="v-flat"
+          bgOpacity="0"
+          [paddingX]="0"
+          [paddingY]="0">
   <span v-prefix>✕</span>
 </v-button>
 
 <!-- Disabled -->
-<v-button class="v-primary" [config]="{ isDisabled: true }">Disabled</v-button>
+<v-button class="v-primary"
+          [isDisabled]="true">Disabled</v-button>
 
 <!-- Link-style -->
 <v-button class="v-link">Learn more</v-button>

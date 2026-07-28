@@ -10,7 +10,7 @@
   <span class="separator"
         aria-hidden="true"></span>
 
-  @for (preset of presets$$(); track preset) {
+  @for (preset of presets(); track preset) {
     <button type="button"
             class="swatch"
             [class.selected]="value() === preset"

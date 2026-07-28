@@ -11,17 +11,13 @@ Preset color swatches plus a native color input for picking an arbitrary color. 
 </v-color-picker>
 ```
 
-## Config API
+## Properties
 
 ```ts
-interface VColorPickerConfig {
-  presets?: string[];
-  swatchSize?: CssUnitValue;
-  gap?: CssUnitValue;
-}
+presets: string[]         // 12 curated preset colors by default
+swatchSize: CssUnitValue = 6
+gap: CssUnitValue = 2
 ```
-
-Defaults: 12 curated preset colors, `swatchSize=6`, `gap=2`.
 
 ## Events
 

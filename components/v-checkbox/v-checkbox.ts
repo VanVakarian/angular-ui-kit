@@ -6,34 +6,6 @@ export type VCheckboxMode = 'checkbox' | 'switch';
 
 export type VCheckboxLabelPosition = 'left' | 'right';
 
-export interface VCheckboxConfig {
-  labelPosition?: VCheckboxLabelPosition;
-  isDisabled?: boolean;
-  mode?: VCheckboxMode;
-  size?: CssUnitValue;
-  borderRadius?: CssUnitValue;
-  gap?: CssUnitValue;
-  checkIconSize?: CssUnitValue;
-  switchWidth?: CssUnitValue;
-  switchHeight?: CssUnitValue;
-  switchPadding?: CssUnitValue;
-  thumbSize?: CssUnitValue;
-}
-
-const DEFAULT_V_CHECKBOX_CONFIG: Required<VCheckboxConfig> = {
-  labelPosition: 'right',
-  isDisabled: false,
-  mode: 'checkbox',
-  size: 6,
-  checkIconSize: 5,
-  borderRadius: 2,
-  gap: 2,
-  switchWidth: 14,
-  switchHeight: 7,
-  switchPadding: 1,
-  thumbSize: 5,
-};
-
 @Component({
   selector: 'v-checkbox',
   templateUrl: './v-checkbox.html',
@@ -41,9 +13,9 @@ const DEFAULT_V_CHECKBOX_CONFIG: Required<VCheckboxConfig> = {
   imports: [VIcon],
   host: {
     '[class.checked]': 'value()',
-    '[class.disabled]': 'settings$$().isDisabled',
-    '[attr.mode]': 'mode$$()',
-    '[attr.label-position]': 'labelPosition$$()',
+    '[class.disabled]': 'isDisabled()',
+    '[attr.mode]': 'mode()',
+    '[attr.label-position]': 'labelPosition()',
     '[style.--v-checkbox-size]': 'sizeString$$()',
     '[style.--v-checkbox-border-radius]': 'borderRadiusString$$()',
     '[style.--v-checkbox-gap]': 'gapString$$()',
@@ -55,35 +27,38 @@ const DEFAULT_V_CHECKBOX_CONFIG: Required<VCheckboxConfig> = {
   },
 })
 export class VCheckbox {
-  public readonly config = input<VCheckboxConfig>({});
+  public readonly mode = input<VCheckboxMode>('checkbox');
+  public readonly isDisabled = input<boolean>(false);
+  public readonly labelPosition = input<VCheckboxLabelPosition>('right');
+  public readonly size = input<CssUnitValue>(6);
+  public readonly borderRadius = input<CssUnitValue>(2);
+  public readonly gap = input<CssUnitValue>(2);
+  public readonly checkIconSize = input<CssUnitValue>(5);
+  public readonly switchWidth = input<CssUnitValue>(14);
+  public readonly switchHeight = input<CssUnitValue>(7);
+  public readonly switchPadding = input<CssUnitValue>(1);
+  public readonly thumbSize = input<CssUnitValue>(5);
+
   public readonly value = model<boolean>(false);
   public readonly onChanged = output<boolean>();
 
   protected readonly Icon = IconName;
 
-  protected readonly settings$$ = computed(() => ({
-    ...DEFAULT_V_CHECKBOX_CONFIG,
-    ...this.config(),
-  }));
+  protected readonly isSwitch$$ = computed(() => this.mode() === 'switch');
 
-  protected readonly mode$$ = computed(() => this.settings$$().mode);
-  protected readonly isSwitch$$ = computed(() => this.mode$$() === 'switch');
-  protected readonly labelPosition$$ = computed(() => this.settings$$().labelPosition);
-
-  protected readonly sizeString$$ = computed(() => `var(--unit-${this.settings$$().size})`);
-  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.settings$$().borderRadius})`);
-  protected readonly gapString$$ = computed(() => `var(--unit-${this.settings$$().gap})`);
-  protected readonly checkIconSizeString$$ = computed(() => `var(--unit-${this.settings$$().checkIconSize})`);
-  protected readonly switchWidthString$$ = computed(() => `var(--unit-${this.settings$$().switchWidth})`);
-  protected readonly switchHeightString$$ = computed(() => `var(--unit-${this.settings$$().switchHeight})`);
-  protected readonly switchPaddingString$$ = computed(() => `var(--unit-${this.settings$$().switchPadding})`);
-  protected readonly thumbSizeString$$ = computed(() => `var(--unit-${this.settings$$().thumbSize})`);
-  protected readonly checkIconSize$$ = computed(() => this.settings$$().checkIconSize);
+  protected readonly sizeString$$ = computed(() => `var(--unit-${this.size()})`);
+  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
+  protected readonly gapString$$ = computed(() => `var(--unit-${this.gap()})`);
+  protected readonly checkIconSizeString$$ = computed(() => `var(--unit-${this.checkIconSize()})`);
+  protected readonly switchWidthString$$ = computed(() => `var(--unit-${this.switchWidth()})`);
+  protected readonly switchHeightString$$ = computed(() => `var(--unit-${this.switchHeight()})`);
+  protected readonly switchPaddingString$$ = computed(() => `var(--unit-${this.switchPadding()})`);
+  protected readonly thumbSizeString$$ = computed(() => `var(--unit-${this.thumbSize()})`);
 
   protected onInputChange(event: Event): void {
     const target = event.target as HTMLInputElement;
 
-    if (this.settings$$().isDisabled) {
+    if (this.isDisabled()) {
       target.checked = this.value();
       return;
     }

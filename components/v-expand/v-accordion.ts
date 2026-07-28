@@ -20,8 +20,8 @@ export interface AccordionItemPosition {
   },
 })
 export class VAccordion implements OnInit, OnDestroy {
-  public readonly multiple = input<boolean>(false);
   public readonly groupId = input<string>();
+  public readonly multiple = input<boolean>(false);
 
   public readonly items = contentChildren(VExpand, { descendants: false });
 

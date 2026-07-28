@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { IconName, VIcon } from '@ui-kit/components/v-icon/v-icon';
-import { VInput, VInputConfig } from '@ui-kit/components/v-input/v-input';
+import { VInput } from '@ui-kit/components/v-input/v-input';
 import { LayerController, PARENT_LAYER_ID, ZLayerService } from '@ui-kit/services/z-layer.service';
 
 export enum ddExpandDirection {
@@ -59,16 +59,16 @@ export type DropdownMode = (typeof DropdownMode)[keyof typeof DropdownMode];
   imports: [CommonModule, VInput, VIcon, ReactiveFormsModule],
 })
 export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
+  public readonly mode = input<DropdownMode>(DropdownMode.Search);
   public readonly label = input<string>('');
   public readonly labelRight = input<string>('');
   public readonly placeholder = input<string>('');
+  public readonly items = input<DropdownItem[]>([]);
   public readonly isDisabled = input<boolean>(false);
   public readonly isRequired = input<boolean>(false);
   public readonly errorMessage = input<string>('');
-  public readonly items = input<DropdownItem[]>([]);
   public readonly minDropdownWidth = input<string>('');
   public readonly expandDirection = input<ddExpandDirection>(ddExpandDirection.Left);
-  public readonly mode = input<DropdownMode>(DropdownMode.Search);
 
   public readonly onSelectionChanged = output<DropdownItem | null>();
 
@@ -92,18 +92,6 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
 
     return selectedItem as DropdownItemWithIcon;
   });
-
-  protected readonly inputConfig$$ = computed<VInputConfig>(() => ({
-    label: this.label(),
-    labelRight: this.labelRight() || undefined,
-    placeholder: this.placeholder(),
-    isDisabled: this.isDisabled(),
-    isReadonly: this.isSelectMode$$(),
-    isClickable: this.isSelectMode$$(),
-    inputSize: this.isSelectMode$$() ? this.getSelectInputSize() : null,
-    inputmode: this.isSelectMode$$() ? 'none' : 'text',
-    errorMessage: this.computedErrorMessage$$(),
-  }));
 
   protected readonly value$$ = signal('');
   protected readonly selectedValue$$ = signal('');
@@ -282,7 +270,7 @@ export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {
     return matched ? matched.label : value;
   }
 
-  private getSelectInputSize(): number {
+  protected getSelectInputSize(): number {
     const displayValue = this.value$$().trim();
     const placeholder = this.placeholder().trim();
     const textLength = Math.max(displayValue.length, placeholder.length, 12);

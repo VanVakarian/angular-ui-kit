@@ -1,4 +1,3 @@
-
 import { Component, computed, effect, HostListener, inject, input, output } from '@angular/core';
 import { VButton } from '@ui-kit/components/v-button/v-button';
 import { VBackdropDirective } from '@ui-kit/directives/backdrop.directive';
@@ -6,32 +5,6 @@ import { LayerController, PARENT_LAYER_ID, ZLayerService } from '@ui-kit/service
 import { CssUnitValue } from '@ui-kit/types';
 
 export type ModalDeviceType = 'mobile' | 'desktop';
-
-export interface VModalConfig {
-  isOpen?: boolean;
-  isCloseButtonVisible?: boolean;
-  width?: string;
-  mobileWidth?: string;
-  desktopWidth?: string;
-  borderRadius?: CssUnitValue;
-  padding?: CssUnitValue;
-  paddingX?: CssUnitValue;
-  paddingY?: CssUnitValue;
-  deviceType?: ModalDeviceType;
-}
-
-const DEFAULT_V_MODAL_CONFIG: Required<VModalConfig> = {
-  isOpen: false,
-  isCloseButtonVisible: false,
-  width: 'min(100vw, 400px)',
-  mobileWidth: undefined as unknown as string,
-  desktopWidth: undefined as unknown as string,
-  borderRadius: 2,
-  padding: undefined as unknown as CssUnitValue,
-  paddingX: 2,
-  paddingY: 2,
-  deviceType: undefined as unknown as ModalDeviceType,
-};
 
 @Component({
   selector: 'v-modal',
@@ -54,30 +27,34 @@ const DEFAULT_V_MODAL_CONFIG: Required<VModalConfig> = {
   imports: [VButton, VBackdropDirective],
 })
 export class VModal {
-  public readonly config = input<VModalConfig>({});
+  public readonly deviceType = input<ModalDeviceType>();
+  public readonly isOpen = input<boolean>(false);
+  public readonly isCloseButtonVisible = input<boolean>(false);
+  public readonly width = input<string>('min(100vw, 400px)');
+  public readonly mobileWidth = input<string>();
+  public readonly desktopWidth = input<string>();
+  public readonly borderRadius = input<CssUnitValue>(2);
+  public readonly padding = input<CssUnitValue>();
+  public readonly paddingX = input<CssUnitValue>(2);
+  public readonly paddingY = input<CssUnitValue>(2);
 
   public readonly onClose = output<void>();
   public readonly onOpen = output<void>();
 
-  protected readonly settings$$ = computed(() => ({
-    ...DEFAULT_V_MODAL_CONFIG,
-    ...this.config(),
-  }));
-
   protected readonly width$$ = computed(() => this.getFinalWidth());
-  protected readonly paddingX$$ = computed(() => this.getPaddingX());
-  protected readonly paddingY$$ = computed(() => this.getPaddingY());
+  protected readonly paddingX$$ = computed(() => this.paddingX() ?? this.padding() ?? 2);
+  protected readonly paddingY$$ = computed(() => this.paddingY() ?? this.padding() ?? 2);
 
   protected readonly paddingXString$$ = computed(() => `var(--unit-${this.paddingX$$()})`);
   protected readonly paddingYString$$ = computed(() => `var(--unit-${this.paddingY$$()})`);
-  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.settings$$().borderRadius})`);
+  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
 
   protected zIndex = 100;
   private layerController?: LayerController;
   private readonly zLayerService = inject(ZLayerService);
 
   private readonly isOpenEffect$$ = effect(() => {
-    const isOpen = this.settings$$().isOpen;
+    const isOpen = this.isOpen();
     if (isOpen && !this.layerController) {
       this.registerLayer();
       this.onOpen.emit();
@@ -94,7 +71,7 @@ export class VModal {
 
   @HostListener('document:keydown.escape')
   protected onEscapeKey(): void {
-    if (this.settings$$().isOpen) {
+    if (this.isOpen()) {
       this.closeModal();
     }
   }
@@ -108,30 +85,15 @@ export class VModal {
     this.zIndex = this.layerController.zIndex;
   }
 
-  private getPaddingX(): CssUnitValue {
-    const config = this.config();
-    if (config.paddingX !== undefined) return config.paddingX;
-    if (config.padding !== undefined) return config.padding;
-    return this.settings$$().paddingX;
-  }
-
-  private getPaddingY(): CssUnitValue {
-    const config = this.config();
-    if (config.paddingY !== undefined) return config.paddingY;
-    if (config.padding !== undefined) return config.padding;
-    return this.settings$$().paddingY;
-  }
-
   private getFinalWidth(): string {
-    const deviceType = this.settings$$().deviceType;
-    const config = this.config();
+    const deviceType = this.deviceType();
 
-    if (deviceType === 'mobile' && config.mobileWidth) {
-      return config.mobileWidth;
+    if (deviceType === 'mobile' && this.mobileWidth()) {
+      return this.mobileWidth()!;
     }
-    if (deviceType === 'desktop' && config.desktopWidth) {
-      return config.desktopWidth;
+    if (deviceType === 'desktop' && this.desktopWidth()) {
+      return this.desktopWidth()!;
     }
-    return this.settings$$().width;
+    return this.width();
   }
 }

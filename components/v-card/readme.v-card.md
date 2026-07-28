@@ -44,15 +44,28 @@ Flat design card component with configurable spacing and borders. Supports dark 
 <v-card (onCardclick)="handleClick($event)">
   Click me!
 </v-card>
+
+<!-- Selected card with background image -->
+<v-card [isSelected]="true"
+        [backgroundImageUrl]="'/images/bg.jpg'"
+        [backgroundImageOpacity]="0.6">
+  Featured
+</v-card>
 ```
 
-## API
+## Properties
 
 ```ts
-// Inputs
-borderRadius: CssUnitValue = 2  // 0-96
-padding: CssUnitValue = 2       // 0-96
-
-// Events
-onCardclick: MouseEvent
+isSelected: boolean = false
+borderRadius: CssUnitValue = 4     // 0-96
+padding: CssUnitValue              // shorthand, fills paddingX/paddingY unless set
+paddingX: CssUnitValue = 2
+paddingY: CssUnitValue = 2
+minHeight: string = 'auto'
+backgroundImageUrl: string | null = null
+backgroundImageOpacity: number = 1
 ```
+
+## Events
+
+- `onCardclick: MouseEvent`

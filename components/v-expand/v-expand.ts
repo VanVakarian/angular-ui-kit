@@ -2,20 +2,6 @@ import { Component, computed, effect, input, output, signal } from '@angular/cor
 import { CssUnitValue } from '@ui-kit/types';
 import { AccordionItemPosition } from './v-accordion';
 
-export interface VExpandConfig {
-  padding?: CssUnitValue;
-  borderRadius?: CssUnitValue;
-  animationTimingFunction?: 'ease-in-out' | 'linear' | 'ease' | 'ease-in' | 'ease-out';
-  isWithoutAnimation?: boolean;
-}
-
-const DEFAULT_V_EXPAND_CONFIG: Required<VExpandConfig> = {
-  padding: 2,
-  borderRadius: 2,
-  animationTimingFunction: 'ease-in-out',
-  isWithoutAnimation: false,
-};
-
 @Component({
   selector: 'v-expand',
   templateUrl: './v-expand.html',
@@ -23,8 +9,8 @@ const DEFAULT_V_EXPAND_CONFIG: Required<VExpandConfig> = {
   host: {
     '[style.--v-expand-padding]': 'paddingString$$()',
     '[style.--v-expand-border-radius]': 'borderRadiusString$$()',
-    '[style.--v-expand-animation-timing-function]': 'animationTimingFunction$$()',
-    '[class.no-transition]': 'config$$().isWithoutAnimation',
+    '[style.--v-expand-animation-timing-function]': 'animationTimingFunction()',
+    '[class.no-transition]': 'isWithoutAnimation()',
     '[class.accordion-item]': 'isInAccordion$$()',
     '[class.accordion-first]': 'accordionPosition$$()?.isFirst',
     '[class.accordion-last]': 'accordionPosition$$()?.isLast',
@@ -33,15 +19,15 @@ const DEFAULT_V_EXPAND_CONFIG: Required<VExpandConfig> = {
   },
 })
 export class VExpand {
-  public readonly config = input<VExpandConfig>({});
   public readonly isExpanded = input<boolean>(false);
+  public readonly isWithoutAnimation = input<boolean>(false);
+  public readonly padding = input<CssUnitValue>(2);
+  public readonly borderRadius = input<CssUnitValue>(2);
+  public readonly animationTimingFunction = input<'ease-in-out' | 'linear' | 'ease' | 'ease-in' | 'ease-out'>(
+    'ease-in-out',
+  );
 
   public readonly onOpened = output<CustomEvent<boolean>>();
-
-  protected readonly config$$ = computed(() => ({
-    ...DEFAULT_V_EXPAND_CONFIG,
-    ...this.config(),
-  }));
 
   protected readonly accordionPosition$$ = signal<AccordionItemPosition | null>(null);
 
@@ -60,19 +46,9 @@ export class VExpand {
     return this._isExpanded$$();
   });
 
-  public readonly paddingString$$ = computed(() => {
-    const padding = this.config$$().padding;
-    return `var(--unit-${padding})`;
-  });
+  public readonly paddingString$$ = computed(() => `var(--unit-${this.padding()})`);
 
-  public readonly borderRadiusString$$ = computed(() => {
-    const borderRadius = this.config$$().borderRadius;
-    return `var(--unit-${borderRadius})`;
-  });
-
-  public readonly animationTimingFunction$$ = computed(() => {
-    return this.config$$().animationTimingFunction;
-  });
+  public readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
 
   private readonly _isExpanded$$ = signal(false);
 

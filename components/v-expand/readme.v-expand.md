@@ -80,34 +80,30 @@ Expandable/collapsible panel with flat design and accordion support. Works stand
 
 ```html
 <!-- Custom padding, border radius, no animation -->
-<v-expand [config]="{
-  padding: 3,
-  borderRadius: 4,
-  animationTimingFunction: 'ease-out',
-  isWithoutAnimation: false
-}">
+<v-expand [padding]="3"
+          [borderRadius]="4"
+          animationTimingFunction="ease-out"
+          [isWithoutAnimation]="false">
   <div v-header>Custom Styled Panel</div>
   <div v-body>Content with custom settings</div>
 </v-expand>
 ```
 
-## Config API
+## Properties
 
 ```ts
-interface VExpandConfig {
-  padding?: CssUnitValue;
-  borderRadius?: CssUnitValue;
-  animationTimingFunction?: 'ease-in-out' | 'linear' | 'ease' | 'ease-in' | 'ease-out';
-  isWithoutAnimation?: boolean;
-}
+isExpanded: boolean = false
+isWithoutAnimation: boolean = false
+padding: CssUnitValue = 2
+borderRadius: CssUnitValue = 2
+animationTimingFunction: 'ease-in-out' | 'linear' | 'ease' | 'ease-in' | 'ease-out' = 'ease-in-out'
 ```
-
-Defaults: `padding=2`, `borderRadius=2`, `animationTimingFunction='ease-in-out'`, `isWithoutAnimation=false`.
 
 ## VAccordion API
 
 ```ts
 // Inputs
+groupId: string
 multiple: boolean = false  // Allow multiple panels open
 ```
 

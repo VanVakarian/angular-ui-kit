@@ -1,6 +1,6 @@
 import { Component, computed, input, model, output } from '@angular/core';
-import { VButton, VButtonConfig } from '@ui-kit/components/v-button/v-button';
-import { VCard, VCardConfig } from '@ui-kit/components/v-card/v-card';
+import { VButton } from '@ui-kit/components/v-button/v-button';
+import { VCard } from '@ui-kit/components/v-card/v-card';
 import { CssUnitValue } from '@ui-kit/types';
 
 export interface VToggleItem {
@@ -9,30 +9,6 @@ export interface VToggleItem {
   isDisabled?: boolean;
 }
 
-export interface VToggleConfig {
-  isMultiple?: boolean;
-  isDisabled?: boolean;
-  activeClass?: string;
-  inactiveClass?: string;
-  borderRadius?: CssUnitValue;
-  padding?: CssUnitValue;
-  gap?: CssUnitValue;
-  buttonConfig?: VButtonConfig;
-  fitContent?: boolean;
-}
-
-const DEFAULT_V_TOGGLE_CONFIG: Required<VToggleConfig> = {
-  isMultiple: false,
-  isDisabled: false,
-  activeClass: 'v-primary',
-  inactiveClass: 'v-flat',
-  borderRadius: 2,
-  padding: 1,
-  gap: 1,
-  buttonConfig: {},
-  fitContent: false,
-};
-
 @Component({
   selector: 'v-toggle',
   templateUrl: './v-toggle.html',
@@ -40,36 +16,24 @@ const DEFAULT_V_TOGGLE_CONFIG: Required<VToggleConfig> = {
   imports: [VCard, VButton],
   host: {
     '[style.--v-toggle-gap]': 'gapString$$()',
-    '[class.v-toggle-fit-host]': 'settings$$().fitContent',
+    '[class.v-toggle-fit-host]': 'fitContent()',
   },
 })
 export class VToggle {
   public readonly items = input<VToggleItem[]>([]);
-  public readonly config = input<VToggleConfig>({});
+  public readonly isMultiple = input<boolean>(false);
+  public readonly isDisabled = input<boolean>(false);
+  public readonly fitContent = input<boolean>(false);
+  public readonly borderRadius = input<CssUnitValue>(2);
+  public readonly padding = input<CssUnitValue>(1);
+  public readonly gap = input<CssUnitValue>(1);
+  public readonly activeClass = input<string>('v-primary');
+  public readonly inactiveClass = input<string>('v-flat');
+
   public readonly value = model<string[]>([]);
   public readonly onChanged = output<string[]>();
 
-  protected readonly settings$$ = computed(() => ({
-    ...DEFAULT_V_TOGGLE_CONFIG,
-    ...this.config(),
-  }));
-
-  protected readonly gapString$$ = computed(() => `var(--unit-${this.settings$$().gap})`);
-
-  protected readonly cardConfig$$ = computed<VCardConfig>(() => ({
-    borderRadius: this.settings$$().borderRadius,
-    padding: this.settings$$().padding,
-  }));
-
-  protected readonly buttonConfig$$ = computed<VButtonConfig>(() => {
-    const settings = this.settings$$();
-    const buttonConfig = settings.buttonConfig || {};
-    return {
-      ...(settings.fitContent ? {} : { width: '100%' }),
-      padding: 1,
-      ...buttonConfig,
-    };
-  });
+  protected readonly gapString$$ = computed(() => `var(--unit-${this.gap()})`);
 
   protected onToggleClick(item: VToggleItem): void {
     if (this.isItemDisabled(item)) return;
@@ -78,7 +42,7 @@ export class VToggle {
     const isSelected = current.includes(item.id);
     let nextValue: string[];
 
-    if (this.settings$$().isMultiple) {
+    if (this.isMultiple()) {
       nextValue = isSelected ? current.filter((id) => id !== item.id) : [...current, item.id];
     } else {
       nextValue = isSelected ? [] : [item.id];
@@ -93,21 +57,10 @@ export class VToggle {
   }
 
   protected isItemDisabled(item: VToggleItem): boolean {
-    return this.settings$$().isDisabled || !!item.isDisabled;
+    return this.isDisabled() || !!item.isDisabled;
   }
 
   protected getButtonClass(item: VToggleItem): string {
-    return this.isItemActive(item) ? this.settings$$().activeClass : this.settings$$().inactiveClass;
-  }
-
-  protected getItemButtonConfig(item: VToggleItem): VButtonConfig {
-    const baseConfig = this.buttonConfig$$();
-    if (!this.isItemDisabled(item)) return baseConfig;
-    if (baseConfig.isDisabled) return baseConfig;
-
-    return {
-      ...baseConfig,
-      isDisabled: true,
-    };
+    return this.isItemActive(item) ? this.activeClass() : this.inactiveClass();
   }
 }

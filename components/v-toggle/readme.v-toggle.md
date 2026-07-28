@@ -16,12 +16,12 @@ Segmented toggle control built on top of the card and button styles. Supports si
 ```html
 <v-toggle
   [items]="filters"
-  [config]="{ isMultiple: true }"
+  [isMultiple]="true"
   [value]="selectedFilters"
   (valueChange)="selectedFilters = $event"></v-toggle>
 ```
 
-## Config API
+## Properties
 
 ```ts
 interface VToggleItem {
@@ -29,20 +29,19 @@ interface VToggleItem {
   label: string;
   isDisabled?: boolean;
 }
-
-interface VToggleConfig {
-  isMultiple?: boolean;
-  isDisabled?: boolean;
-  activeClass?: string;
-  inactiveClass?: string;
-  borderRadius?: CssUnitValue;
-  padding?: CssUnitValue;
-  gap?: CssUnitValue;
-  buttonConfig?: VButtonConfig;
-}
 ```
 
-Defaults: `isMultiple=false`, `isDisabled=false`, `activeClass='v-primary'`, `inactiveClass='v-flat'`, `borderRadius=2`, `padding=1`, `gap=1`.
+```ts
+items: VToggleItem[] = []
+isMultiple: boolean = false
+isDisabled: boolean = false
+fitContent: boolean = false
+borderRadius: CssUnitValue = 2
+padding: CssUnitValue = 1
+gap: CssUnitValue = 1
+activeClass: string = 'v-primary'
+inactiveClass: string = 'v-flat'
+```
 
 ## Events
 

@@ -3,7 +3,7 @@
   <input class="checkbox-input"
          type="checkbox"
          [checked]="value()"
-         [disabled]="settings$$().isDisabled"
+         [disabled]="isDisabled()"
          (change)="onInputChange($event)" />
 
   <span class="control">
@@ -11,14 +11,14 @@
       <span class="thumb">
         <span class="thumb-icon">
           <v-icon [name]="value() ? Icon.Check : Icon.Close"
-                  [size]="checkIconSize$$()" />
+                  [size]="checkIconSize()" />
         </span>
       </span>
     }
     @else {
       <span class="check-icon">
         <v-icon [name]="Icon.Check"
-                [size]="checkIconSize$$()" />
+                [size]="checkIconSize()" />
       </span>
     }
   </span>

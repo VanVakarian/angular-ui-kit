@@ -25,54 +25,18 @@ type DragState = {
   startRange: VSliderRangeValue;
 };
 
-export interface VSliderConfig {
-  valueList?: number[];
-  min?: number;
-  max?: number;
-  height?: CssUnitValue;
-  borderRadius?: CssUnitValue;
-  thumbBorderRadius?: CssUnitValue | 'full';
-  trackColor?: string;
-  fillColor?: string;
-  barStyle?: ProgressBarStyle;
-  thumbSize?: CssUnitValue;
-  isRange?: boolean;
-  isTouchMode?: boolean;
-  touchAreaSize?: CssUnitValue;
-  isDisabled?: boolean;
-  minSpan?: number;
-}
-
-const DEFAULT_V_SLIDER_CONFIG: Required<VSliderConfig> = {
-  valueList: [],
-  min: 0,
-  max: 100,
-  height: 3,
-  borderRadius: 2,
-  thumbBorderRadius: 'full',
-  trackColor: 'var(--v-color-surface)',
-  fillColor: 'var(--v-color-primary)',
-  barStyle: ProgressBarStyle.Flat,
-  thumbSize: 6,
-  isRange: false,
-  isTouchMode: false,
-  touchAreaSize: 12,
-  isDisabled: false,
-  minSpan: 0,
-};
-
 @Component({
   selector: 'v-slider',
   templateUrl: './v-slider.html',
   styleUrl: './v-slider.css',
   host: {
-    '[class.touch-mode]': 'isTouchMode$$()',
+    '[class.touch-mode]': 'isTouchMode()',
     '[class.dragging]': 'isDragging$$()',
-    '[class.disabled]': 'isDisabled$$()',
+    '[class.disabled]': 'isDisabled()',
     '[style.--v-slider-height]': 'heightString$$()',
     '[style.--v-slider-border-radius]': 'borderRadiusString$$()',
-    '[style.--v-slider-track-color]': 'trackColor$$()',
-    '[style.--v-slider-fill-color]': 'fillColor$$()',
+    '[style.--v-slider-track-color]': 'trackColor()',
+    '[style.--v-slider-fill-color]': 'fillColor()',
     '[style.--v-slider-thumb-size]': 'thumbSizeString$$()',
     '[style.--v-slider-thumb-border-radius]': 'thumbBorderRadiusString$$()',
     '[style.--v-slider-touch-size]': 'touchAreaSizeString$$()',
@@ -84,7 +48,21 @@ const DEFAULT_V_SLIDER_CONFIG: Required<VSliderConfig> = {
   },
 })
 export class VSlider {
-  public readonly config = input<VSliderConfig>({});
+  public readonly valueList = input<number[]>([]);
+  public readonly isDisabled = input<boolean>(false);
+  public readonly isRange = input<boolean>(false);
+  public readonly isTouchMode = input<boolean>(false);
+  public readonly min = input<number>(0);
+  public readonly max = input<number>(100);
+  public readonly height = input<CssUnitValue>(3);
+  public readonly borderRadius = input<CssUnitValue>(2);
+  public readonly thumbBorderRadius = input<CssUnitValue | 'full'>('full');
+  public readonly thumbSize = input<CssUnitValue>(6);
+  public readonly touchAreaSize = input<CssUnitValue>(12);
+  public readonly minSpan = input<number>(0);
+  public readonly trackColor = input<string>('var(--v-color-surface)');
+  public readonly fillColor = input<string>('var(--v-color-primary)');
+  public readonly barStyle = input<ProgressBarStyle>(ProgressBarStyle.Flat);
 
   public readonly value = model<number>(0);
   public readonly range = model<VSliderRangeValue>([0, 100]);
@@ -94,17 +72,10 @@ export class VSlider {
   protected readonly thumbStartElem = viewChild.required<ElementRef<HTMLDivElement>>('thumbStart');
   protected readonly thumbEndElem = viewChild<ElementRef<HTMLDivElement>>('thumbEnd');
 
-  protected readonly settings$$ = computed(() => ({
-    ...DEFAULT_V_SLIDER_CONFIG,
-    ...this.config(),
-  }));
+  protected readonly touchAreaSizeString$$ = computed(() => `var(--unit-${this.touchAreaSize()})`);
 
-  protected readonly isTouchMode$$ = computed(() => this.settings$$().isTouchMode);
-  protected readonly isDisabled$$ = computed(() => this.settings$$().isDisabled);
-  protected readonly touchAreaSizeString$$ = computed(() => `var(--unit-${this.settings$$().touchAreaSize})`);
-
-  protected readonly valueList$$ = computed(() => {
-    const list = this.settings$$().valueList;
+  protected readonly valueListSorted$$ = computed(() => {
+    const list = this.valueList();
     if (!Array.isArray(list)) return [];
     const filtered = list.filter((value) => Number.isFinite(value));
     if (filtered.length <= 1) return [];
@@ -112,48 +83,43 @@ export class VSlider {
   });
 
   protected readonly min$$ = computed(() => {
-    const list = this.valueList$$();
+    const list = this.valueListSorted$$();
     if (list.length > 0) return list[0];
-    return Math.min(this.settings$$().min, this.settings$$().max);
+    return Math.min(this.min(), this.max());
   });
 
   protected readonly max$$ = computed(() => {
-    const list = this.valueList$$();
+    const list = this.valueListSorted$$();
     if (list.length > 0) return list[list.length - 1];
-    return Math.max(this.settings$$().min, this.settings$$().max);
+    return Math.max(this.min(), this.max());
   });
 
-  protected readonly isRange$$ = computed(() => this.settings$$().isRange);
-  private readonly minSpan$$ = computed(() => this.settings$$().minSpan);
-
-  protected readonly heightString$$ = computed(() => `var(--unit-${this.settings$$().height})`);
-  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.settings$$().borderRadius})`);
+  protected readonly heightString$$ = computed(() => `var(--unit-${this.height()})`);
+  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
 
   protected readonly thumbBorderRadiusString$$ = computed(() => {
-    const radius = this.settings$$().thumbBorderRadius;
+    const radius = this.thumbBorderRadius();
     if (radius === 'full') return '50%';
     return `var(--unit-${radius})`;
   });
 
   protected readonly fillRadiusString$$ = computed(() => {
-    if (!this.isRange$$()) return '0px';
-    return `var(--unit-${this.settings$$().borderRadius})`;
+    if (!this.isRange()) return '0px';
+    return `var(--unit-${this.borderRadius()})`;
   });
 
-  protected readonly trackColor$$ = computed(() => this.settings$$().trackColor);
-  protected readonly fillColor$$ = computed(() => this.settings$$().fillColor);
-  protected readonly thumbSizeString$$ = computed(() => `var(--unit-${this.settings$$().thumbSize})`);
+  protected readonly thumbSizeString$$ = computed(() => `var(--unit-${this.thumbSize()})`);
 
   protected readonly trackMarginString$$ = computed(() => {
-    const trackHeightPx = this.unitToPx(this.settings$$().height);
-    const thumbSizePx = this.unitToPx(this.settings$$().thumbSize);
+    const trackHeightPx = this.unitToPx(this.height());
+    const thumbSizePx = this.unitToPx(this.thumbSize());
     const thumbOuterPx = thumbSizePx + 4;
     const marginPx = Math.max(0, (thumbOuterPx - trackHeightPx) / 2);
     return `${marginPx}px`;
   });
 
   protected readonly barStyle$$ = computed(() => {
-    const style = this.settings$$().barStyle;
+    const style = this.barStyle();
     switch (style) {
       case ProgressBarStyle.Flat:
         return 'flat';
@@ -179,24 +145,24 @@ export class VSlider {
   });
 
   protected readonly thumbStartPosition$$ = computed(() => {
-    const isRange = this.isRange$$();
+    const isRange = this.isRange();
     const value = isRange ? this.displayRange$$()[0] : this.displayValue$$();
     return isRange ? this.valueToPercentForRangeStart(value) : this.valueToPercentSingle(value);
   });
 
   protected readonly thumbEndPosition$$ = computed(() => {
-    const isRange = this.isRange$$();
+    const isRange = this.isRange();
     const value = isRange ? this.displayRange$$()[1] : this.displayValue$$();
     return isRange ? this.valueToPercentForRangeEnd(value) : this.valueToPercentSingle(value);
   });
 
   protected readonly fillStart$$ = computed(() => {
-    if (!this.isRange$$()) return '0%';
+    if (!this.isRange()) return '0%';
     return this.valueToPercentForRangeEdge(this.displayRange$$()[0]);
   });
 
   protected readonly fillEnd$$ = computed(() => {
-    if (this.isRange$$()) return this.valueToPercentForRangeEdge(this.displayRange$$()[1]);
+    if (this.isRange()) return this.valueToPercentForRangeEdge(this.displayRange$$()[1]);
     return this.valueToPercentSingle(this.displayValue$$());
   });
 
@@ -209,11 +175,11 @@ export class VSlider {
   private readonly isBrowser$$ = signal(false);
 
   private readonly normalizeEffect = effect(() => {
-    if (this.isRange$$()) {
+    if (this.isRange()) {
       const current = this.range();
       const clampedStart = this.normalizeValue(current[0]);
       const clampedEnd = this.normalizeValue(current[1]);
-      const minSpan = this.minSpan$$();
+      const minSpan = this.minSpan();
       let nextStart = Math.min(clampedStart, clampedEnd);
       let nextEnd = Math.max(clampedStart, clampedEnd);
 
@@ -246,11 +212,11 @@ export class VSlider {
   }
 
   protected onTrackPointerDown(event: PointerEvent): void {
-    if (this.isDisabled$$()) return;
+    if (this.isDisabled()) return;
     if (event.button !== 0) return;
 
     event.preventDefault();
-    if (this.isRange$$()) {
+    if (this.isRange()) {
       const value = this.positionToValueForRangeEdge(event);
       const thumb = this.getClosestThumb(value);
       this.startDrag(event, thumb === 'start' ? 'range-start' : 'range-end');
@@ -261,13 +227,13 @@ export class VSlider {
   }
 
   protected onFillPointerDown(event: PointerEvent): void {
-    if (this.isDisabled$$()) return;
+    if (this.isDisabled()) return;
     if (event.button !== 0) return;
 
     event.preventDefault();
     event.stopPropagation();
 
-    if (this.isRange$$()) {
+    if (this.isRange()) {
       this.startDrag(event, 'range-shift');
       return;
     }
@@ -276,16 +242,16 @@ export class VSlider {
   }
 
   protected onThumbPointerDown(event: PointerEvent, thumb: ActiveThumb): void {
-    if (this.isDisabled$$()) return;
+    if (this.isDisabled()) return;
     if (event.button !== 0) return;
 
     event.preventDefault();
     event.stopPropagation();
-    if (this.isTouchMode$$() && event.pointerType === 'touch') {
+    if (this.isTouchMode() && event.pointerType === 'touch') {
       this.touchActive$$.set(true);
       this.activeTouchThumb$$.set(thumb);
     }
-    if (this.isRange$$()) {
+    if (this.isRange()) {
       this.startDrag(event, thumb === 'start' ? 'range-start' : 'range-end');
       return;
     }
@@ -313,7 +279,7 @@ export class VSlider {
     const [start, end] = dragState.startRange;
 
     if (dragState.mode === 'range-start') {
-      const minSpan = this.minSpan$$();
+      const minSpan = this.minSpan();
       const cap = minSpan > 0 ? this.normalizeValue(end - minSpan) : end;
       const nextStart = Math.min(this.normalizeValue(start + deltaValue), cap);
       this.range.set([nextStart, end]);
@@ -321,7 +287,7 @@ export class VSlider {
     }
 
     if (dragState.mode === 'range-end') {
-      const minSpan = this.minSpan$$();
+      const minSpan = this.minSpan();
       const floor = minSpan > 0 ? this.normalizeValue(start + minSpan) : start;
       const nextEnd = Math.max(this.normalizeValue(end + deltaValue), floor);
       this.range.set([start, nextEnd]);
@@ -367,14 +333,14 @@ export class VSlider {
   }
 
   protected onThumbKeydown(event: KeyboardEvent, thumb: ActiveThumb): void {
-    if (this.isDisabled$$()) return;
+    if (this.isDisabled()) return;
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
 
     event.preventDefault();
 
     const dir = event.key === 'ArrowRight' ? 1 : -1;
 
-    if (!this.isRange$$()) {
+    if (!this.isRange()) {
       this.value.set(this.stepValue(this.displayValue$$(), dir));
       return;
     }
@@ -490,7 +456,7 @@ export class VSlider {
   }
 
   private snapToList(value: number): number {
-    const list = this.valueList$$();
+    const list = this.valueListSorted$$();
     if (list.length === 0) return value;
     if (value <= list[0]) return list[0];
     if (value >= list[list.length - 1]) return list[list.length - 1];
@@ -561,7 +527,7 @@ export class VSlider {
   }
 
   private getThumbSizePx(): number {
-    return this.unitToPx(this.settings$$().thumbSize);
+    return this.unitToPx(this.thumbSize());
   }
 
   private unitToPx(value: CssUnitValue): number {
@@ -573,7 +539,7 @@ export class VSlider {
   }
 
   private stepValue(current: number, dir: 1 | -1): number {
-    const list = this.valueList$$();
+    const list = this.valueListSorted$$();
     if (list.length > 0) {
       const idx = list.indexOf(current);
       return list[Math.max(0, Math.min(list.length - 1, idx + dir))];

@@ -129,3 +129,21 @@ For **Tailwind v3** — `.scss` is fine:
 ```
 
 To check which version is installed: `tailwindcss` entry in `package.json`. `^4.x` → v4. `^3.x` → v3.
+
+## Property Ordering Convention
+
+Every component exposes each setting as its own `input()` — never a single bag object. Within a component's Inputs section, properties are ordered by group, in this order:
+
+1. **Identity/kind** — `type`, `mode`, `name`
+2. **Content** — `label`, `labelRight`, `placeholder`, `text`, `message`, `items`, `presets`, `valueList`, `value` (for read-only value inputs, not `model()`)
+3. **State flags** — `isDisabled`, `isReadonly`, `isRequired`, `isClickable`, `isSelected`, `isMultiple`, `isOpen`, `isTextarea`, `isRange`, `isTouchMode`, `fill`, `noWrap`
+4. **Validation** — `errorMessage`, `pattern`
+5. **Layout/sizing** — `width`, `height`, `size`, `min`, `max`, `borderRadius`, `padding`, `paddingX`, `paddingY`, `gap`
+6. **Visual/style** — `color`, `bgOpacity`, `textAlign`, `fontSize`, `fontWeight`, `trackColor`, `fillColor`, `barColor`, `thumbSize`, `thumbBorderRadius`
+7. **Feature-specific trailing block** — a self-contained bundle of related properties for one feature, always at the very end, starting with its own enabling flag (example: all `autoSubmit*` properties on `v-input`)
+
+Meta-rule on top of the groups: `input.required<T>()` properties always come before optional ones, regardless of group. Within the required and optional blocks, order follows the groups above.
+
+Normalization: when a component exposes a `padding` shorthand alongside `paddingX`/`paddingY`, the order is always `padding` → `paddingX` → `paddingY`.
+
+A component that wraps another ui-kit component (e.g. `v-dropdown` wrapping `v-input`, `v-toggle` wrapping `v-button`/`v-card`) exposes only the specific properties it actually needs to pass through as its own flat inputs — never a nested config object of the wrapped component's type.

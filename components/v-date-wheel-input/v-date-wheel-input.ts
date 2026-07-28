@@ -40,8 +40,8 @@ function partsToIso(values: Record<string, string>): string {
   imports: [FormsModule, VWheelInput],
 })
 export class VDateWheelInput implements ControlValueAccessor {
-  public readonly yearRange = input<number>(100);
   public readonly isDisabled = input<boolean>(false);
+  public readonly yearRange = input<number>(100);
 
   protected readonly dateISO$$ = signal('');
   protected readonly segmentValues$$ = computed(() => isoToParts(this.dateISO$$()));

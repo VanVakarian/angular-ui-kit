@@ -1,12 +1,15 @@
 <v-card class="v-toggle-card"
-        [class.v-toggle-fit]="settings$$().fitContent"
-        [config]="cardConfig$$()">
+        [class.v-toggle-fit]="fitContent()"
+        [borderRadius]="borderRadius()"
+        [padding]="padding()">
   <div class="toggle-group"
        role="group"
-       [attr.aria-disabled]="settings$$().isDisabled ? 'true' : 'false'">
+       [attr.aria-disabled]="isDisabled() ? 'true' : 'false'">
     @for (item of items(); track item.id) {
       <v-button [class]="'toggle-button ' + getButtonClass(item)"
-                [config]="getItemButtonConfig(item)"
+                [width]="fitContent() ? undefined : '100%'"
+                [padding]="1"
+                [isDisabled]="isItemDisabled(item)"
                 [attr.aria-pressed]="isItemActive(item) ? 'true' : 'false'"
                 [attr.aria-disabled]="isItemDisabled(item) ? 'true' : 'false'"
                 (click)="onToggleClick(item)">

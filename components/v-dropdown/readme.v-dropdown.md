@@ -24,14 +24,16 @@ interface DropdownItem {
 ## Properties
 
 ```ts
+mode: 'search' | 'select' = 'search'
 label: string = ''
+labelRight: string = ''
 placeholder: string = ''
 items: DropdownItem[] = []
 isDisabled: boolean = false
+isRequired: boolean = false
 errorMessage: string = ''
 minDropdownWidth: string = ''
 expandDirection: 'left' | 'right' = 'left'
-mode: 'search' | 'select' = 'search'
 ```
 
 ## Events

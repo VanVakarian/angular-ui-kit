@@ -1,30 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { CssUnitValue } from '@ui-kit/types';
 
-export interface VProgressConfig {
-  value?: number;
-  min?: number;
-  max?: number;
-  height?: CssUnitValue;
-  borderRadius?: CssUnitValue;
-  barColor?: string;
-  barGap?: number;
-  isShowValues?: boolean;
-  valueSuffix?: string;
-}
-
-const DEFAULT_V_PROGRESS_CONFIG: Required<VProgressConfig> = {
-  value: 0,
-  min: 0,
-  max: 100,
-  height: 3,
-  borderRadius: 2,
-  barColor: 'var(--v-color-primary)',
-  barGap: 1,
-  isShowValues: false,
-  valueSuffix: '',
-};
-
 @Component({
   selector: 'v-progress',
   templateUrl: './v-progress.html',
@@ -33,58 +9,56 @@ const DEFAULT_V_PROGRESS_CONFIG: Required<VProgressConfig> = {
     '[style.--v-progress-height]': 'heightString$$()',
     '[style.--v-progress-border-radius]': 'borderRadiusString$$()',
     '[style.--v-progress-percentage]': 'percentage$$()',
-    '[style.--v-progress-bar-color]': 'barColor$$()',
-    '[style.--v-progress-bar-gap]': 'barGap$$()',
-    '[style.--v-progress-value]': 'settings$$().value',
+    '[style.--v-progress-bar-color]': 'barColor()',
+    '[style.--v-progress-bar-gap]': 'barGapString$$()',
+    '[style.--v-progress-value]': 'value()',
   },
 })
 export class VProgress {
-  public readonly config = input<VProgressConfig>({});
+  public readonly value = input<number>(0);
+  public readonly isShowValues = input<boolean>(false);
+  public readonly min = input<number>(0);
+  public readonly max = input<number>(100);
+  public readonly height = input<CssUnitValue>(3);
+  public readonly borderRadius = input<CssUnitValue>(2);
+  public readonly barGap = input<number>(1);
+  public readonly barColor = input<string>('var(--v-color-primary)');
+  public readonly valueSuffix = input<string>('');
 
-  protected readonly settings$$ = computed(() => ({
-    ...DEFAULT_V_PROGRESS_CONFIG,
-    ...this.config(),
-  }));
+  protected readonly heightString$$ = computed(() => `var(--unit-${this.height()})`);
+  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
+  protected readonly barGapString$$ = computed(() => `${this.barGap()}px`);
 
-  protected readonly heightString$$ = computed(() => `var(--unit-${this.settings$$().height})`);
-  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.settings$$().borderRadius})`);
-  protected readonly barColor$$ = computed(() => this.settings$$().barColor);
-  protected readonly barGap$$ = computed(() => `${this.settings$$().barGap}px`);
+  protected readonly scaleMin$$ = computed(() => Math.min(this.min(), this.value()));
 
-  protected readonly isShowValues$$ = computed(() => this.settings$$().isShowValues);
-
-  protected readonly scaleMin$$ = computed(() => {
-    const { min, value } = this.settings$$();
-    return Math.min(min, value);
-  });
-
-  protected readonly scaleMax$$ = computed(() => {
-    const { max, value } = this.settings$$();
-    return Math.max(max, value);
-  });
+  protected readonly scaleMax$$ = computed(() => Math.max(this.max(), this.value()));
 
   protected readonly scaleRange$$ = computed(() => this.scaleMax$$() - this.scaleMin$$());
 
   protected readonly leftLabel$$ = computed(() => {
-    const { value, min } = this.settings$$();
+    const value = this.value();
+    const min = this.min();
     return value < min ? value : min;
   });
 
   protected readonly leftLabelText$$ = computed(() => this.formatValue(this.leftLabel$$()));
 
-  protected readonly leftLabelIsPrimary$$ = computed(() => this.leftLabel$$() === this.settings$$().min);
+  protected readonly leftLabelIsPrimary$$ = computed(() => this.leftLabel$$() === this.min());
 
   protected readonly rightLabel$$ = computed(() => {
-    const { value, max } = this.settings$$();
+    const value = this.value();
+    const max = this.max();
     return value > max ? value : max;
   });
 
   protected readonly rightLabelText$$ = computed(() => this.formatValue(this.rightLabel$$()));
 
-  protected readonly rightLabelIsPrimary$$ = computed(() => this.rightLabel$$() === this.settings$$().max);
+  protected readonly rightLabelIsPrimary$$ = computed(() => this.rightLabel$$() === this.max());
 
   protected readonly middleLabel$$ = computed(() => {
-    const { value, min, max } = this.settings$$();
+    const value = this.value();
+    const min = this.min();
+    const max = this.max();
     if (value < min) return min;
     if (value > max) return max;
     return null;
@@ -95,20 +69,20 @@ export class VProgress {
     return middle !== null ? this.formatValue(middle) : null;
   });
 
-  protected readonly currentValueText$$ = computed(() => this.formatValue(this.settings$$().value));
+  protected readonly currentValueText$$ = computed(() => this.formatValue(this.value()));
 
   protected readonly shouldShowCurrentValue$$ = computed(() => {
-    const value = this.settings$$().value;
+    const value = this.value();
     return value !== this.leftLabel$$() && value !== this.rightLabel$$();
   });
 
   protected readonly percentage$$ = computed(() => {
-    const percentage = this.calculatePercentage(this.settings$$().value);
+    const percentage = this.calculatePercentage(this.value());
     return percentage < 3 && percentage > 0 ? '3%' : `${percentage}%`;
   });
 
   protected readonly valuePosition$$ = computed(() => {
-    return this.calculateClampedPosition(this.settings$$().value);
+    return this.calculateClampedPosition(this.value());
   });
 
   protected readonly middlePosition$$ = computed(() => {
@@ -117,7 +91,7 @@ export class VProgress {
   });
 
   private formatValue(value: number): string {
-    return `${value}${this.settings$$().valueSuffix}`;
+    return `${value}${this.valueSuffix()}`;
   }
 
   private calculatePercentage(value: number): number {
