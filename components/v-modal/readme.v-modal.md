@@ -14,16 +14,16 @@ Simple modal window with customizable width, padding, and close button.
 ## Properties
 
 ```ts
-deviceType: 'mobile' | 'desktop'   // picks mobileWidth/desktopWidth over width when set
+deviceType: ModalDeviceType   // picks mobileWidth/desktopWidth over width when set
 isOpen: boolean = false
 isCloseButtonVisible: boolean = false
 width: string = 'min(100vw, 400px)'
 mobileWidth: string
 desktopWidth: string
-borderRadius: CssUnitValue = 2
-padding: CssUnitValue              // shorthand, fills paddingX/paddingY unless set
-paddingX: CssUnitValue = 2
-paddingY: CssUnitValue = 2
+borderRadius: CssUnitOrRawValue = 2
+padding: CssUnitOrRawValue              // shorthand, fills paddingX/paddingY unless set
+paddingX: CssUnitOrRawValue = 2
+paddingY: CssUnitOrRawValue = 2
 ```
 
 ## Events
@@ -69,7 +69,7 @@ paddingY: CssUnitValue = 2
 
   <div v-footer class="form-actions">
     <v-button class="v-primary" (onClick)="saveForm()">Save</v-button>
-    <v-button class="v-flat" (onClick)="hideForm()">Cancel</v-button>
+    <v-button surface="flat" (onClick)="hideForm()">Cancel</v-button>
   </div>
 </v-modal>
 
@@ -82,7 +82,7 @@ paddingY: CssUnitValue = 2
   <p>Are you sure you want to delete this item?</p>
   <div v-footer>
     <v-button class="v-danger" (onClick)="confirmDelete()">Delete</v-button>
-    <v-button class="v-flat" (onClick)="cancelAction()">Cancel</v-button>
+    <v-button surface="flat" (onClick)="cancelAction()">Cancel</v-button>
   </div>
 </v-modal>
 
@@ -95,7 +95,7 @@ paddingY: CssUnitValue = 2
   <div v-header>Quick Info</div>
   <p>Compact modal with minimal spacing</p>
   <div v-footer>
-    <v-button class="v-flat" (onClick)="closeInfo()">OK</v-button>
+    <v-button surface="flat" (onClick)="closeInfo()">OK</v-button>
   </div>
 </v-modal>
 

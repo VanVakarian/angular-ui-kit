@@ -1,5 +1,5 @@
 import { Component, computed, input, model, output } from '@angular/core';
-import { CssUnitValue } from '@ui-kit/types';
+import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 
 const DEFAULT_PRESETS: string[] = [
   '#495057',
@@ -27,14 +27,14 @@ const DEFAULT_PRESETS: string[] = [
 })
 export class VColorPicker {
   public readonly presets = input<string[]>(DEFAULT_PRESETS);
-  public readonly swatchSize = input<CssUnitValue>(6);
-  public readonly gap = input<CssUnitValue>(2);
+  public readonly swatchSize = input<CssUnitOrRawValue>(6);
+  public readonly gap = input<CssUnitOrRawValue>(2);
 
   public readonly value = model<string | null>(null);
   public readonly onChanged = output<string | null>();
 
-  protected readonly swatchSizeString$$ = computed(() => `var(--unit-${this.swatchSize()})`);
-  protected readonly gapString$$ = computed(() => `var(--unit-${this.gap()})`);
+  protected readonly swatchSizeString$$ = computed(() => resolveCssUnitOrRawValue(this.swatchSize()));
+  protected readonly gapString$$ = computed(() => resolveCssUnitOrRawValue(this.gap()));
   protected readonly customColorValue$$ = computed(() => this.value() ?? '#000000');
 
   protected selectPreset(color: string): void {

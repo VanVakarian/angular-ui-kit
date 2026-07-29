@@ -1,5 +1,5 @@
 import { Component, computed, effect, input, output, signal } from '@angular/core';
-import { CssUnitValue } from '@ui-kit/types';
+import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 import { AccordionItemPosition } from './v-accordion';
 
 @Component({
@@ -21,8 +21,8 @@ import { AccordionItemPosition } from './v-accordion';
 export class VExpand {
   public readonly isExpanded = input<boolean>(false);
   public readonly isWithoutAnimation = input<boolean>(false);
-  public readonly padding = input<CssUnitValue>(2);
-  public readonly borderRadius = input<CssUnitValue>(2);
+  public readonly padding = input<CssUnitOrRawValue>(2);
+  public readonly borderRadius = input<CssUnitOrRawValue>(2);
   public readonly animationTimingFunction = input<'ease-in-out' | 'linear' | 'ease' | 'ease-in' | 'ease-out'>(
     'ease-in-out',
   );
@@ -46,9 +46,9 @@ export class VExpand {
     return this._isExpanded$$();
   });
 
-  public readonly paddingString$$ = computed(() => `var(--unit-${this.padding()})`);
+  public readonly paddingString$$ = computed(() => resolveCssUnitOrRawValue(this.padding()));
 
-  public readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
+  public readonly borderRadiusString$$ = computed(() => resolveCssUnitOrRawValue(this.borderRadius()));
 
   private readonly _isExpanded$$ = signal(false);
 

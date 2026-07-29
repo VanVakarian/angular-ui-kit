@@ -1,7 +1,17 @@
 import { Component, computed, ElementRef, inject, input, output, Renderer2 } from '@angular/core';
-import { CssUnitValue } from '@ui-kit/types';
+import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 
 type ButtonType = 'button' | 'submit' | 'reset';
+
+export const ButtonSurface = {
+  Default: 'default',
+  Flat: 'flat',
+  Raised: 'raised',
+  Link: 'link',
+  Hover: 'hover',
+} as const;
+
+export type ButtonSurface = (typeof ButtonSurface)[keyof typeof ButtonSurface];
 
 @Component({
   selector: 'v-button',
@@ -15,6 +25,11 @@ type ButtonType = 'button' | 'submit' | 'reset';
     '[style.--v-button-padding-x]': 'paddingXString$$()',
     '[style.--v-button-gap]': 'gapString$$()',
     '[style.--v-color-primary]': 'color() || null',
+    '[class.v-flat]': 'surface() === "flat"',
+    '[class.v-raised]': 'surface() === "raised"',
+    '[class.v-link]': 'surface() === "link"',
+    '[class.v-hover]': 'surface() === "hover"',
+    '[class.v-link-static]': 'isLinkStatic()',
     '[attr.text-align]': 'textAlign() || null',
     '[attr.aria-disabled]': 'isDisabled() ? "true" : "false"',
   },
@@ -24,12 +39,14 @@ export class VButton {
   public readonly isDisabled = input<boolean>(false);
   public readonly isLabelHidden = input<boolean>(false);
   public readonly width = input<string>();
-  public readonly borderRadius = input<CssUnitValue>(2);
-  public readonly padding = input<CssUnitValue>();
-  public readonly paddingX = input<CssUnitValue>();
-  public readonly paddingY = input<CssUnitValue>();
-  public readonly gap = input<CssUnitValue>(2);
-  public readonly bgOpacity = input<'0' | '1' | `0.${number}`>('1');
+  public readonly borderRadius = input<CssUnitOrRawValue>(2);
+  public readonly padding = input<CssUnitOrRawValue>();
+  public readonly paddingX = input<CssUnitOrRawValue>();
+  public readonly paddingY = input<CssUnitOrRawValue>();
+  public readonly gap = input<CssUnitOrRawValue>(2);
+  public readonly surface = input<ButtonSurface>(ButtonSurface.Default);
+  public readonly isLinkStatic = input<boolean>(false);
+  public readonly bgOpacity = input<number>(1);
   public readonly textAlign = input<'left' | 'center' | 'right'>();
   public readonly color = input<string>();
   public readonly tabindex = input<number | string | undefined>(undefined);
@@ -39,10 +56,10 @@ export class VButton {
   protected readonly paddingX$$ = computed(() => this.paddingX() ?? this.padding() ?? 2);
   protected readonly paddingY$$ = computed(() => this.paddingY() ?? this.padding() ?? 2);
 
-  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
-  protected readonly paddingYString$$ = computed(() => `var(--unit-${this.paddingY$$()})`);
-  protected readonly paddingXString$$ = computed(() => `var(--unit-${this.paddingX$$()})`);
-  protected readonly gapString$$ = computed(() => `var(--unit-${this.gap()})`);
+  protected readonly borderRadiusString$$ = computed(() => resolveCssUnitOrRawValue(this.borderRadius()));
+  protected readonly paddingYString$$ = computed(() => resolveCssUnitOrRawValue(this.paddingY$$()));
+  protected readonly paddingXString$$ = computed(() => resolveCssUnitOrRawValue(this.paddingX$$()));
+  protected readonly gapString$$ = computed(() => resolveCssUnitOrRawValue(this.gap()));
 
   private readonly elementRef = inject(ElementRef);
   private readonly renderer = inject(Renderer2);

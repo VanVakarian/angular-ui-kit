@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { getValidationErrorMessage } from '@ui-kit/components/v-input/validators';
-import { CssUnitOrRawValue, CssUnitValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
+import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 import { VInputAutoSubmitManager, VInputAutoSubmitResult, VInputAutoSubmitState } from './v-input-auto-submit';
 
 type InputValue = string | number | null;
@@ -66,7 +66,7 @@ export class VInput implements ControlValueAccessor, OnDestroy {
   public readonly pattern = input<string>('');
   public readonly errorMessage = input<string>('');
   public readonly inputSize = input<number | null>(null);
-  public readonly borderRadius = input<CssUnitValue>(2);
+  public readonly borderRadius = input<CssUnitOrRawValue>(2);
   public readonly paddingX = input<CssUnitOrRawValue>(0);
   public readonly paddingY = input<CssUnitOrRawValue>(2);
   public readonly rows = input<number>(3);
@@ -87,7 +87,7 @@ export class VInput implements ControlValueAccessor, OnDestroy {
   public readonly onEnterPressed = output<KeyboardEvent>();
   public readonly onAutoSubmit = output<InputValue>();
 
-  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
+  protected readonly borderRadiusString$$ = computed(() => resolveCssUnitOrRawValue(this.borderRadius()));
   protected readonly paddingXString$$ = computed(() => resolveCssUnitOrRawValue(this.paddingX()));
   protected readonly paddingYString$$ = computed(() => resolveCssUnitOrRawValue(this.paddingY()));
   protected readonly autoSubmitDelayString$$ = computed(() => `${this.autoSubmitDelay()}ms`);

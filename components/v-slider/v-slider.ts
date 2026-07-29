@@ -10,7 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { ProgressBarStyle } from '@ui-kit/components/types';
-import { CssUnitValue } from '@ui-kit/types';
+import { CssUnitOrRawValue, CssUnitValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 
 export type VSliderRangeValue = [number, number];
 
@@ -44,7 +44,7 @@ type DragState = {
     '[style.--v-slider-fill-radius]': 'fillRadiusString$$()',
     '[style.--v-slider-fill-start]': 'fillStart$$()',
     '[style.--v-slider-fill-end]': 'fillEnd$$()',
-    '[attr.bar-style]': 'barStyle$$()',
+    '[attr.bar-style]': 'barStyle()',
   },
 })
 export class VSlider {
@@ -55,10 +55,10 @@ export class VSlider {
   public readonly min = input<number>(0);
   public readonly max = input<number>(100);
   public readonly height = input<CssUnitValue>(3);
-  public readonly borderRadius = input<CssUnitValue>(2);
-  public readonly thumbBorderRadius = input<CssUnitValue | 'full'>('full');
+  public readonly borderRadius = input<CssUnitOrRawValue>(2);
+  public readonly thumbBorderRadius = input<CssUnitOrRawValue>('50%');
   public readonly thumbSize = input<CssUnitValue>(6);
-  public readonly touchAreaSize = input<CssUnitValue>(12);
+  public readonly touchAreaSize = input<CssUnitOrRawValue>(12);
   public readonly minSpan = input<number>(0);
   public readonly trackColor = input<string>('var(--v-color-surface)');
   public readonly fillColor = input<string>('var(--v-color-primary)');
@@ -72,7 +72,7 @@ export class VSlider {
   protected readonly thumbStartElem = viewChild.required<ElementRef<HTMLDivElement>>('thumbStart');
   protected readonly thumbEndElem = viewChild<ElementRef<HTMLDivElement>>('thumbEnd');
 
-  protected readonly touchAreaSizeString$$ = computed(() => `var(--unit-${this.touchAreaSize()})`);
+  protected readonly touchAreaSizeString$$ = computed(() => resolveCssUnitOrRawValue(this.touchAreaSize()));
 
   protected readonly valueListSorted$$ = computed(() => {
     const list = this.valueList();
@@ -95,17 +95,13 @@ export class VSlider {
   });
 
   protected readonly heightString$$ = computed(() => `var(--unit-${this.height()})`);
-  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
+  protected readonly borderRadiusString$$ = computed(() => resolveCssUnitOrRawValue(this.borderRadius()));
 
-  protected readonly thumbBorderRadiusString$$ = computed(() => {
-    const radius = this.thumbBorderRadius();
-    if (radius === 'full') return '50%';
-    return `var(--unit-${radius})`;
-  });
+  protected readonly thumbBorderRadiusString$$ = computed(() => resolveCssUnitOrRawValue(this.thumbBorderRadius()));
 
   protected readonly fillRadiusString$$ = computed(() => {
     if (!this.isRange()) return '0px';
-    return `var(--unit-${this.borderRadius()})`;
+    return resolveCssUnitOrRawValue(this.borderRadius());
   });
 
   protected readonly thumbSizeString$$ = computed(() => `var(--unit-${this.thumbSize()})`);
@@ -116,20 +112,6 @@ export class VSlider {
     const thumbOuterPx = thumbSizePx + 4;
     const marginPx = Math.max(0, (thumbOuterPx - trackHeightPx) / 2);
     return `${marginPx}px`;
-  });
-
-  protected readonly barStyle$$ = computed(() => {
-    const style = this.barStyle();
-    switch (style) {
-      case ProgressBarStyle.Flat:
-        return 'flat';
-      case ProgressBarStyle.Raised:
-        return 'raised';
-      case ProgressBarStyle.Inset:
-        return 'inset';
-      default:
-        return 'flat';
-    }
   });
 
   protected readonly displayValue$$ = computed(() => this.normalizeValue(this.value()));

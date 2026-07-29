@@ -1,5 +1,5 @@
 import { Component, computed, input, output } from '@angular/core';
-import { CssUnitValue } from '@ui-kit/types';
+import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 
 @Component({
   selector: 'v-card',
@@ -16,21 +16,21 @@ import { CssUnitValue } from '@ui-kit/types';
 })
 export class VCard {
   public readonly isSelected = input<boolean>(false);
-  public readonly borderRadius = input<CssUnitValue>(4);
-  public readonly padding = input<CssUnitValue>();
-  public readonly paddingX = input<CssUnitValue>();
-  public readonly paddingY = input<CssUnitValue>();
+  public readonly borderRadius = input<CssUnitOrRawValue>(4);
+  public readonly padding = input<CssUnitOrRawValue>();
+  public readonly paddingX = input<CssUnitOrRawValue>();
+  public readonly paddingY = input<CssUnitOrRawValue>();
   public readonly minHeight = input<string>('auto');
   public readonly backgroundImageUrl = input<string | null>(null);
   public readonly backgroundImageOpacity = input<number>(1);
 
   public readonly onCardclick = output<MouseEvent>();
 
-  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
+  protected readonly borderRadiusString$$ = computed(() => resolveCssUnitOrRawValue(this.borderRadius()));
   protected readonly paddingX$$ = computed(() => this.paddingX() ?? this.padding() ?? 2);
   protected readonly paddingY$$ = computed(() => this.paddingY() ?? this.padding() ?? 2);
-  protected readonly paddingXString$$ = computed(() => `var(--unit-${this.paddingX$$()})`);
-  protected readonly paddingYString$$ = computed(() => `var(--unit-${this.paddingY$$()})`);
+  protected readonly paddingXString$$ = computed(() => resolveCssUnitOrRawValue(this.paddingX$$()));
+  protected readonly paddingYString$$ = computed(() => resolveCssUnitOrRawValue(this.paddingY$$()));
 
   protected readonly cardBackgroundImage$$ = computed(() => {
     const url = this.backgroundImageUrl();

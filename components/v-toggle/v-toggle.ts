@@ -1,7 +1,7 @@
 import { Component, computed, input, model, output } from '@angular/core';
-import { VButton } from '@ui-kit/components/v-button/v-button';
+import { ButtonSurface, VButton } from '@ui-kit/components/v-button/v-button';
 import { VCard } from '@ui-kit/components/v-card/v-card';
-import { CssUnitValue } from '@ui-kit/types';
+import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 
 export interface VToggleItem {
   id: string;
@@ -24,16 +24,18 @@ export class VToggle {
   public readonly isMultiple = input<boolean>(false);
   public readonly isDisabled = input<boolean>(false);
   public readonly fitContent = input<boolean>(false);
-  public readonly borderRadius = input<CssUnitValue>(2);
-  public readonly padding = input<CssUnitValue>(1);
-  public readonly gap = input<CssUnitValue>(1);
-  public readonly activeClass = input<string>('v-primary');
-  public readonly inactiveClass = input<string>('v-flat');
+  public readonly borderRadius = input<CssUnitOrRawValue>(2);
+  public readonly padding = input<CssUnitOrRawValue>(1);
+  public readonly gap = input<CssUnitOrRawValue>(1);
+  public readonly activeSurface = input<ButtonSurface>(ButtonSurface.Default);
+  public readonly inactiveSurface = input<ButtonSurface>(ButtonSurface.Flat);
+  public readonly activeColorClass = input<string>('v-primary');
+  public readonly inactiveColorClass = input<string>('');
 
   public readonly value = model<string[]>([]);
   public readonly onChanged = output<string[]>();
 
-  protected readonly gapString$$ = computed(() => `var(--unit-${this.gap()})`);
+  protected readonly gapString$$ = computed(() => resolveCssUnitOrRawValue(this.gap()));
 
   protected onToggleClick(item: VToggleItem): void {
     if (this.isItemDisabled(item)) return;
@@ -60,7 +62,11 @@ export class VToggle {
     return this.isDisabled() || !!item.isDisabled;
   }
 
-  protected getButtonClass(item: VToggleItem): string {
-    return this.isItemActive(item) ? this.activeClass() : this.inactiveClass();
+  protected getButtonSurface(item: VToggleItem): ButtonSurface {
+    return this.isItemActive(item) ? this.activeSurface() : this.inactiveSurface();
+  }
+
+  protected getButtonColorClass(item: VToggleItem): string {
+    return this.isItemActive(item) ? this.activeColorClass() : this.inactiveColorClass();
   }
 }

@@ -94,8 +94,8 @@ Expandable/collapsible panel with flat design and accordion support. Works stand
 ```ts
 isExpanded: boolean = false
 isWithoutAnimation: boolean = false
-padding: CssUnitValue = 2
-borderRadius: CssUnitValue = 2
+padding: CssUnitOrRawValue = 2
+borderRadius: CssUnitOrRawValue = 2
 animationTimingFunction: 'ease-in-out' | 'linear' | 'ease' | 'ease-in' | 'ease-out' = 'ease-in-out'
 ```
 

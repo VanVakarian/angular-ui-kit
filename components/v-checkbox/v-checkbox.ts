@@ -1,10 +1,20 @@
 import { Component, computed, input, model, output } from '@angular/core';
 import { IconName, VIcon } from '@ui-kit/components/v-icon/v-icon';
-import { CssUnitValue } from '@ui-kit/types';
+import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 
-export type VCheckboxMode = 'checkbox' | 'switch';
+export const VCheckboxMode = {
+  Checkbox: 'checkbox',
+  Switch: 'switch',
+} as const;
 
-export type VCheckboxLabelPosition = 'left' | 'right';
+export type VCheckboxMode = (typeof VCheckboxMode)[keyof typeof VCheckboxMode];
+
+export const VCheckboxLabelPosition = {
+  Left: 'left',
+  Right: 'right',
+} as const;
+
+export type VCheckboxLabelPosition = (typeof VCheckboxLabelPosition)[keyof typeof VCheckboxLabelPosition];
 
 @Component({
   selector: 'v-checkbox',
@@ -27,33 +37,33 @@ export type VCheckboxLabelPosition = 'left' | 'right';
   },
 })
 export class VCheckbox {
-  public readonly mode = input<VCheckboxMode>('checkbox');
+  public readonly mode = input<VCheckboxMode>(VCheckboxMode.Checkbox);
   public readonly isDisabled = input<boolean>(false);
-  public readonly labelPosition = input<VCheckboxLabelPosition>('right');
-  public readonly size = input<CssUnitValue>(6);
-  public readonly borderRadius = input<CssUnitValue>(2);
-  public readonly gap = input<CssUnitValue>(2);
-  public readonly checkIconSize = input<CssUnitValue>(5);
-  public readonly switchWidth = input<CssUnitValue>(14);
-  public readonly switchHeight = input<CssUnitValue>(7);
-  public readonly switchPadding = input<CssUnitValue>(1);
-  public readonly thumbSize = input<CssUnitValue>(5);
+  public readonly labelPosition = input<VCheckboxLabelPosition>(VCheckboxLabelPosition.Right);
+  public readonly size = input<CssUnitOrRawValue>(6);
+  public readonly borderRadius = input<CssUnitOrRawValue>(2);
+  public readonly gap = input<CssUnitOrRawValue>(2);
+  public readonly checkIconSize = input<CssUnitOrRawValue>(5);
+  public readonly switchWidth = input<CssUnitOrRawValue>(14);
+  public readonly switchHeight = input<CssUnitOrRawValue>(7);
+  public readonly switchPadding = input<CssUnitOrRawValue>(1);
+  public readonly thumbSize = input<CssUnitOrRawValue>(5);
 
   public readonly value = model<boolean>(false);
   public readonly onChanged = output<boolean>();
 
   protected readonly Icon = IconName;
 
-  protected readonly isSwitch$$ = computed(() => this.mode() === 'switch');
+  protected readonly isSwitch$$ = computed(() => this.mode() === VCheckboxMode.Switch);
 
-  protected readonly sizeString$$ = computed(() => `var(--unit-${this.size()})`);
-  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
-  protected readonly gapString$$ = computed(() => `var(--unit-${this.gap()})`);
-  protected readonly checkIconSizeString$$ = computed(() => `var(--unit-${this.checkIconSize()})`);
-  protected readonly switchWidthString$$ = computed(() => `var(--unit-${this.switchWidth()})`);
-  protected readonly switchHeightString$$ = computed(() => `var(--unit-${this.switchHeight()})`);
-  protected readonly switchPaddingString$$ = computed(() => `var(--unit-${this.switchPadding()})`);
-  protected readonly thumbSizeString$$ = computed(() => `var(--unit-${this.thumbSize()})`);
+  protected readonly sizeString$$ = computed(() => resolveCssUnitOrRawValue(this.size()));
+  protected readonly borderRadiusString$$ = computed(() => resolveCssUnitOrRawValue(this.borderRadius()));
+  protected readonly gapString$$ = computed(() => resolveCssUnitOrRawValue(this.gap()));
+  protected readonly checkIconSizeString$$ = computed(() => resolveCssUnitOrRawValue(this.checkIconSize()));
+  protected readonly switchWidthString$$ = computed(() => resolveCssUnitOrRawValue(this.switchWidth()));
+  protected readonly switchHeightString$$ = computed(() => resolveCssUnitOrRawValue(this.switchHeight()));
+  protected readonly switchPaddingString$$ = computed(() => resolveCssUnitOrRawValue(this.switchPadding()));
+  protected readonly thumbSizeString$$ = computed(() => resolveCssUnitOrRawValue(this.thumbSize()));
 
   protected onInputChange(event: Event): void {
     const target = event.target as HTMLInputElement;

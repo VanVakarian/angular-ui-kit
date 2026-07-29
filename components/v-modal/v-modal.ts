@@ -2,9 +2,14 @@ import { Component, computed, effect, HostListener, inject, input, output } from
 import { VButton } from '@ui-kit/components/v-button/v-button';
 import { VBackdropDirective } from '@ui-kit/directives/backdrop.directive';
 import { LayerController, PARENT_LAYER_ID, ZLayerService } from '@ui-kit/services/z-layer.service';
-import { CssUnitValue } from '@ui-kit/types';
+import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 
-export type ModalDeviceType = 'mobile' | 'desktop';
+export const ModalDeviceType = {
+  Mobile: 'mobile',
+  Desktop: 'desktop',
+} as const;
+
+export type ModalDeviceType = (typeof ModalDeviceType)[keyof typeof ModalDeviceType];
 
 @Component({
   selector: 'v-modal',
@@ -33,10 +38,10 @@ export class VModal {
   public readonly width = input<string>('min(100vw, 400px)');
   public readonly mobileWidth = input<string>();
   public readonly desktopWidth = input<string>();
-  public readonly borderRadius = input<CssUnitValue>(2);
-  public readonly padding = input<CssUnitValue>();
-  public readonly paddingX = input<CssUnitValue>(2);
-  public readonly paddingY = input<CssUnitValue>(2);
+  public readonly borderRadius = input<CssUnitOrRawValue>(2);
+  public readonly padding = input<CssUnitOrRawValue>();
+  public readonly paddingX = input<CssUnitOrRawValue>(2);
+  public readonly paddingY = input<CssUnitOrRawValue>(2);
 
   public readonly onClose = output<void>();
   public readonly onOpen = output<void>();
@@ -45,9 +50,9 @@ export class VModal {
   protected readonly paddingX$$ = computed(() => this.paddingX() ?? this.padding() ?? 2);
   protected readonly paddingY$$ = computed(() => this.paddingY() ?? this.padding() ?? 2);
 
-  protected readonly paddingXString$$ = computed(() => `var(--unit-${this.paddingX$$()})`);
-  protected readonly paddingYString$$ = computed(() => `var(--unit-${this.paddingY$$()})`);
-  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
+  protected readonly paddingXString$$ = computed(() => resolveCssUnitOrRawValue(this.paddingX$$()));
+  protected readonly paddingYString$$ = computed(() => resolveCssUnitOrRawValue(this.paddingY$$()));
+  protected readonly borderRadiusString$$ = computed(() => resolveCssUnitOrRawValue(this.borderRadius()));
 
   protected zIndex = 100;
   private layerController?: LayerController;
@@ -88,10 +93,10 @@ export class VModal {
   private getFinalWidth(): string {
     const deviceType = this.deviceType();
 
-    if (deviceType === 'mobile' && this.mobileWidth()) {
+    if (deviceType === ModalDeviceType.Mobile && this.mobileWidth()) {
       return this.mobileWidth()!;
     }
-    if (deviceType === 'desktop' && this.desktopWidth()) {
+    if (deviceType === ModalDeviceType.Desktop && this.desktopWidth()) {
       return this.desktopWidth()!;
     }
     return this.width();

@@ -15,9 +15,9 @@ value: number = 0
 isShowValues: boolean = false
 min: number = 0
 max: number = 100
-height: CssUnitValue = 3
-borderRadius: CssUnitValue = 2
-barGap: number = 1
+height: CssUnitOrRawValue = 3
+borderRadius: CssUnitOrRawValue = 2
+barGap: CssUnitOrRawValue = '1px'
 barColor: string = 'var(--v-color-primary)'
 valueSuffix: string = ''
 ```

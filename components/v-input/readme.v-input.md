@@ -28,7 +28,7 @@ isTextarea: boolean = false
 pattern: string
 errorMessage: string
 inputSize: number | null
-borderRadius: CssUnitValue = 2
+borderRadius: CssUnitOrRawValue = 2
 paddingX: CssUnitOrRawValue = 0
 paddingY: CssUnitOrRawValue = 2
 rows: number = 3

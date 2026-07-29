@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { CssUnitValue } from '@ui-kit/types';
+import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 
 @Component({
   selector: 'v-progress',
@@ -19,15 +19,15 @@ export class VProgress {
   public readonly isShowValues = input<boolean>(false);
   public readonly min = input<number>(0);
   public readonly max = input<number>(100);
-  public readonly height = input<CssUnitValue>(3);
-  public readonly borderRadius = input<CssUnitValue>(2);
-  public readonly barGap = input<number>(1);
+  public readonly height = input<CssUnitOrRawValue>(3);
+  public readonly borderRadius = input<CssUnitOrRawValue>(2);
+  public readonly barGap = input<CssUnitOrRawValue>('1px');
   public readonly barColor = input<string>('var(--v-color-primary)');
   public readonly valueSuffix = input<string>('');
 
-  protected readonly heightString$$ = computed(() => `var(--unit-${this.height()})`);
-  protected readonly borderRadiusString$$ = computed(() => `var(--unit-${this.borderRadius()})`);
-  protected readonly barGapString$$ = computed(() => `${this.barGap()}px`);
+  protected readonly heightString$$ = computed(() => resolveCssUnitOrRawValue(this.height()));
+  protected readonly borderRadiusString$$ = computed(() => resolveCssUnitOrRawValue(this.borderRadius()));
+  protected readonly barGapString$$ = computed(() => resolveCssUnitOrRawValue(this.barGap()));
 
   protected readonly scaleMin$$ = computed(() => Math.min(this.min(), this.value()));
 

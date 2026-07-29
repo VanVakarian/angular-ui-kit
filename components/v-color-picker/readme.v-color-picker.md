@@ -15,8 +15,8 @@ Preset color swatches plus a native color input for picking an arbitrary color. 
 
 ```ts
 presets: string[]         // 12 curated preset colors by default
-swatchSize: CssUnitValue = 6
-gap: CssUnitValue = 2
+swatchSize: CssUnitOrRawValue = 6
+gap: CssUnitOrRawValue = 2
 ```
 
 ## Events

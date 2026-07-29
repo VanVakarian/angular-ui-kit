@@ -57,10 +57,10 @@ Flat design card component with configurable spacing and borders. Supports dark 
 
 ```ts
 isSelected: boolean = false
-borderRadius: CssUnitValue = 4     // 0-96
-padding: CssUnitValue              // shorthand, fills paddingX/paddingY unless set
-paddingX: CssUnitValue = 2
-paddingY: CssUnitValue = 2
+borderRadius: CssUnitOrRawValue = 4     // 0-96
+padding: CssUnitOrRawValue              // shorthand, fills paddingX/paddingY unless set
+paddingX: CssUnitOrRawValue
+paddingY: CssUnitOrRawValue
 minHeight: string = 'auto'
 backgroundImageUrl: string | null = null
 backgroundImageOpacity: number = 1

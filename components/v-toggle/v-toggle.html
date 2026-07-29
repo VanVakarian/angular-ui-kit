@@ -6,7 +6,9 @@
        role="group"
        [attr.aria-disabled]="isDisabled() ? 'true' : 'false'">
     @for (item of items(); track item.id) {
-      <v-button [class]="'toggle-button ' + getButtonClass(item)"
+      <v-button class="toggle-button"
+                [class]="getButtonColorClass(item)"
+                [surface]="getButtonSurface(item)"
                 [width]="fitContent() ? undefined : '100%'"
                 [padding]="1"
                 [isDisabled]="isItemDisabled(item)"

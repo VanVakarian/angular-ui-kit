@@ -18,10 +18,12 @@ import { IconName, VIcon } from '@ui-kit/components/v-icon/v-icon';
 import { VInput } from '@ui-kit/components/v-input/v-input';
 import { LayerController, PARENT_LAYER_ID, ZLayerService } from '@ui-kit/services/z-layer.service';
 
-export enum ddExpandDirection {
-  Left = 'left',
-  Right = 'right',
-}
+export const ddExpandDirection = {
+  Left: 'left',
+  Right: 'right',
+} as const;
+
+export type ddExpandDirection = (typeof ddExpandDirection)[keyof typeof ddExpandDirection];
 
 export interface DropdownItem {
   value: string;

@@ -1,15 +1,19 @@
-export enum VInputAutoSubmitResult {
-  Success,
-  Error,
-}
+export const VInputAutoSubmitResult = {
+  Success: 'success',
+  Error: 'error',
+} as const;
 
-export enum VInputAutoSubmitState {
-  Idle,
-  Countdown,
-  Submitting,
-  Success,
-  Error,
-}
+export type VInputAutoSubmitResult = (typeof VInputAutoSubmitResult)[keyof typeof VInputAutoSubmitResult];
+
+export const VInputAutoSubmitState = {
+  Idle: 'idle',
+  Countdown: 'countdown',
+  Submitting: 'submitting',
+  Success: 'success',
+  Error: 'error',
+} as const;
+
+export type VInputAutoSubmitState = (typeof VInputAutoSubmitState)[keyof typeof VInputAutoSubmitState];
 
 interface VInputAutoSubmitOptions {
   isEnabled: () => boolean;

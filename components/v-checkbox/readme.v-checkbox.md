@@ -26,17 +26,17 @@ Flat design checkbox with optional switch mode and smooth animations. Supports d
 ## Properties
 
 ```ts
-mode: 'checkbox' | 'switch' = 'checkbox'
+mode: VCheckboxMode = 'checkbox'
 isDisabled: boolean = false
-labelPosition: 'left' | 'right' = 'right'
-size: CssUnitValue = 6
-borderRadius: CssUnitValue = 2
-gap: CssUnitValue = 2
-checkIconSize: CssUnitValue = 5
-switchWidth: CssUnitValue = 14
-switchHeight: CssUnitValue = 7
-switchPadding: CssUnitValue = 1
-thumbSize: CssUnitValue = 5
+labelPosition: VCheckboxLabelPosition = 'right'
+size: CssUnitOrRawValue = 6
+borderRadius: CssUnitOrRawValue = 2
+gap: CssUnitOrRawValue = 2
+checkIconSize: CssUnitOrRawValue = 5
+switchWidth: CssUnitOrRawValue = 14
+switchHeight: CssUnitOrRawValue = 7
+switchPadding: CssUnitOrRawValue = 1
+thumbSize: CssUnitOrRawValue = 5
 ```
 
 ## Events

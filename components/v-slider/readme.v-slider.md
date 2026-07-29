@@ -32,15 +32,15 @@ isRange: boolean = false
 isTouchMode: boolean = false
 min: number = 0
 max: number = 100
-height: CssUnitValue = 3
-borderRadius: CssUnitValue = 2
-thumbBorderRadius: CssUnitValue | 'full' = 'full'
-thumbSize: CssUnitValue = 6
-touchAreaSize: CssUnitValue = 12
+height: CssUnitValue = 3          // participates in JS drag/position math — steps only, no raw CSS
+borderRadius: CssUnitOrRawValue = 2
+thumbBorderRadius: CssUnitOrRawValue = '50%'
+thumbSize: CssUnitValue = 6        // participates in JS drag/position math — steps only, no raw CSS
+touchAreaSize: CssUnitOrRawValue = 12
 minSpan: number = 0
 trackColor: string = 'var(--v-color-surface)'
 fillColor: string = 'var(--v-color-primary)'
-barStyle: ProgressBarStyle = ProgressBarStyle.Flat
+barStyle: ProgressBarStyle = 'flat'   // 'flat' | 'raised' | 'inset'
 ```
 
 ## Events

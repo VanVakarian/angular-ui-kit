@@ -36,11 +36,13 @@ items: VToggleItem[] = []
 isMultiple: boolean = false
 isDisabled: boolean = false
 fitContent: boolean = false
-borderRadius: CssUnitValue = 2
-padding: CssUnitValue = 1
-gap: CssUnitValue = 1
-activeClass: string = 'v-primary'
-inactiveClass: string = 'v-flat'
+borderRadius: CssUnitOrRawValue = 2
+padding: CssUnitOrRawValue = 1
+gap: CssUnitOrRawValue = 1
+activeSurface: ButtonSurface = 'default'
+inactiveSurface: ButtonSurface = 'flat'
+activeColorClass: string = 'v-primary'
+inactiveColorClass: string = ''
 ```
 
 ## Events

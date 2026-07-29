@@ -1,24 +1,22 @@
 # V-Button
 
-Flat design button with class-based styles and unified props API. Supports dark theme.
+Flat design button with a typed `surface` input plus color classes. Supports dark theme.
 
 ## Basic Usage
 
 ```html
 <v-button class="v-primary">Primary</v-button>
 <v-button class="v-danger">Danger</v-button>
-<v-button class="v-flat">Flat</v-button>
+<v-button surface="flat">Flat</v-button>
 ```
 
-## Style Classes
+## Two Independent Axes
 
-- `v-primary` — primary action with accent color
-- `v-danger` — destructive/alert action
-- `v-accent` — alternative accent
-- `v-flat` — flat look with borders
-- `v-raised` — elevated with shadows
-- `v-link` — link-style (transparent)
-- `v-hover` — hover-only styling
+Surface (shape/elevation) and color are independent — combine any surface with any color class.
+
+- `surface` (typed input, `ButtonSurface`) — `default` (no modifier), `flat`, `raised`, `link`, `hover`
+- `isLinkStatic` (boolean input) — with `surface="link"`, disables the underline/color-shift hover animation
+- Color classes (still plain CSS classes, untyped): `v-primary`, `v-danger`, `v-accent`, or no color class for neutral
 
 ## Properties
 
@@ -27,12 +25,14 @@ type: 'button' | 'submit' | 'reset' = 'button'
 isDisabled: boolean = false
 isLabelHidden: boolean = false
 width: string
-borderRadius: CssUnitValue = 2
-padding: CssUnitValue        // shorthand, fills paddingX/paddingY unless set
-paddingX: CssUnitValue = 2
-paddingY: CssUnitValue = 2
-gap: CssUnitValue = 2
-bgOpacity: '0' | '1' | `0.${number}` = '1'
+borderRadius: CssUnitOrRawValue = 2
+padding: CssUnitOrRawValue        // shorthand, fills paddingX/paddingY unless set
+paddingX: CssUnitOrRawValue
+paddingY: CssUnitOrRawValue
+gap: CssUnitOrRawValue = 2
+surface: ButtonSurface = 'default'
+isLinkStatic: boolean = false
+bgOpacity: number = 1              // 0..1
 textAlign: 'left' | 'center' | 'right'
 color: string
 tabindex: number | string
@@ -46,7 +46,7 @@ tabindex: number | string
 
 ```html
 <!-- Icon-only: hide label, compact padding -->
-<v-button class="v-flat"
+<v-button surface="flat"
           [isLabelHidden]="true"
           [paddingX]="2">
   <span v-prefix>⚙️</span>
@@ -63,8 +63,8 @@ tabindex: number | string
           width="100%">Continue</v-button>
 
 <!-- Transparent background -->
-<v-button class="v-flat"
-          bgOpacity="0"
+<v-button surface="flat"
+          [bgOpacity]="0"
           [paddingX]="0"
           [paddingY]="0">
   <span v-prefix>✕</span>
@@ -75,12 +75,20 @@ tabindex: number | string
           [isDisabled]="true">Disabled</v-button>
 
 <!-- Link-style -->
-<v-button class="v-link">Learn more</v-button>
+<v-button surface="link">Learn more</v-button>
+
+<!-- Link without hover animation (e.g. a static nav item) -->
+<v-button surface="link"
+          [isLinkStatic]="true">Learn more</v-button>
 
 <!-- With prefix/postfix -->
-<v-button class="v-raised">
+<v-button surface="raised">
   <span v-prefix>🔍</span>
   Search
   <span v-postfix>→</span>
 </v-button>
+
+<!-- Combining surface with color -->
+<v-button class="v-primary"
+          surface="raised">Save</v-button>
 ```

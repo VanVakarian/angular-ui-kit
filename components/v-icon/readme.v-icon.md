@@ -24,8 +24,8 @@ enum IconSize {
 
 ```ts
 // Inputs
-name: string         // Required, icon filename
-size: CssUnitValue | IconSize = IconSize.M
+name: IconName       // Required
+size: CssUnitOrRawValue | IconSize = IconSize.M
 color: string = 'var(--color-text-default)'
 ```
 
@@ -40,13 +40,13 @@ color: string = 'var(--color-text-default)'
 <v-icon name="star" color="var(--color-primary)" />
 
 <!-- In buttons -->
-<v-button raised>
+<v-button surface="raised">
   <v-icon v-prefix name="plus" [size]="IconSize.S" />
   Add
 </v-button>
 
 <!-- Icon-only button -->
-<v-button flat>
+<v-button surface="flat">
   <v-icon name="close" />
 </v-button>
 
