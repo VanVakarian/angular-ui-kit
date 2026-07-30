@@ -94,7 +94,7 @@ export class VSlider {
     return Math.max(this.min(), this.max());
   });
 
-  protected readonly heightString$$ = computed(() => `var(--unit-${this.height()})`);
+  protected readonly heightString$$ = computed(() => resolveCssUnitOrRawValue(this.height()));
   protected readonly borderRadiusString$$ = computed(() => resolveCssUnitOrRawValue(this.borderRadius()));
 
   protected readonly thumbBorderRadiusString$$ = computed(() => resolveCssUnitOrRawValue(this.thumbBorderRadius()));
@@ -104,7 +104,7 @@ export class VSlider {
     return resolveCssUnitOrRawValue(this.borderRadius());
   });
 
-  protected readonly thumbSizeString$$ = computed(() => `var(--unit-${this.thumbSize()})`);
+  protected readonly thumbSizeString$$ = computed(() => resolveCssUnitOrRawValue(this.thumbSize()));
 
   protected readonly trackMarginString$$ = computed(() => {
     const trackHeightPx = this.unitToPx(this.height());

@@ -40,8 +40,8 @@ export class VModal {
   public readonly desktopWidth = input<string>();
   public readonly borderRadius = input<CssUnitOrRawValue>(2);
   public readonly padding = input<CssUnitOrRawValue>();
-  public readonly paddingX = input<CssUnitOrRawValue>(2);
-  public readonly paddingY = input<CssUnitOrRawValue>(2);
+  public readonly paddingX = input<CssUnitOrRawValue>();
+  public readonly paddingY = input<CssUnitOrRawValue>();
 
   public readonly onClose = output<void>();
   public readonly onOpen = output<void>();
