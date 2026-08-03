@@ -1,5 +1,6 @@
 :host {
   display: inline-flex;
+  min-width: 0;
 }
 
 :host(.fill) {
@@ -10,6 +11,7 @@
 .trigger {
   display: inline-flex;
   align-items: center;
+  min-width: 0;
   cursor: help;
   outline: var(--v-outline-transparent);
   outline-offset: var(--v-outline-offset);
@@ -39,6 +41,7 @@
   font-weight: 400;
   line-height: 1.4;
   text-align: left;
+  white-space: pre-line;
   pointer-events: none;
   opacity: 0;
   transform: translateY(4px);

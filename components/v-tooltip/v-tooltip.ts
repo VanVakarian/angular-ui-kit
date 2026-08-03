@@ -2,7 +2,6 @@ import {
   Component,
   computed,
   ElementRef,
-  HostListener,
   Inject,
   inject,
   input,
@@ -45,7 +44,6 @@ export class VTooltip implements OnDestroy {
   protected readonly fixedLeft$$ = signal(0);
   protected readonly zIndex$$ = computed(() => this.layerController.zIndex);
 
-  private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly zLayerService = inject(ZLayerService);
   private readonly layerController: LayerController;
 
@@ -59,18 +57,6 @@ export class VTooltip implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.layerController.destroy();
-  }
-
-  @HostListener('document:click', ['$event'])
-  protected onDocumentClick(event: MouseEvent): void {
-    if (!this.isOpen$$()) return;
-    if (this.elementRef.nativeElement.contains(event.target as Node)) return;
-    this.close();
-  }
-
-  protected onTriggerClick(event: MouseEvent): void {
-    event.stopPropagation();
-    this.isOpen$$() ? this.close() : this.open();
   }
 
   protected open(): void {

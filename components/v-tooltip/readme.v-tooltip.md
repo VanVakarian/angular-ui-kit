@@ -13,12 +13,12 @@ Floating text hint shown on hover (desktop) or tap (touch). Positions itself abo
 ## Properties
 
 ```ts
-text: string       // required, the hint text
+text: string       // required, the hint text — `\n` renders as a line break
 maxWidth: string = '280px'
 ```
 
 ## Behavior
 
-- Desktop: hover/focus opens, mouse-leave/blur closes.
-- Touch: tap toggles open/closed; tapping anywhere else closes it.
-- Content projected into `<v-tooltip>` is the trigger element (usually an info icon).
+- Hover/focus opens, mouse-leave/blur closes. That's the only thing that opens or closes it.
+- Click is not intercepted — it passes through to whatever click handler sits on the trigger content or an ancestor (e.g. a clickable card the trigger lives inside).
+- Content projected into `<v-tooltip>` is the trigger element — an icon, a label, any inline content.
