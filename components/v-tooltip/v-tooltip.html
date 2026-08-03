@@ -15,7 +15,7 @@
        [class.visible]="isPositioned$$()"
        [style.top.px]="fixedTop$$()"
        [style.left.px]="fixedLeft$$()"
-       [style.max-width]="maxWidth()">
+       [style.max-width]="noWrap() ? 'none' : maxWidth()">
     {{ text() }}
   </div>
 }
