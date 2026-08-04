@@ -24,13 +24,12 @@ import { computeTooltipPosition } from './tooltip-position';
   },
 })
 export class VTooltip implements OnDestroy {
-  public readonly text = input.required<string>();
   // When true, the trigger stretches to fill its positioned parent instead
   // of sizing to its content — for wrapping an already-sized container
   // (e.g. a timeline segment too small to show its own label).
   public readonly fill = input(false);
-  // When true, the panel text is forced to a single line regardless of
-  // maxWidth instead of wrapping.
+  // When true, the panel is forced to a single line regardless of maxWidth
+  // instead of wrapping.
   public readonly noWrap = input(false);
   public readonly maxWidth = input<string>('280px');
 
@@ -46,6 +45,7 @@ export class VTooltip implements OnDestroy {
 
   private readonly zLayerService = inject(ZLayerService);
   private readonly layerController: LayerController;
+  private outsideTouchListener: ((event: TouchEvent) => void) | null = null;
 
   constructor(
     @Optional()
@@ -56,6 +56,7 @@ export class VTooltip implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.stopWatchingOutsideTouch();
     this.layerController.destroy();
   }
 
@@ -63,11 +64,35 @@ export class VTooltip implements OnDestroy {
     this.isOpen$$.set(true);
     this.isPositioned$$.set(false);
     setTimeout(() => this.updatePosition(), 0);
+    this.watchOutsideTouch();
   }
 
   protected close(): void {
     this.isOpen$$.set(false);
     this.isPositioned$$.set(false);
+    this.stopWatchingOutsideTouch();
+    // Closing via the outside-touch listener doesn't move DOM focus off the trigger. Left
+    // focused, a later tap on it won't re-fire `focus` (it's already focused), so open() would
+    // never run again. Blurring keeps DOM focus state and isOpen$$ in sync — a no-op when close()
+    // runs from an actual blur event, since the element is already unfocused by then.
+    this.triggerElem().nativeElement.blur();
+  }
+
+  // Closes the instant a new touch starts elsewhere, not on touchend/blur — otherwise, since the
+  // panel is position: fixed, dragging the page to scroll leaves it floating in place, detached
+  // from its trigger, until the drag ends.
+  private watchOutsideTouch(): void {
+    this.outsideTouchListener = (event: TouchEvent) => {
+      if (this.triggerElem().nativeElement.contains(event.target as Node)) return;
+      this.close();
+    };
+    document.addEventListener('touchstart', this.outsideTouchListener, { capture: true, passive: true });
+  }
+
+  private stopWatchingOutsideTouch(): void {
+    if (!this.outsideTouchListener) return;
+    document.removeEventListener('touchstart', this.outsideTouchListener, { capture: true });
+    this.outsideTouchListener = null;
   }
 
   private updatePosition(): void {

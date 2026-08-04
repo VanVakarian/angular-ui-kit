@@ -16,6 +16,6 @@
        [style.top.px]="fixedTop$$()"
        [style.left.px]="fixedLeft$$()"
        [style.max-width]="noWrap() ? 'none' : maxWidth()">
-    {{ text() }}
+    <ng-content select="[v-panel]" />
   </div>
 }
