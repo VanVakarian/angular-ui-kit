@@ -45,15 +45,12 @@ export class VAccordion implements OnInit, OnDestroy {
     }
   }
 
-  private readonly itemsChangeEffect$$ = effect(
-    () => {
-      const items = this.items();
-      if (items.length > 0) {
-        this.updatePositions();
-      }
-    },
-    { allowSignalWrites: true },
-  );
+  private readonly itemsChangeEffect$$ = effect(() => {
+    const items = this.items();
+    if (items.length > 0) {
+      this.updatePositions();
+    }
+  });
 
   private readonly groupStateChangeEffect$$ = effect(() => {
     const groupId = this.groupId();

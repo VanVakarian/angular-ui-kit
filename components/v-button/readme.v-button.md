@@ -14,7 +14,7 @@ Flat design button with a typed `surface` input plus color classes. Supports dar
 
 Surface (shape/elevation) and color are independent — combine any surface with any color class.
 
-- `surface` (typed input, `ButtonSurface`) — `default` (no modifier), `flat`, `raised`, `link`, `hover`
+- `surface` (typed input, `ButtonSurface`) — `default` (no modifier), `flat`, `raised`, `inset`, `link`, `hover`
 - `isLinkStatic` (boolean input) — with `surface="link"`, disables the underline/color-shift hover animation
 - Color classes (still plain CSS classes, untyped): `v-primary`, `v-danger`, `v-accent`, or no color class for neutral
 
@@ -91,4 +91,7 @@ tabindex: number | string
 <!-- Combining surface with color -->
 <v-button class="v-primary"
           surface="raised">Save</v-button>
+
+<!-- Pressed-in / neumorphic look -->
+<v-button surface="inset">Pressed</v-button>
 ```

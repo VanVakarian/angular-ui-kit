@@ -7,6 +7,7 @@ export const ButtonSurface = {
   Default: 'default',
   Flat: 'flat',
   Raised: 'raised',
+  Inset: 'inset',
   Link: 'link',
   Hover: 'hover',
 } as const;
@@ -27,6 +28,7 @@ export type ButtonSurface = (typeof ButtonSurface)[keyof typeof ButtonSurface];
     '[style.--v-color-primary]': 'color() || null',
     '[class.v-flat]': 'surface() === "flat"',
     '[class.v-raised]': 'surface() === "raised"',
+    '[class.v-inset]': 'surface() === "inset"',
     '[class.v-link]': 'surface() === "link"',
     '[class.v-hover]': 'surface() === "hover"',
     '[class.v-link-static]': 'isLinkStatic()',

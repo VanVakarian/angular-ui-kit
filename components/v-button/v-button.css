@@ -469,6 +469,102 @@ button > :not(.prefix):not(.postfix) {
   }
 }
 
+:host(.v-inset) {
+  button {
+    background: var(--v-color-bg);
+    box-shadow: var(--v-shadow-pressed);
+    outline: var(--v-outline);
+  }
+
+  @media (hover: hover) {
+    button:hover {
+      outline-color: var(--v-outline-hover);
+    }
+  }
+
+  button:active {
+    box-shadow: var(--v-shadow-pressed-active);
+  }
+
+  &.v-primary {
+    button {
+      color: var(--v-color-text-on-accent, white);
+      background: color-mix(in oklab, var(--v-color-primary) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
+      outline-color: transparent;
+    }
+
+    @media (hover: hover) {
+      button:hover {
+        background: color-mix(
+          in oklab,
+          var(--v-color-primary) var(--v-button-mix-hover),
+          black var(--v-button-mix-hover-contrast)
+        );
+      }
+    }
+
+    button:active {
+      background: color-mix(
+        in oklab,
+        var(--v-color-primary) var(--v-button-mix-active),
+        black var(--v-button-mix-active-contrast)
+      );
+    }
+  }
+
+  &.v-danger {
+    button {
+      color: var(--v-color-text-on-accent, white);
+      background: color-mix(in oklab, var(--v-color-danger) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
+      outline-color: transparent;
+    }
+
+    @media (hover: hover) {
+      button:hover {
+        background: color-mix(
+          in oklab,
+          var(--v-color-danger) var(--v-button-mix-hover),
+          black var(--v-button-mix-hover-contrast)
+        );
+      }
+    }
+
+    button:active {
+      background: color-mix(
+        in oklab,
+        var(--v-color-danger) var(--v-button-mix-active),
+        black var(--v-button-mix-active-contrast)
+      );
+    }
+  }
+
+  &.v-accent {
+    button {
+      color: var(--v-color-text-on-accent, white);
+      background: color-mix(in oklab, var(--v-color-accent) calc(var(--v-button-bg-opacity, 1) * 100%), transparent);
+      outline-color: transparent;
+    }
+
+    @media (hover: hover) {
+      button:hover {
+        background: color-mix(
+          in oklab,
+          var(--v-color-accent) var(--v-button-mix-hover),
+          black var(--v-button-mix-hover-contrast)
+        );
+      }
+    }
+
+    button:active {
+      background: color-mix(
+        in oklab,
+        var(--v-color-accent) var(--v-button-mix-active),
+        black var(--v-button-mix-active-contrast)
+      );
+    }
+  }
+}
+
 :host(.v-link) {
   button {
     background: transparent;
