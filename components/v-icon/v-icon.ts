@@ -27,6 +27,7 @@ export const IconName = {
   CurrencyBitcoin: 'currency_bitcoin',
   CurrencyExchange: 'currency_exchange',
   DarkMode: 'dark_mode',
+  DataThresholding: 'data_thresholding',
   Delete: 'delete',
   Dining: 'dining',
   Edit: 'edit',
