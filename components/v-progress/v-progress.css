@@ -12,6 +12,9 @@
   outline: var(--v-outline);
   outline-offset: var(--v-outline-offset);
   overflow: hidden;
+  transition:
+    background var(--v-theme-transition-duration, 0.2s) ease,
+    var(--v-outline-transition);
 }
 
 .progress-bar {
@@ -21,7 +24,9 @@
   height: calc(100% - var(--v-progress-bar-gap, 1px) * 2);
   width: calc(var(--v-progress-percentage, 0%) - var(--v-progress-bar-gap, 1px) * 2);
   background: var(--v-progress-bar-color, var(--v-color-primary));
-  transition: width var(--animation-duration-medium) ease;
+  transition:
+    width var(--animation-duration-medium) ease,
+    background var(--v-theme-transition-duration, 0s) ease;
   border-radius: calc(var(--v-progress-border-radius, var(--unit-2)) - var(--v-progress-bar-gap, 1px));
 }
 

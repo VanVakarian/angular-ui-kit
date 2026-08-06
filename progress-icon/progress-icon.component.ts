@@ -10,8 +10,8 @@ export class UiProgressIcon {
   public readonly diameter = input(40);
   public readonly strokeWidthCircle = input(4);
   public readonly strokeWidthPie = input(0);
-  public readonly color = input('#000000de');
-  public readonly backgroundColor = input('#e0e0e0');
+  public readonly color = input('var(--v-color-text)');
+  public readonly backgroundColor = input('var(--v-color-border-subtle)');
 
   protected readonly isCircle$$ = computed(() => {
     const element = this.elementRef.nativeElement;

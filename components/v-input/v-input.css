@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  --v-input-transition-duration: 0.2s;
+  --v-input-transition-duration: var(--v-theme-transition-duration, 0.2s);
 }
 
 .label {

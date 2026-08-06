@@ -22,7 +22,7 @@
 .clear-icon {
   padding-right: var(--unit-2);
   color: var(--v-color-text-muted);
-  transition: color var(--animation-duration-medium) ease;
+  transition: color var(--v-theme-transition-duration, var(--animation-duration-medium)) ease;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -64,7 +64,7 @@
 .dropdown-item {
   padding: var(--unit-2);
   cursor: pointer;
-  transition: background var(--animation-duration-medium) ease;
+  transition: background var(--v-theme-transition-duration, var(--animation-duration-medium)) ease;
   color: var(--v-color-text);
 
   &.selected {

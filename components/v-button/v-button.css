@@ -7,7 +7,7 @@
 :host {
   display: block;
   width: max-content;
-  --v-button-transition-duration: 0.2s;
+  --v-button-transition-duration: var(--v-theme-transition-duration, 0.2s);
   --v-button-ripple-mix-default: 7%;
   --v-button-ripple-mix-strong: 15%;
   --v-button-mix-hover: 88%;
@@ -117,7 +117,7 @@ button > :not(.prefix):not(.postfix) {
         background: color-mix(
           in oklab,
           var(--v-color-primary) var(--v-button-mix-hover),
-          black var(--v-button-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-hover-contrast)
         );
       }
     }
@@ -126,7 +126,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-primary) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
     }
   }
@@ -143,7 +143,7 @@ button > :not(.prefix):not(.postfix) {
         background: color-mix(
           in oklab,
           var(--v-color-danger) var(--v-button-mix-hover),
-          black var(--v-button-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-hover-contrast)
         );
       }
     }
@@ -152,7 +152,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-danger) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
     }
   }
@@ -169,7 +169,7 @@ button > :not(.prefix):not(.postfix) {
         background: color-mix(
           in oklab,
           var(--v-color-accent) var(--v-button-mix-hover),
-          black var(--v-button-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-hover-contrast)
         );
       }
     }
@@ -178,7 +178,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-accent) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
     }
   }
@@ -209,19 +209,9 @@ button > :not(.prefix):not(.postfix) {
         background: color-mix(
           in oklab,
           var(--v-color-primary) var(--v-button-mix-hover),
-          black var(--v-button-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-hover-contrast)
         );
         outline-color: transparent;
-      }
-
-      :host-context(.dark) & {
-        button:hover {
-          background: color-mix(
-            in oklab,
-            var(--v-color-primary) var(--v-button-mix-hover),
-            white var(--v-button-mix-hover-contrast)
-          );
-        }
       }
     }
 
@@ -229,7 +219,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-primary) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
     }
   }
@@ -246,19 +236,9 @@ button > :not(.prefix):not(.postfix) {
         background: color-mix(
           in oklab,
           var(--v-color-danger) var(--v-button-mix-hover),
-          black var(--v-button-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-hover-contrast)
         );
         outline-color: transparent;
-      }
-
-      :host-context(.dark) & {
-        button:hover {
-          background: color-mix(
-            in oklab,
-            var(--v-color-danger) var(--v-button-mix-hover),
-            white var(--v-button-mix-hover-contrast)
-          );
-        }
       }
     }
 
@@ -266,7 +246,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-danger) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
     }
   }
@@ -283,19 +263,9 @@ button > :not(.prefix):not(.postfix) {
         background: color-mix(
           in oklab,
           var(--v-color-accent) var(--v-button-mix-hover),
-          black var(--v-button-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-hover-contrast)
         );
         outline-color: transparent;
-      }
-
-      :host-context(.dark) & {
-        button:hover {
-          background: color-mix(
-            in oklab,
-            var(--v-color-accent) var(--v-button-mix-hover),
-            white var(--v-button-mix-hover-contrast)
-          );
-        }
       }
     }
 
@@ -303,7 +273,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-accent) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
     }
   }
@@ -337,18 +307,6 @@ button > :not(.prefix):not(.postfix) {
         outline-color: var(--v-outline-hover);
       }
     }
-
-    :host-context(.dark) &:not(.v-primary):not(.v-danger):not(.v-accent) {
-      button:hover {
-        outline-color: var(--v-outline-hover);
-      }
-    }
-  }
-
-  :host-context(.dark) &:not(.v-primary):not(.v-danger):not(.v-accent) {
-    button {
-      outline: var(--v-outline);
-    }
   }
 
   &.v-primary {
@@ -364,19 +322,9 @@ button > :not(.prefix):not(.postfix) {
         background: color-mix(
           in oklab,
           var(--v-color-primary) var(--v-button-mix-hover),
-          black var(--v-button-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-hover-contrast)
         );
         box-shadow: var(--v-button-shadow-role-hover);
-      }
-
-      :host-context(.dark) & {
-        button:hover {
-          background: color-mix(
-            in oklab,
-            var(--v-color-primary) var(--v-button-mix-hover),
-            white var(--v-button-mix-hover-contrast)
-          );
-        }
       }
     }
 
@@ -384,7 +332,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-primary) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
       box-shadow: var(--v-button-shadow-role);
     }
@@ -403,19 +351,9 @@ button > :not(.prefix):not(.postfix) {
         background: color-mix(
           in oklab,
           var(--v-color-danger) var(--v-button-mix-hover),
-          black var(--v-button-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-hover-contrast)
         );
         box-shadow: var(--v-button-shadow-role-hover);
-      }
-
-      :host-context(.dark) & {
-        button:hover {
-          background: color-mix(
-            in oklab,
-            var(--v-color-danger) var(--v-button-mix-hover),
-            white var(--v-button-mix-hover-contrast)
-          );
-        }
       }
     }
 
@@ -423,7 +361,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-danger) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
       box-shadow: var(--v-button-shadow-role);
     }
@@ -442,19 +380,9 @@ button > :not(.prefix):not(.postfix) {
         background: color-mix(
           in oklab,
           var(--v-color-accent) var(--v-button-mix-hover),
-          black var(--v-button-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-hover-contrast)
         );
         box-shadow: var(--v-button-shadow-role-hover);
-      }
-
-      :host-context(.dark) & {
-        button:hover {
-          background: color-mix(
-            in oklab,
-            var(--v-color-accent) var(--v-button-mix-hover),
-            white var(--v-button-mix-hover-contrast)
-          );
-        }
       }
     }
 
@@ -462,7 +390,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-accent) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
       box-shadow: var(--v-button-shadow-role);
     }
@@ -498,7 +426,7 @@ button > :not(.prefix):not(.postfix) {
         background: color-mix(
           in oklab,
           var(--v-color-primary) var(--v-button-mix-hover),
-          black var(--v-button-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-hover-contrast)
         );
       }
     }
@@ -507,7 +435,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-primary) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
     }
   }
@@ -524,7 +452,7 @@ button > :not(.prefix):not(.postfix) {
         background: color-mix(
           in oklab,
           var(--v-color-danger) var(--v-button-mix-hover),
-          black var(--v-button-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-hover-contrast)
         );
       }
     }
@@ -533,7 +461,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-danger) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
     }
   }
@@ -550,7 +478,7 @@ button > :not(.prefix):not(.postfix) {
         background: color-mix(
           in oklab,
           var(--v-color-accent) var(--v-button-mix-hover),
-          black var(--v-button-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-hover-contrast)
         );
       }
     }
@@ -559,7 +487,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-accent) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
     }
   }
@@ -576,7 +504,7 @@ button > :not(.prefix):not(.postfix) {
       color: color-mix(
         in oklab,
         var(--v-color-primary) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
     }
   }
@@ -609,18 +537,8 @@ button > :not(.prefix):not(.postfix) {
         color: color-mix(
           in oklab,
           var(--v-color-primary) var(--v-button-mix-link-hover),
-          black var(--v-button-mix-link-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-link-hover-contrast)
         );
-      }
-
-      :host-context(.dark) & {
-        button:hover {
-          color: color-mix(
-            in oklab,
-            var(--v-color-primary) var(--v-button-mix-link-hover),
-            white var(--v-button-mix-link-hover-contrast)
-          );
-        }
       }
     }
 
@@ -628,7 +546,7 @@ button > :not(.prefix):not(.postfix) {
       color: color-mix(
         in oklab,
         var(--v-color-primary) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
     }
   }
@@ -645,18 +563,8 @@ button > :not(.prefix):not(.postfix) {
         color: color-mix(
           in oklab,
           var(--v-color-danger) var(--v-button-mix-link-hover),
-          black var(--v-button-mix-link-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-link-hover-contrast)
         );
-      }
-
-      :host-context(.dark) & {
-        button:hover {
-          color: color-mix(
-            in oklab,
-            var(--v-color-danger) var(--v-button-mix-link-hover),
-            white var(--v-button-mix-link-hover-contrast)
-          );
-        }
       }
     }
 
@@ -664,7 +572,7 @@ button > :not(.prefix):not(.postfix) {
       color: color-mix(
         in oklab,
         var(--v-color-danger) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
     }
   }
@@ -681,18 +589,8 @@ button > :not(.prefix):not(.postfix) {
         color: color-mix(
           in oklab,
           var(--v-color-accent) var(--v-button-mix-link-hover),
-          black var(--v-button-mix-link-hover-contrast)
+          var(--v-color-contrast) var(--v-button-mix-link-hover-contrast)
         );
-      }
-
-      :host-context(.dark) & {
-        button:hover {
-          color: color-mix(
-            in oklab,
-            var(--v-color-accent) var(--v-button-mix-link-hover),
-            white var(--v-button-mix-link-hover-contrast)
-          );
-        }
       }
     }
 
@@ -700,7 +598,7 @@ button > :not(.prefix):not(.postfix) {
       color: color-mix(
         in oklab,
         var(--v-color-accent) var(--v-button-mix-active),
-        black var(--v-button-mix-active-contrast)
+        var(--v-color-contrast) var(--v-button-mix-active-contrast)
       );
     }
   }
@@ -726,7 +624,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-primary) var(--v-button-mix-hover-strong),
-        black var(--v-button-mix-hover-strong-contrast)
+        var(--v-color-contrast) var(--v-button-mix-hover-strong-contrast)
       );
     }
   }
@@ -750,7 +648,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-danger) var(--v-button-mix-hover-strong),
-        black var(--v-button-mix-hover-strong-contrast)
+        var(--v-color-contrast) var(--v-button-mix-hover-strong-contrast)
       );
     }
   }
@@ -774,7 +672,7 @@ button > :not(.prefix):not(.postfix) {
       background: color-mix(
         in oklab,
         var(--v-color-accent) var(--v-button-mix-hover-strong),
-        black var(--v-button-mix-hover-strong-contrast)
+        var(--v-color-contrast) var(--v-button-mix-hover-strong-contrast)
       );
     }
   }

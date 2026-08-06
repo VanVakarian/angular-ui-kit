@@ -1,7 +1,7 @@
 :host {
   display: inline-flex;
   align-items: center;
-  --v-checkbox-transition-duration: 0.2s;
+  --v-checkbox-transition-duration: var(--v-theme-transition-duration, 0.2s);
 }
 
 .checkbox {
@@ -72,13 +72,16 @@
 
   @media (hover: hover) {
     .control:hover {
-      background: color-mix(in oklab, var(--v-color-primary) var(--v-mix-hover), black var(--v-mix-hover-contrast));
-      outline-color: color-mix(in oklab, var(--v-color-primary) var(--v-mix-hover), black var(--v-mix-hover-contrast));
-    }
-
-    :host-context(.dark) & .control:hover {
-      background: color-mix(in oklab, var(--v-color-primary) var(--v-mix-hover), white var(--v-mix-hover-contrast));
-      outline-color: color-mix(in oklab, var(--v-color-primary) var(--v-mix-hover), white var(--v-mix-hover-contrast));
+      background: color-mix(
+        in oklab,
+        var(--v-color-primary) var(--v-mix-hover),
+        var(--v-color-contrast) var(--v-mix-hover-contrast)
+      );
+      outline-color: color-mix(
+        in oklab,
+        var(--v-color-primary) var(--v-mix-hover),
+        var(--v-color-contrast) var(--v-mix-hover-contrast)
+      );
     }
   }
 
@@ -148,20 +151,15 @@
 
     @media (hover: hover) {
       .control:hover {
-        background: color-mix(in oklab, var(--v-color-primary) var(--v-mix-hover), black var(--v-mix-hover-contrast));
-        outline-color: color-mix(
+        background: color-mix(
           in oklab,
           var(--v-color-primary) var(--v-mix-hover),
-          black var(--v-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-mix-hover-contrast)
         );
-      }
-
-      :host-context(.dark) & .control:hover {
-        background: color-mix(in oklab, var(--v-color-primary) var(--v-mix-hover), white var(--v-mix-hover-contrast));
         outline-color: color-mix(
           in oklab,
           var(--v-color-primary) var(--v-mix-hover),
-          white var(--v-mix-hover-contrast)
+          var(--v-color-contrast) var(--v-mix-hover-contrast)
         );
       }
     }

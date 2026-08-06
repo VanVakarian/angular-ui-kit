@@ -1,6 +1,9 @@
 [v-theme='flat-blue'] {
   background-color: var(--v-color-bg);
   color: var(--v-color-text);
+  transition:
+    background-color var(--v-theme-transition-duration, 0s),
+    color var(--v-theme-transition-duration, 0s);
 
   --v-color-primary: #5664b7;
   --v-color-accent: #1d851c;
@@ -20,6 +23,8 @@
   --v-color-surface: #ffffff;
   --v-color-surface-accent: #f1f5f9;
   --v-color-border-subtle: #e2e8f0;
+
+  --v-color-contrast: black;
 
   --v-shadow-color-dark: rgba(15, 23, 42, 0.12);
   --v-shadow-color-dark-strong: rgba(15, 23, 42, 0.2);
@@ -76,6 +81,8 @@
   --v-color-surface: #1f2937;
   --v-color-surface-accent: #111827;
   --v-color-border-subtle: #334155;
+
+  --v-color-contrast: white;
 
   --v-shadow-color-dark: rgba(0, 0, 0, 0.6);
   --v-shadow-color-dark-strong: rgba(0, 0, 0, 0.75);

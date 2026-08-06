@@ -4,7 +4,7 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  --v-card-transition-duration: 0.2s;
+  --v-card-transition-duration: var(--v-theme-transition-duration, 0.2s);
 
   outline: var(--v-outline);
   outline-offset: var(--v-outline-offset);

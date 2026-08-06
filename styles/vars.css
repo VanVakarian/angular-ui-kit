@@ -7,6 +7,11 @@
   --animation-duration-medium: 250ms;
   --animation-duration-slow: 400ms;
 
+  /* --v-theme-transition-duration is intentionally never declared here — SettingsService
+     sets it inline on documentElement only for the duration of a theme switch, so every
+     var(--v-theme-transition-duration, <local-default>) consumer falls back to its own
+     duration the rest of the time. */
+
   --v-input-auto-submit-result-fade-duration: 3000ms;
 
   --unit-0: 0;

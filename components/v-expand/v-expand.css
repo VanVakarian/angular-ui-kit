@@ -5,10 +5,15 @@
   border: 1px solid var(--v-color-border-subtle);
   border-radius: var(--v-expand-border-radius);
   background: var(--v-color-surface);
+  /* border-color/background-color are theme-color properties: same shared duration
+     var(--v-theme-transition-duration) as the rest of the app, and deliberately no
+     var(--v-expand-animation-timing-function) — that curve is tuned for the expand/
+     collapse geometry feel (often ease-in-out) and made the color crossfade look
+     out of sync with every other element using the implicit default "ease". */
   transition:
-    border-color var(--animation-duration-fast) var(--v-expand-animation-timing-function),
+    border-color var(--v-theme-transition-duration, var(--animation-duration-fast)),
     border-width var(--animation-duration-fast) var(--v-expand-animation-timing-function),
-    background-color var(--animation-duration-fast) var(--v-expand-animation-timing-function),
+    background-color var(--v-theme-transition-duration, var(--animation-duration-fast)),
     border-radius var(--animation-duration-fast) ease-in-out,
     margin var(--animation-duration-fast) var(--v-expand-animation-timing-function);
 }

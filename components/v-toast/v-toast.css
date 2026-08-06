@@ -6,7 +6,7 @@
   border-radius: var(--unit-2);
   background: var(--v-color-surface);
   border: 1px solid var(--v-color-border-subtle);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 4px 16px color-mix(in oklab, var(--v-shadow-color-dark-strong) 80%, transparent);
   width: 280px;
   box-sizing: border-box;
   cursor: pointer;

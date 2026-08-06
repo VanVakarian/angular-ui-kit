@@ -12,7 +12,7 @@
   cursor: pointer;
   padding: 0 var(--unit-1);
   border-radius: var(--unit-1);
-  transition: background var(--animation-duration-medium) ease;
+  transition: background var(--v-theme-transition-duration, var(--animation-duration-medium)) ease;
 
   &:disabled {
     cursor: not-allowed;
@@ -75,7 +75,7 @@
   cursor: pointer;
   font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
   color: var(--v-color-text-muted);
-  transition: color var(--animation-duration-medium) ease;
+  transition: color var(--v-theme-transition-duration, var(--animation-duration-medium)) ease;
 
   &.selected {
     color: var(--v-color-text);
