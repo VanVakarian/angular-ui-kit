@@ -258,8 +258,9 @@ export class VInput implements ControlValueAccessor, OnDestroy {
 
     event.preventDefault();
 
-    const delta = event.key === 'ArrowUp' ? 1 : -1;
-    const nextNum = parsed.value + delta;
+    const step = event.altKey ? 0.1 : 1;
+    const delta = event.key === 'ArrowUp' ? step : -step;
+    const nextNum = Math.round((parsed.value + delta) * 10) / 10;
     const nextRaw = parsed.usesComma ? String(nextNum).replace('.', ',') : String(nextNum);
     this.applyKeyboardValue(nextRaw);
     this.onInputChanged.emit(event);
