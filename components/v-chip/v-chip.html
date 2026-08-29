@@ -1,0 +1,13 @@
+<button type="button"
+        class="chip"
+        [disabled]="isDisabled()"
+        [attr.aria-disabled]="isDisabled() ? 'true' : 'false'"
+        (click)="onChipClick()">
+  <span class="chip-label"><ng-content /></span>
+
+  @if (isRemovable()) {
+    <v-icon class="chip-remove-icon"
+            [name]="Icon.Close"
+            [size]="4" />
+  }
+</button>

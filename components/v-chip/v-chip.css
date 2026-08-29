@@ -1,0 +1,52 @@
+:host {
+  display: inline-flex;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--unit-1);
+  padding: var(--unit-1) var(--unit-2) var(--unit-1) var(--unit-3);
+  border-radius: 999px;
+  background: var(--v-color-surface-accent);
+  color: var(--v-color-text);
+  font-size: inherit;
+  white-space: nowrap;
+  transition: background var(--v-theme-transition-duration, 0.2s) ease;
+}
+
+.chip:not(:disabled) {
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .chip:not(:disabled):hover {
+    background: color-mix(
+      in oklab,
+      var(--v-color-surface-accent) var(--v-mix-hover),
+      var(--v-color-contrast) var(--v-mix-hover-contrast)
+    );
+  }
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--v-color-primary);
+  outline-offset: 2px;
+}
+
+.chip-label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.chip-remove-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--v-color-text-muted);
+}
+
+:host(.disabled) .chip {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
