@@ -59,9 +59,9 @@
 
 @keyframes v-toast-spin {
   from {
-    transform: rotate(0deg);
+    transform: scaleX(-1) rotate(0deg);
   }
   to {
-    transform: rotate(360deg);
+    transform: scaleX(-1) rotate(-360deg);
   }
 }
