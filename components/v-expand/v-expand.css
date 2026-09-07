@@ -56,6 +56,8 @@
 }
 
 .header {
+  display: flex;
+  align-items: center;
   cursor: pointer;
   user-select: none;
   transition: background-color var(--animation-duration-fast) var(--v-expand-animation-timing-function);
@@ -68,6 +70,18 @@
 }
 
 .header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.chevron {
+  flex-shrink: 0;
+  margin: 0 var(--unit-2);
+  transition: transform var(--animation-duration-fast) var(--v-expand-animation-timing-function);
+
+  &.expanded {
+    transform: rotate(180deg);
+  }
 }
 
 .body {
@@ -80,6 +94,7 @@
   height: auto;
 }
 
-:host.no-transition .body {
+:host.no-transition .body,
+:host.no-transition .chevron {
   transition: none !important;
 }

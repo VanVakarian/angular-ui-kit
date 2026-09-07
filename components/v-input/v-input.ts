@@ -91,9 +91,7 @@ export class VInput implements ControlValueAccessor, OnDestroy {
   protected readonly paddingXString$$ = computed(() => resolveCssUnitOrRawValue(this.paddingX()));
   protected readonly paddingYString$$ = computed(() => resolveCssUnitOrRawValue(this.paddingY()));
   protected readonly autoSubmitDelayString$$ = computed(() => `${this.autoSubmitDelay()}ms`);
-  protected readonly autoSubmitResultFadeDurationString$$ = computed(
-    () => `${this.autoSubmitResultFadeDuration()}ms`,
-  );
+  protected readonly autoSubmitResultFadeDurationString$$ = computed(() => `${this.autoSubmitResultFadeDuration()}ms`);
 
   protected ngControlValue$$: WritableSignal<string> = signal('');
   protected readonly isFocused$$ = signal(false);
@@ -220,19 +218,25 @@ export class VInput implements ControlValueAccessor, OnDestroy {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    if (!this.isTextarea()) {
-      if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-        const didApply = this.applyArrowStep(event);
-        if (didApply) return;
-      }
-
-      if (event.key === 'Enter') {
-        if (event.isComposing || this.isImeComposing) return;
-        if (this.isAutoSubmitEnabled()) {
-          this.autoSubmitManager.triggerSubmit();
-        }
+    if (this.isTextarea()) {
+      if (event.key === 'Enter' && (event.metaKey || event.ctrlKey) && !event.isComposing && !this.isImeComposing) {
+        event.preventDefault();
         this.onEnterPressed.emit(event);
       }
+      return;
+    }
+
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      const didApply = this.applyArrowStep(event);
+      if (didApply) return;
+    }
+
+    if (event.key === 'Enter') {
+      if (event.isComposing || this.isImeComposing) return;
+      if (this.isAutoSubmitEnabled()) {
+        this.autoSubmitManager.triggerSubmit();
+      }
+      this.onEnterPressed.emit(event);
     }
   }
 

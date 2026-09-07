@@ -1,4 +1,5 @@
 import { Component, computed, effect, input, output, signal } from '@angular/core';
+import { IconName, VIcon } from '@ui-kit/components/v-icon/v-icon';
 import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 import { AccordionItemPosition } from './v-accordion';
 
@@ -6,6 +7,7 @@ import { AccordionItemPosition } from './v-accordion';
   selector: 'v-expand',
   templateUrl: './v-expand.html',
   styleUrl: './v-expand.css',
+  imports: [VIcon],
   host: {
     '[style.--v-expand-padding]': 'paddingString$$()',
     '[style.--v-expand-border-radius]': 'borderRadiusString$$()',
@@ -19,8 +21,11 @@ import { AccordionItemPosition } from './v-accordion';
   },
 })
 export class VExpand {
+  protected readonly Icon = IconName;
+
   public readonly isExpanded = input<boolean>(false);
   public readonly isWithoutAnimation = input<boolean>(false);
+  public readonly isChevronVisible = input<boolean>(false);
   public readonly padding = input<CssUnitOrRawValue>(2);
   public readonly borderRadius = input<CssUnitOrRawValue>(2);
   public readonly animationTimingFunction = input<'ease-in-out' | 'linear' | 'ease' | 'ease-in' | 'ease-out'>(

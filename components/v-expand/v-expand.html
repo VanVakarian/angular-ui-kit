@@ -2,7 +2,16 @@
 
 <div class="header"
      (click)="toggle()">
-  <ng-content select="[v-header]" />
+  <div class="header-content">
+    <ng-content select="[v-header]" />
+  </div>
+
+  @if (isChevronVisible()) {
+    <v-icon class="chevron"
+            [class.expanded]="isPanelExpanded()"
+            [name]="Icon.KeyboardArrowDown"
+            [size]="5" />
+  }
 </div>
 
 <div class="body"
