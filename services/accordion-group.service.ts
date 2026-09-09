@@ -51,6 +51,15 @@ export class AccordionGroupService {
     return group.openedItemKey === itemKey;
   }
 
+  // True while any item in the group is expanded, regardless of which v-accordion instance
+  // (or item within it) owns it — groups are single-open-item-at-a-time, so this is just
+  // "is the group's opened key set". Lets consumers react to "something is expanded" without
+  // duplicating per-item bookkeeping the group already tracks.
+  public isAnyOpen(groupId: string): boolean {
+    const group = this.groups$$().get(groupId);
+    return !!group && group.openedItemKey !== null;
+  }
+
   public closeAll(groupId: string): void {
     const groups = this.groups$$();
     const group = groups.get(groupId);
