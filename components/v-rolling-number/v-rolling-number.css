@@ -1,0 +1,40 @@
+:host {
+  position: relative;
+  display: inline-block;
+  white-space: pre;
+  vertical-align: baseline;
+}
+
+.rn-static {
+  color: transparent;
+  pointer-events: none;
+  user-select: none;
+  white-space: pre;
+}
+
+.rn-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.rn-cell {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.rn-glyph {
+  display: block;
+  text-align: center;
+}
+
+.rn-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  white-space: pre;
+  text-align: center;
+}
