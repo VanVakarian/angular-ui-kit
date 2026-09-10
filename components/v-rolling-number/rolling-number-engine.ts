@@ -44,6 +44,18 @@ const TIMING_PRESETS: Record<RollingNumberFeel, TimingPreset> = {
 const DIGIT_TRANSITION_MS = 260;
 const STRIP_ROWS = '9\n8\n7\n6\n5\n4\n3\n2\n1\n0';
 
+// A cell's width is the glyph's exact advance width (see measureFrames), but a glyph's
+// painted ink can overhang that advance box by a hair — bold digits with a diagonal
+// stroke (e.g. "7") are the common case. .rn-cell clips at its own box edge, so with zero
+// slack that overhang gets cropped. This pad widens the clip box a little on each side
+// without moving its visual center (.rn-strip/.rn-glyph stay centered inside it).
+const CELL_INK_PAD_PX = 1.5;
+
+function applyCellBox(el: HTMLElement, frame: GlyphFrame): void {
+  el.style.left = `${frame.x - CELL_INK_PAD_PX}px`;
+  el.style.width = `${frame.width + 2 * CELL_INK_PAD_PX}px`;
+}
+
 const segmenter =
   typeof Intl !== 'undefined' && 'Segmenter' in Intl ? new Intl.Segmenter('en', { granularity: 'grapheme' }) : null;
 
@@ -408,8 +420,7 @@ export class RollingNumberEngine {
   private mountCell(ch: string, frame: GlyphFrame, reduced: boolean): Cell {
     const el = document.createElement('span');
     el.className = 'rn-cell';
-    el.style.left = `${frame.x}px`;
-    el.style.width = `${frame.width}px`;
+    applyCellBox(el, frame);
     this.copyAngularScopeAttrs(el);
 
     const rolling = this.mode === 'rolling' && isDigit(ch);
@@ -452,8 +463,7 @@ export class RollingNumberEngine {
 
   private moveCell(cell: Cell, newChar: string, frame: GlyphFrame, reduced: boolean): void {
     const dx = cell.x - frame.x;
-    cell.el.style.left = `${frame.x}px`;
-    cell.el.style.width = `${frame.width}px`;
+    applyCellBox(cell.el, frame);
     cell.x = frame.x;
     cell.width = frame.width;
     if (!reduced && Math.abs(dx) >= 0.5) this.springs.play(cell.el, dx, this.timing.spring);
