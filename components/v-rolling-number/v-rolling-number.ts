@@ -1,5 +1,5 @@
 import { afterNextRender, Component, DestroyRef, effect, ElementRef, inject, input, viewChild } from '@angular/core';
-import { RollingNumberEngine, RollingNumberFeel, RollingNumberMode } from './rolling-number-engine';
+import { DEFAULT_ROLLING_NUMBER_SPEED_MS, RollingNumberEngine, RollingNumberMode } from './rolling-number-engine';
 
 // Renders `textInput` as normal accessible text, then animates every subsequent change to
 // it glyph-by-glyph (digits roll like a slot-machine reel, everything else cross-fades) —
@@ -21,7 +21,9 @@ import { RollingNumberEngine, RollingNumberFeel, RollingNumberMode } from './rol
 export class VRollingNumber {
   public readonly textInput = input.required<string>();
   public readonly modeInput = input<RollingNumberMode>('rolling');
-  public readonly feelInput = input<RollingNumberFeel>('snappy');
+  // Milliseconds — the digit-roll transition time. Lower is faster, higher is slower;
+  // every other timing (cell reposition spring, enter/exit fade, stagger) scales with it.
+  public readonly speedInput = input<number>(DEFAULT_ROLLING_NUMBER_SPEED_MS);
 
   private readonly staticTextElem = viewChild.required<ElementRef<HTMLElement>>('staticText');
   private readonly overlayElem = viewChild.required<ElementRef<HTMLElement>>('overlay');
@@ -38,7 +40,7 @@ export class VRollingNumber {
         this.staticTextElem().nativeElement,
         {
           mode: this.modeInput(),
-          feel: this.feelInput(),
+          speedMs: this.speedInput(),
         },
       );
       this.engine.commit(this.textInput(), true);

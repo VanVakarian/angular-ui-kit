@@ -10,7 +10,6 @@
 // engine one.
 
 export type RollingNumberMode = 'swap' | 'morph' | 'rolling';
-export type RollingNumberFeel = 'snappy' | 'smooth' | 'bouncy';
 
 interface GlyphFrame {
   readonly x: number;
@@ -23,25 +22,34 @@ interface SpringSpec {
   readonly damping: number;
 }
 
-const SPRINGS: Record<RollingNumberFeel, SpringSpec> = {
-  snappy: { mass: 1, stiffness: 350, damping: 30 },
-  smooth: { mass: 1, stiffness: 170, damping: 26 },
-  bouncy: { mass: 1, stiffness: 300, damping: 22 },
-};
-
-interface TimingPreset {
+interface Timing {
   readonly spring: SpringSpec;
   readonly staggerMs: number;
   readonly fadeMs: number;
+  readonly digitMs: number;
 }
 
-const TIMING_PRESETS: Record<RollingNumberFeel, TimingPreset> = {
-  snappy: { spring: SPRINGS.snappy, staggerMs: 15, fadeMs: 150 },
-  smooth: { spring: SPRINGS.smooth, staggerMs: 50, fadeMs: 200 },
-  bouncy: { spring: SPRINGS.bouncy, staggerMs: 40, fadeMs: 180 },
-};
+// Baseline timing, tuned by feel; `speedMs` scales every duration in it by a factor
+// s = speedMs / BASE_SPEED_MS. Stiffness and damping are rescaled together (not just
+// duration) so the spring keeps the same damping ratio — a slower speed plays out like
+// slow motion of the same motion, not a differently-shaped one.
+const BASE_SPEED_MS = 260;
+const BASE_SPRING: SpringSpec = { mass: 1, stiffness: 350, damping: 30 };
+const BASE_STAGGER_MS = 15;
+const BASE_FADE_MS = 150;
 
-const DIGIT_TRANSITION_MS = 260;
+export const DEFAULT_ROLLING_NUMBER_SPEED_MS = BASE_SPEED_MS;
+
+function buildTiming(speedMs: number): Timing {
+  const s = speedMs / BASE_SPEED_MS;
+  return {
+    spring: { mass: BASE_SPRING.mass, stiffness: BASE_SPRING.stiffness / (s * s), damping: BASE_SPRING.damping / s },
+    staggerMs: BASE_STAGGER_MS * s,
+    fadeMs: BASE_FADE_MS * s,
+    digitMs: speedMs,
+  };
+}
+
 const STRIP_ROWS = '9\n8\n7\n6\n5\n4\n3\n2\n1\n0';
 
 // A cell's width is the glyph's exact advance width (see measureFrames), but a glyph's
@@ -340,13 +348,13 @@ function digitOffset(digit: string, rowHeight: number): number {
 
 export interface RollingNumberOptions {
   readonly mode?: RollingNumberMode;
-  readonly feel?: RollingNumberFeel;
+  readonly speedMs?: number;
 }
 
 export class RollingNumberEngine {
   private readonly springs = new SpringAnimator();
   private readonly mode: RollingNumberMode;
-  private readonly timing: TimingPreset;
+  private readonly timing: Timing;
   private chars: string[] = [];
   private cells: Cell[] = [];
   private rowHeight = 0;
@@ -358,7 +366,7 @@ export class RollingNumberEngine {
     options: RollingNumberOptions = {},
   ) {
     this.mode = options.mode ?? 'rolling';
-    this.timing = TIMING_PRESETS[options.feel ?? 'snappy'];
+    this.timing = buildTiming(options.speedMs ?? DEFAULT_ROLLING_NUMBER_SPEED_MS);
   }
 
   // Diffs `text` against whatever was last committed and animates the difference. Pass
@@ -477,7 +485,7 @@ export class RollingNumberEngine {
             { transform: `translateY(${digitOffset(cell.char, this.rowHeight)}px)` },
             { transform: `translateY(${target}px)` },
           ],
-          { duration: DIGIT_TRANSITION_MS, easing: 'cubic-bezier(.2,.8,.3,1)', fill: 'forwards' },
+          { duration: this.timing.digitMs, easing: 'cubic-bezier(.2,.8,.3,1)', fill: 'forwards' },
         );
       }
       cell.strip.style.transform = `translateY(${target}px)`;
