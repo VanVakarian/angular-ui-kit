@@ -1,4 +1,13 @@
-import { Component, computed, effect, forwardRef, input, signal, untracked } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  forwardRef,
+  input,
+  signal,
+  untracked,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { VWheelSelect, WheelSelectItem } from '@ui-kit/components/v-wheel-select/v-wheel-select';
 
@@ -19,6 +28,7 @@ export interface WheelInputSegment {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [VWheelSelect],
 })
 export class VWheelInput implements ControlValueAccessor {

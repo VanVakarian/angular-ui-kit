@@ -1,4 +1,4 @@
-import { Component, computed, input, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, model, output } from '@angular/core';
 import { IconName, VIcon } from '@ui-kit/components/v-icon/v-icon';
 import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 
@@ -21,6 +21,7 @@ export type VCheckboxLabelPosition = (typeof VCheckboxLabelPosition)[keyof typeo
   templateUrl: './v-checkbox.html',
   styleUrl: './v-checkbox.css',
   imports: [VIcon],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[class.checked]': 'value()',
     '[class.disabled]': 'isDisabled()',

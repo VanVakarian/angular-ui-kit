@@ -1,10 +1,11 @@
-import { Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 
 @Component({
   selector: 'v-card',
   templateUrl: './v-card.html',
   styleUrl: './v-card.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[style.--v-card-border-radius]': 'borderRadiusString$$()',
     '[style.--v-card-padding-x]': 'paddingXString$$()',

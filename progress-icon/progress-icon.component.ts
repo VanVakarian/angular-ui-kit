@@ -1,8 +1,9 @@
-import { Component, computed, ElementRef, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, input } from '@angular/core';
 
 @Component({
   selector: 'ui-progress-icon',
   templateUrl: './progress-icon.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './progress-icon.component.scss',
 })
 export class UiProgressIcon {

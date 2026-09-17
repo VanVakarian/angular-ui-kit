@@ -1,4 +1,14 @@
-import { Component, contentChildren, effect, inject, input, OnDestroy, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  contentChildren,
+  effect,
+  inject,
+  input,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { AccordionGroupService } from '@ui-kit/services/accordion-group.service';
 import { VExpand } from './v-expand';
 
@@ -14,6 +24,7 @@ export interface AccordionItemPosition {
   selector: 'v-accordion',
   template: '<ng-content />',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'v-accordion-group',
     style: 'display: block;',

@@ -1,4 +1,4 @@
-import { Component, computed, input, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, model, output } from '@angular/core';
 import { ButtonSurface, VButton } from '@ui-kit/components/v-button/v-button';
 import { VCard } from '@ui-kit/components/v-card/v-card';
 import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
@@ -14,6 +14,7 @@ export interface VToggleItem {
   templateUrl: './v-toggle.html',
   styleUrl: './v-toggle.css',
   imports: [VCard, VButton],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[style.--v-toggle-gap]': 'gapString$$()',
     '[class.v-toggle-fit-host]': 'fitContent()',

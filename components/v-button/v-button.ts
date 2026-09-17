@@ -1,4 +1,13 @@
-import { Component, computed, ElementRef, inject, input, output, Renderer2 } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  output,
+  Renderer2,
+} from '@angular/core';
 import { CssUnitOrRawValue, resolveCssUnitOrRawValue } from '@ui-kit/types';
 
 type ButtonType = 'button' | 'submit' | 'reset';
@@ -18,6 +27,7 @@ export type ButtonSurface = (typeof ButtonSurface)[keyof typeof ButtonSurface];
   selector: 'v-button',
   templateUrl: './v-button.html',
   styleUrl: './v-button.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[style.width]': 'width() || null',
     '[style.--v-button-border-radius]': 'borderRadiusString$$()',

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostListener,
@@ -31,6 +32,7 @@ function clamp(value: number, min: number, max: number): number {
   selector: 'v-wheel-select',
   templateUrl: './v-wheel-select.html',
   styleUrl: './v-wheel-select.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[style.--v-wheel-select-z-index]': 'zIndex$$()',
   },

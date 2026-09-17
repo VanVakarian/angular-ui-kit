@@ -1,5 +1,6 @@
 import {
   afterNextRender,
+  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -29,6 +30,7 @@ type DragState = {
   selector: 'v-slider',
   templateUrl: './v-slider.html',
   styleUrl: './v-slider.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[class.touch-mode]': 'isTouchMode()',
     '[class.dragging]': 'isDragging$$()',

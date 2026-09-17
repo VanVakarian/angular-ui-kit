@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -58,6 +59,7 @@ export type DropdownMode = (typeof DropdownMode)[keyof typeof DropdownMode];
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CommonModule, VInput, VIcon, ReactiveFormsModule],
 })
 export class VDropdown implements ControlValueAccessor, OnInit, OnDestroy {

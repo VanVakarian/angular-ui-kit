@@ -1,4 +1,4 @@
-import { Component, computed, forwardRef, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, forwardRef, input, signal } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { VWheelInput, WheelInputSegment } from '@ui-kit/components/v-wheel-input/v-wheel-input';
 import { WheelSelectItem } from '@ui-kit/components/v-wheel-select/v-wheel-select';
@@ -37,6 +37,7 @@ function partsToIso(values: Record<string, string>): string {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [FormsModule, VWheelInput],
 })
 export class VDateWheelInput implements ControlValueAccessor {

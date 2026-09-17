@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -48,6 +49,7 @@ let uniqueId = 0;
     '[class.success-state]': 'autoSubmitState$$() === vInputAutoSubmitState.Success',
     '[class.error-state]': 'autoSubmitState$$() === vInputAutoSubmitState.Error',
   },
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [],
 })
 export class VInput implements ControlValueAccessor, OnDestroy {

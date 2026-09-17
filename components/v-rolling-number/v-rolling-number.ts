@@ -1,4 +1,14 @@
-import { afterNextRender, Component, DestroyRef, effect, ElementRef, inject, input, viewChild } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  viewChild,
+} from '@angular/core';
 import { DEFAULT_ROLLING_NUMBER_SPEED_MS, RollingNumberEngine, RollingNumberMode } from './rolling-number-engine';
 
 // Renders `textInput` as normal accessible text, then animates every subsequent change to
@@ -16,6 +26,7 @@ import { DEFAULT_ROLLING_NUMBER_SPEED_MS, RollingNumberEngine, RollingNumberMode
 @Component({
   selector: 'v-rolling-number',
   templateUrl: './v-rolling-number.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './v-rolling-number.css',
 })
 export class VRollingNumber {

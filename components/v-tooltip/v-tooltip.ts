@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -17,6 +18,7 @@ import { computeTooltipPosition } from './tooltip-position';
   selector: 'v-tooltip',
   templateUrl: './v-tooltip.html',
   styleUrl: './v-tooltip.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[style.--v-tooltip-z-index]': 'zIndex$$()',
     '[class.fill]': 'fill()',
