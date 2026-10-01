@@ -6,6 +6,7 @@ export const IconName = {
   AccountBalance: 'account_balance',
   Add: 'add',
   Analytics: 'analytics',
+  Archive: 'archive',
   Article: 'article',
   AvgTime: 'avg_time',
   Bar: 'bar',
