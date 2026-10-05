@@ -3,8 +3,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   effect,
   ElementRef,
+  inject,
   input,
   model,
   signal,
@@ -156,7 +158,8 @@ export class VSlider {
   protected readonly touchActive$$ = signal(false);
   protected readonly activeTouchThumb$$ = signal<ActiveThumb | null>(null);
 
-  private readonly isBrowser$$ = signal(false);
+  private readonly trackWidth$$ = signal(0);
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly normalizeEffect = effect(() => {
     if (this.isRange()) {
@@ -192,37 +195,33 @@ export class VSlider {
   });
 
   constructor() {
-    afterNextRender(() => this.isBrowser$$.set(true));
+    afterNextRender(() => {
+      const track = this.trackElement().nativeElement;
+      const observer = new ResizeObserver(() => this.trackWidth$$.set(track.clientWidth));
+      observer.observe(track);
+      this.destroyRef.onDestroy(() => observer.disconnect());
+    });
   }
 
   protected onTrackPointerDown(event: PointerEvent): void {
+    if (!this.isRange()) return;
     if (this.isDisabled()) return;
     if (event.button !== 0) return;
 
     event.preventDefault();
-    if (this.isRange()) {
-      const value = this.positionToValueForRangeEdge(event);
-      const thumb = this.getClosestThumb(value);
-      this.startDrag(event, thumb === 'start' ? 'range-start' : 'range-end');
-      return;
-    }
-
-    this.startDrag(event, 'single');
+    const value = this.positionToValueForRangeEdge(event);
+    const thumb = this.getClosestThumb(value);
+    this.startDrag(event, thumb === 'start' ? 'range-start' : 'range-end');
   }
 
   protected onFillPointerDown(event: PointerEvent): void {
+    if (!this.isRange()) return;
     if (this.isDisabled()) return;
     if (event.button !== 0) return;
 
     event.preventDefault();
     event.stopPropagation();
-
-    if (this.isRange()) {
-      this.startDrag(event, 'range-shift');
-      return;
-    }
-
-    this.startDrag(event, 'single');
+    this.startDrag(event, 'range-shift');
   }
 
   protected onThumbPointerDown(event: PointerEvent, thumb: ActiveThumb): void {
@@ -491,7 +490,8 @@ export class VSlider {
     bottom: number;
     borderWidth: number;
   } {
-    if (!this.isBrowser$$()) {
+    const width = this.trackWidth$$();
+    if (width <= 0) {
       return { width: 0, height: 0, left: 0, top: 0, right: 0, bottom: 0, borderWidth: 0 };
     }
 
@@ -500,7 +500,7 @@ export class VSlider {
     const borderWidth = (element.offsetWidth - element.clientWidth) / 2;
 
     return {
-      width: element.clientWidth,
+      width,
       height: element.clientHeight,
       left: rect.left,
       top: rect.top,

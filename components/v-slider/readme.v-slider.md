@@ -12,6 +12,11 @@ Flat design slider with individual property API, single or range mode, touch are
   (valueChange)="value = $event" />
 ```
 
+## Dragging
+
+- Single mode: only the thumb is draggable. Track and fill are inert.
+- Range mode: thumbs, track (moves the closest thumb), and fill (shifts the whole range) are draggable.
+
 ## Range Mode
 
 ```html

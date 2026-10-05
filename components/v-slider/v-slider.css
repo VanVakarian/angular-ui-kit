@@ -32,8 +32,13 @@
   background: var(--v-slider-fill-color, var(--v-color-primary));
   border-radius: inherit;
   box-shadow: none;
-  cursor: pointer;
+  pointer-events: none;
   transition: background var(--v-theme-transition-duration, 0.2s) ease;
+}
+
+.fill.draggable {
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .thumb-hit-area {

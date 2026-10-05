@@ -9,6 +9,7 @@
        (pointerdown)="onTrackPointerDown($event)">
 
     <div class="fill"
+         [class.draggable]="isRange()"
          (pointerdown)="onFillPointerDown($event)"></div>
 
     <div class="thumb-hit-area"
